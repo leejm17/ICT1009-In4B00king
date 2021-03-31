@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "mainpage2.h"
+#include "mydb.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Login; }

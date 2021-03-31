@@ -2,6 +2,7 @@
 #define MAINPAGE_H
 
 #include <QDialog>
+#include "mydb.h"
 
 namespace Ui {
 class Mainpage;

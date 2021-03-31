@@ -3,7 +3,6 @@
 #include <QMessageBox>
 #include <QPixmap>
 
-
 Login::Login(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Login)
@@ -18,15 +17,15 @@ Login::~Login()
     delete ui;
 }
 
-
 void Login::on_pushButton_clicked()
 {
+    QSqlQuery query(MyDB::getInstance()->getDBInstance());
     QString username = ui->username->text();
     QString password = ui->password->text();
 
     if (username == "test" && password == "test"){
         QMessageBox::information(this, "Login", "You have logined successfully");
-        //hide();
+        hide();
         mainpage = new Mainpage2(this);
         mainpage->show();
     } else {

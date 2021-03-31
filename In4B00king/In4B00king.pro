@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,13 +13,15 @@ SOURCES += \
     login.cpp \
     mainpage.cpp \
     mainpage2.cpp \
-    movieinformation.cpp
+    movieinformation.cpp \
+    mydb.cpp
 
 HEADERS += \
     login.h \
     mainpage.h \
     mainpage2.h \
-    movieinformation.h
+    movieinformation.h \
+    mydb.h
 
 FORMS += \
     login.ui \
