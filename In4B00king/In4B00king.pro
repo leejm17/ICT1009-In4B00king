@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    economyhall.cpp \
     main.cpp \
     login.cpp \
     mainpage.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
     mydb.cpp
 
 HEADERS += \
+    economyhall.h \
     login.h \
     mainpage.h \
     mainpage2.h \
@@ -24,6 +26,7 @@ HEADERS += \
     mydb.h
 
 FORMS += \
+    economyhall.ui \
     login.ui \
     mainpage.ui \
     mainpage2.ui \
