@@ -21,6 +21,7 @@ void Register::on_Register_2_clicked()
 {
     QString gender,email, pwd, pwd2, fname, lname;
     bool emailcheck = false;
+    bool accountcreated = false;
     email = ui->Email->text() + ui->comboBox->currentText();
     pwd = ui->Password->text();
     pwd2 = ui->Password_2->text();
@@ -71,9 +72,12 @@ void Register::on_Register_2_clicked()
             query.bindValue(":gender", gender);
             Login *loginpage = new Login();
             loginpage->show();
+            accountcreated = true;
         } else {
             qDebug() << "Yes was not clicked";
         }
     }
-    this->close();
+    if (accountcreated){
+        this->close();
+    }
 }

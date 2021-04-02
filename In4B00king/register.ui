@@ -155,7 +155,7 @@
       <item>
        <widget class="QSpinBox" name="Age">
         <property name="minimum">
-         <number>21</number>
+         <number>12</number>
         </property>
        </widget>
       </item>
