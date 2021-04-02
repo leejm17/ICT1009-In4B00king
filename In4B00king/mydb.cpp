@@ -11,9 +11,9 @@ void MyDB::init()
 {
     qDebug() << "in init()";
     db = QSqlDatabase::addDatabase("QSQLITE", "Data");
-    db.setDatabaseName("path/test.db"); //Enter yourpath for test.db
+    db.setDatabaseName("../in4b00king.db"); //Enter yourpath for test.db
 
-    if(QFile::exists("path/test.db"))//Enter yourpath for test.db
+    if(QFile::exists("../in4b00king.db"))//Enter yourpath for test.db
             qDebug() << "DB file exist";
         else
            qDebug() << "DB file doesn't exists";

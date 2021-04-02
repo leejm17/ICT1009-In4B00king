@@ -32,18 +32,18 @@ private:
     QString movieName;
     int movieDuration;
     QString movieDebut;  // first date to show movie
-    QString movieShut;   // last date to show movie
+    QString movieFinale;   // last date to show movie
     QString movieDesc;   // movie synopsis
-    QList<QString> movieDates;    // generate an array of dates from movieDebut to movieShut
+    QList<QString> movieDates;    // generate an array of dates from movieDebut to movieFinale
 public:
     MovieInfo();    // unused default constructor
     MovieInfo(QString, int);  // movieName, movieDuration
-    MovieInfo(QString, int, QString, QString, QString); // movieName, movieDuration, movieDebut, movieShut, movieDesc
-    void getMovie_Db(QString);   // movieName
+    MovieInfo(QString, int, QString, QString, QString); // movieName, movieDuration, movieDebut, movieFinale, movieDesc
+    void getMovieDetails_Db();
     void generateMovieDates();
 
 friend void displayMovieDetails(MovieInfo, ShowtimesInfo);  // movieName, movieDuration, movieDesc, movieDates, timeslots, halls
-friend void addMovie_Db(MovieInfo, ShowtimesInfo);   // movieName, movieDuration, movieDebut, movieShut, movieDesc, movieDates, timeslots
+friend void addMovie_Db(MovieInfo, ShowtimesInfo);   // movieName, movieDuration, movieDebut, movieFinale, movieDesc, movieDates, timeslots
 };
 
 
@@ -58,7 +58,7 @@ public:
     void generateShowtimes(QString); // movieDate
 
 friend void displayMovieDetails(MovieInfo, ShowtimesInfo);  // movieName, movieDuration, movieDesc, movieDates, timeslots, halls
-friend void addMovie_Db(MovieInfo, ShowtimesInfo);   // movieName, movieDuration, movieDebut, movieShut, movieDesc, movieDates, timeslots
+friend void addMovie_Db(MovieInfo, ShowtimesInfo);   // movieName, movieDuration, movieDebut, movieFinale, movieDesc, movieDates, timeslots
 };
 
 
@@ -67,7 +67,9 @@ private:
     QString selectedTimeslot;
     int selectedHall;
 public:
-    MovieSelection(QString, QString, QString, int);    // movieName, movieDate, timeslot, hall
+    /* (5) When Customer clicks on movie timeslot, via this constructor, initialise data members, then load the hall layout. */
+    /* Calls displayLayout() based on hallID (eg if hallID<10, normal layout; if hallID>10, diamond layout) */
+    //MovieSelection(QString, QString, QString, int);    // movieName, movieDate, timeslot, hall
 };
 
 #endif
