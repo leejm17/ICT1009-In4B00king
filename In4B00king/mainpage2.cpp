@@ -1,5 +1,6 @@
 #include "mainpage2.h"
 #include "ui_mainpage2.h"
+#include "economyhall.h"
 #include <QPixmap>
 #include <QMessageBox>
 
@@ -18,6 +19,9 @@ Mainpage2::~Mainpage2()
 void Mainpage2::on_SelectButton_clicked()
 {
     QMessageBox::information(this,"Hi","is_clicked");
+    hide();
+    economyhall = new EconomyHall(this);
+    economyhall->show();
     //movieinformation = new MovieInformation(this);
     //movieinformation->show();
 }
