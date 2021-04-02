@@ -15,6 +15,7 @@ class EconomyHall : public QDialog
 public:
     explicit EconomyHall(QWidget *parent = nullptr);
     ~EconomyHall();
+    void updateSeats();
 
 private slots:
     void on_book_clicked();
