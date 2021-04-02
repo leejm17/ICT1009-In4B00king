@@ -1,9 +1,9 @@
-#include "economyhall.h"
-#include "ui_economyhall.h"
+#include "diamondhall.h"
+#include "ui_diamondhall.h"
 
-EconomyHall::EconomyHall(QWidget *parent) :
+DiamondHall::DiamondHall(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::EconomyHall)
+    ui(new Ui::DiamondHall)
 {
     ui->setupUi(this);
     seatSelection = new SeatSelection(this);
@@ -11,12 +11,12 @@ EconomyHall::EconomyHall(QWidget *parent) :
     updateSeats();
 }
 
-EconomyHall::~EconomyHall()
+DiamondHall::~DiamondHall()
 {
     delete ui;
 }
 
-void EconomyHall::updateSeats()
+void DiamondHall::updateSeats()
 {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare("select HallSeats.seat_num,MovieSeats.available,HallSeats.condition from HallSeats inner join MovieSeats on HallSeats.seat_ID=MovieSeats.seat_ID where MovieSeats.show_ID=1");
@@ -41,10 +41,8 @@ void EconomyHall::updateSeats()
         }
     }
 }
-
-void EconomyHall::on_book_clicked()
+void DiamondHall::on_book_clicked()
 {
     seatSelection->updateSelection();
     seatSelection->show();
 }
-

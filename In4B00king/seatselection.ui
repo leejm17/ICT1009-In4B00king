@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>EconomySelection</class>
- <widget class="QDialog" name="EconomySelection">
+ <class>SeatSelection</class>
+ <widget class="QDialog" name="SeatSelection">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,8 +11,18 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Book seat</string>
+   <string>Dialog</string>
   </property>
+  <widget class="QComboBox" name="sselection">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>100</y>
+     <width>111</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QPushButton" name="book">
    <property name="geometry">
     <rect>
@@ -40,16 +50,6 @@
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="sselection">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>100</y>
-     <width>111</width>
-     <height>31</height>
-    </rect>
    </property>
   </widget>
  </widget>

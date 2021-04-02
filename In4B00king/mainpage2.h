@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "movieinformation.h"
 #include "economyhall.h"
+#include "diamondhall.h"
 
 namespace Ui {
 class Mainpage2;
@@ -21,9 +22,12 @@ private slots:
 
     void on_SelectButton_clicked();
 
+    void on_SelectButton_2_clicked();
+
 private:
     Ui::Mainpage2 *ui;
-    EconomyHall *economyhall;
+    EconomyHall *economyHall;
+    DiamondHall *diamondHall;
 };
 
 #endif // MAINPAGE_H

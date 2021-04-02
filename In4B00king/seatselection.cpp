@@ -1,19 +1,19 @@
-#include "economyselection.h"
-#include "ui_economyselection.h"
+#include "seatselection.h"
+#include "ui_seatselection.h"
 
-EconomySelection::EconomySelection(QWidget *parent) :
+SeatSelection::SeatSelection(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::EconomySelection)
+    ui(new Ui::SeatSelection)
 {
     ui->setupUi(this);
 }
 
-EconomySelection::~EconomySelection()
+SeatSelection::~SeatSelection()
 {
     delete ui;
 }
 
-void EconomySelection::updateSelection()
+void SeatSelection::updateSelection()
 {
     ui->sselection->clear();
 

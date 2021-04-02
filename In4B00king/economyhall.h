@@ -2,7 +2,7 @@
 #define ECONOMYHALL_H
 
 #include <QDialog>
-#include "economyselection.h"
+#include "seatselection.h"
 
 namespace Ui {
 class EconomyHall;
@@ -22,7 +22,7 @@ private slots:
 
 private:
     Ui::EconomyHall *ui;
-    EconomySelection *economySelection;
+    SeatSelection *seatSelection;
 };
 
 #endif // ECONOMYHALL_H
