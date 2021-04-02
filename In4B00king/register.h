@@ -18,6 +18,9 @@ public:
 
 private slots:
     void on_Register_2_clicked();
+    void on_testBtn_clicked();
+
+    void on_verifyBtn_clicked();
 
 private:
     Ui::Register *ui;

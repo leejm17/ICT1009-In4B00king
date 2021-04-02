@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>529</width>
-    <height>394</height>
+    <width>666</width>
+    <height>559</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>511</width>
-     <height>381</height>
+     <height>401</height>
     </rect>
    </property>
    <property name="title">
@@ -50,6 +50,43 @@
       </item>
       <item>
        <widget class="QComboBox" name="comboBox"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_8">
+      <item>
+       <widget class="QLineEdit" name="Verify">
+        <property name="maximumSize">
+         <size>
+          <width>459</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="verifyBtn">
+        <property name="text">
+         <string>Verify</string>
+        </property>
+        <property name="autoDefault">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="testBtn">
+        <property name="text">
+         <string>Send Email</string>
+        </property>
+        <property name="autoDefault">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

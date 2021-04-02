@@ -3,6 +3,15 @@
 #include "login.h"
 #include <QMessageBox>
 #include <QCryptographicHash>
+#include <curl/curl.h>
+#include <QApplication>
+
+#define FROM    "<InForBooking@gmail.com>"
+#define TO      "<testing@gmail.com>"
+
+char* generated_OTP;
+bool verified = false;
+
 Register::Register(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Register)
@@ -61,7 +70,7 @@ void Register::on_Register_2_clicked()
         QMessageBox::StandardButton reply = QMessageBox::question(this, "Register Account", "Are you sure you want to register this account?\nEmail:"+
                                                                   email + "\nFirst name:" + fname + "\nLast name:" + lname + "\nAge:" +
                                                                   age + "\nGender:" + gender, QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::Yes) {
+        if (reply == QMessageBox::Yes && verified == true) {
             qDebug() << "Yes was clicked";
             QSqlQuery query(MyDB::getInstance()->getDBInstance());
             query.prepare("INSERT INTO User(email_ID,password,first_name,last_name,age,gender,type) VALUES (:email, :password, :fname, :lname, :age, :gender, 'customer')");
@@ -87,5 +96,122 @@ void Register::on_Register_2_clicked()
     }
     if (accountcreated){
         this->close();
+    }
+}
+
+// A Function to generate a unique OTP everytime
+char * generateOTP(int len)
+{
+    QString str = "0123456789";
+    int n = str.length();
+
+    QString OTP;
+
+    for (int i=1; i<=len; i++)
+        OTP.push_back(str[rand() % n]);
+
+    n = OTP.length();
+
+    char* otp_array= new char;
+
+    strcpy(otp_array, OTP.toStdString().c_str());
+
+    generated_OTP = &otp_array[0];
+    return(&otp_array[0]);
+}
+
+// Variable to send the OTP to the user's email every time.
+char *payload_text[] = {
+        "To: " TO "\r\n",
+        "From: " FROM "\r\n",
+        "Subject: [InForBooking] Email Verification \r\n",
+        "Your OTP is ",generateOTP(6),"\r\n",
+
+};
+
+struct upload_status {
+    int lines_read;
+};
+
+// checks to ensure that the size of the payload is not 0.
+static size_t payload_source(void *ptr, size_t size, size_t nmemb, void *userp)
+{
+    struct upload_status *upload_ctx = (struct upload_status *)userp;
+    const char *data;
+
+    if((size == 0) || (nmemb == 0) || ((size*nmemb) < 1)) {
+        return 0;
+    }
+
+    data = payload_text[upload_ctx->lines_read];
+    // inserts payload text into a char array
+    if(data) {
+        size_t len = strlen(data);
+        memcpy(ptr, data, len);
+        upload_ctx->lines_read++;
+
+        return len;
+    }
+
+    return 0;
+}
+
+void Register::on_testBtn_clicked()
+{
+    qDebug() << "test was clicked";
+    QString email;
+    email = ui->Email->text() + ui->comboBox->currentText();
+    QByteArray ba = email.toLocal8Bit();
+    const char *char_email = ba.data();
+    #define TO char_email
+    CURL *curl;
+    CURLcode res = CURLE_OK;
+    struct curl_slist *recipients = NULL;
+    struct upload_status upload_ctx;
+
+    upload_ctx.lines_read = 0;
+
+    curl = curl_easy_init();
+    // Email Settings
+    // TODO: Hide the Username and Password
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_USERNAME, "InForBooking@gmail.com");
+        curl_easy_setopt(curl, CURLOPT_PASSWORD, "!@QWaszx");
+        curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:587");
+        curl_easy_setopt(curl, CURLOPT_USE_SSL, (long) CURLUSESSL_ALL);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+        qDebug() << "loading cert";
+        curl_easy_setopt(curl, CURLOPT_CAINFO, "../google.pem");
+        curl_easy_setopt(curl, CURLOPT_CAPATH, "../google.pem");
+        curl_easy_setopt(curl, CURLOPT_MAIL_FROM, FROM);
+        recipients = curl_slist_append(recipients, TO);
+        curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);
+        curl_easy_setopt(curl, CURLOPT_READFUNCTION, payload_source);
+        curl_easy_setopt(curl, CURLOPT_READDATA, &upload_ctx);
+        curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+
+        res = curl_easy_perform(curl);
+
+        // Checks for
+        if (res != CURLE_OK)
+            fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                    curl_easy_strerror(res));
+
+        curl_slist_free_all(recipients);
+
+        curl_easy_cleanup(curl);
+        qDebug() << "Email Sent!";
+        ui->testBtn->setEnabled(false);
+    }
+}
+
+void Register::on_verifyBtn_clicked()
+{
+    QString verifyText;
+    verifyText = ui->Verify->text();
+    if(verifyText == generated_OTP){
+        qDebug() <<  "M A T C H E D";
+        verified = true;
     }
 }
