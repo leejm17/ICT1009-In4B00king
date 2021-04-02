@@ -19,17 +19,32 @@ Login::~Login()
 
 void Login::on_pushButton_clicked()
 {
-    QSqlQuery query(MyDB::getInstance()->getDBInstance());
+
     QString username = ui->username->text();
     QString password = ui->password->text();
 
-    if (username == "test" && password == "test"){
-        QMessageBox::information(this, "Login", "You have logined successfully");
-        hide();
-        mainpage = new MovieList(this);
-        mainpage->show();
-    } else {
-        QMessageBox::warning(this, "Login", "You have failed to login");
+    QSqlQuery query(MyDB::getInstance()->getDBInstance());
+    query.prepare("Select * FROM User WHERE email_ID='" + username + "' AND password='" + password + "';");
+    if(!query.exec()){
+        qDebug() << query.lastError().text() << query.lastQuery();
+    }else{
+        if(query.next()){
+            qDebug() << "read was successful "<< query.lastQuery();
+            QMessageBox::information(this, "Login", "You have logined successfully");
+            close();
+            mainpage = new MovieList(this);
+            mainpage->show();
+        }else{
+            qDebug() << "read was successful "<< query.lastQuery();
+            QMessageBox::warning(this, "Login", "Wrong email or password");
+        }
     }
+}
 
+void Login::on_Register_clicked()
+{
+    this->close();
+    Register registerpage;
+    registerpage.setModal(true);
+    registerpage.exec();
 }

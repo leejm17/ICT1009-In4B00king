@@ -18,6 +18,7 @@ SOURCES += \
     movielist.cpp \
     movies.cpp \
     mydb.cpp \
+    register.cpp \
     seatselection.cpp
 
 HEADERS += \
@@ -29,6 +30,7 @@ HEADERS += \
     movielist.h \
     movies.h \
     mydb.h \
+    register.h \
     seatselection.h
 
 FORMS += \
@@ -38,6 +40,7 @@ FORMS += \
     mainpage.ui \
     movieinformation.ui \
     movielist.ui \
+    register.ui \
     seatselection.ui
 
 # Default rules for deployment.

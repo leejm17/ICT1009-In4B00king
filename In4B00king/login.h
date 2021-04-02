@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "movielist.h"
+#include "register.h"
 #include "mydb.h"
 
 QT_BEGIN_NAMESPACE
@@ -19,6 +20,7 @@ public:
 
 private slots:
     void on_pushButton_clicked();
+    void on_Register_clicked();
 
 private:
     Ui::Login *ui;
