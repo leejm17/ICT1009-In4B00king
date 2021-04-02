@@ -16,5 +16,6 @@ EconomyHall::~EconomyHall()
 
 void EconomyHall::on_book_clicked()
 {
+    economySelection->updateSelection();
     economySelection->show();
 }
