@@ -2,7 +2,7 @@
 #define LOGIN_H
 
 #include <QMainWindow>
-#include "movielist.h"
+#include "mainpage2.h"
 #include "mydb.h"
 
 QT_BEGIN_NAMESPACE
@@ -22,6 +22,6 @@ private slots:
 
 private:
     Ui::Login *ui;
-    MovieList *mainpage;
+    Mainpage2 *mainpage;
 };
 #endif // LOGIN_H

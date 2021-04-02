@@ -26,7 +26,7 @@ void Login::on_pushButton_clicked()
     if (username == "test" && password == "test"){
         QMessageBox::information(this, "Login", "You have logined successfully");
         hide();
-        mainpage = new MovieList(this);
+        mainpage = new Mainpage2(this);
         mainpage->show();
     } else {
         QMessageBox::warning(this, "Login", "You have failed to login");
