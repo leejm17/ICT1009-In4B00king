@@ -8,6 +8,7 @@ Mainpage2::Mainpage2(QWidget *parent) :
     ui(new Ui::Mainpage2)
 {
     ui->setupUi(this);
+    economyhall = new EconomyHall(this);
 }
 
 Mainpage2::~Mainpage2()
@@ -18,6 +19,7 @@ Mainpage2::~Mainpage2()
 void Mainpage2::on_SelectButton_clicked()
 {
     QMessageBox::information(this,"Hi","is_clicked");
+    economyhall->show();
     //movieinformation = new MovieInformation(this);
     //movieinformation->show();
 }

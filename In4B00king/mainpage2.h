@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "movieinformation.h"
+#include "economyhall.h"
 
 namespace Ui {
 class Mainpage2;
@@ -22,6 +23,7 @@ private slots:
 
 private:
     Ui::Mainpage2 *ui;
+    EconomyHall *economyhall;
 };
 
 #endif // MAINPAGE_H

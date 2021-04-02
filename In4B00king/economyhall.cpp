@@ -6,9 +6,15 @@ EconomyHall::EconomyHall(QWidget *parent) :
     ui(new Ui::EconomyHall)
 {
     ui->setupUi(this);
+    economySelection = new EconomySelection(this);
 }
 
 EconomyHall::~EconomyHall()
 {
     delete ui;
+}
+
+void EconomyHall::on_book_clicked()
+{
+    economySelection->show();
 }

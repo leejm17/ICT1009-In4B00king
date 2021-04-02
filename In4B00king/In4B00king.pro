@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     economyhall.cpp \
+    economyselection.cpp \
     main.cpp \
     login.cpp \
     mainpage.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 
 HEADERS += \
     economyhall.h \
+    economyselection.h \
     login.h \
     mainpage.h \
     mainpage2.h \
@@ -27,6 +29,7 @@ HEADERS += \
 
 FORMS += \
     economyhall.ui \
+    economyselection.ui \
     login.ui \
     mainpage.ui \
     mainpage2.ui \
