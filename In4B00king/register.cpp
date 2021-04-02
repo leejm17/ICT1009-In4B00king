@@ -2,7 +2,7 @@
 #include "ui_register.h"
 #include "login.h"
 #include <QMessageBox>
-
+#include <QCryptographicHash>
 Register::Register(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Register)
@@ -28,6 +28,7 @@ void Register::on_Register_2_clicked()
     fname = ui->Fname->text();
     lname = ui->Lname->text();
     QString age = ui->Age->text();
+
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare("SELECT * FROM User WHERE email_ID='" + email + "';");
     if(!query.exec()){
@@ -65,13 +66,20 @@ void Register::on_Register_2_clicked()
             QSqlQuery query(MyDB::getInstance()->getDBInstance());
             query.prepare("INSERT INTO User(email_ID,password,first_name,last_name,age,gender,type) VALUES (:email, :password, :fname, :lname, :age, :gender, 'customer')");
             query.bindValue(":email", email);
-            query.bindValue(":password", pwd);
+            // "Salt"
+            QString salted_password = email + pwd;
+            // SHA1 Hash
+            QByteArray hashed_password = QCryptographicHash::hash(salted_password.toUtf8(),QCryptographicHash::Md5);
+            QString inputHash = QLatin1String(hashed_password.toHex());
+
+            query.bindValue(":password", inputHash);
             query.bindValue(":fname", fname);
             query.bindValue(":lname", lname);
             query.bindValue(":age", age);
             query.bindValue(":gender", gender);
             Login *loginpage = new Login();
             loginpage->show();
+            query.exec();
             accountcreated = true;
         } else {
             qDebug() << "Yes was not clicked";

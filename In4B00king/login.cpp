@@ -2,7 +2,7 @@
 #include "ui_login.h"
 #include <QMessageBox>
 #include <QPixmap>
-
+#include <QCryptographicHash>
 Login::Login(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Login)
@@ -22,9 +22,13 @@ void Login::on_pushButton_clicked()
 
     QString username = ui->username->text();
     QString password = ui->password->text();
+    QString salted_password = username + password;
+    // SHA1 Hash
+    QByteArray hashed_password = QCryptographicHash::hash(salted_password.toUtf8(),QCryptographicHash::Md5);
+    QString inputHash = QLatin1String(hashed_password.toHex());
 
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
-    query.prepare("Select * FROM User WHERE email_ID='" + username + "' AND password='" + password + "';");
+    query.prepare("Select * FROM User WHERE email_ID='" + username + "' AND password='" + inputHash + "';");
     if(!query.exec()){
         qDebug() << query.lastError().text() << query.lastQuery();
     }else{
