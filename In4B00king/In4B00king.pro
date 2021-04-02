@@ -9,28 +9,37 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    confirmation.cpp \
+    diamondhall.cpp \
     economyhall.cpp \
     main.cpp \
     login.cpp \
     mainpage.cpp \
     mainpage2.cpp \
     movieinformation.cpp \
-    mydb.cpp
+    mydb.cpp \
+    seatselection.cpp
 
 HEADERS += \
+    confirmation.h \
+    diamondhall.h \
     economyhall.h \
     login.h \
     mainpage.h \
     mainpage2.h \
     movieinformation.h \
-    mydb.h
+    mydb.h \
+    seatselection.h
 
 FORMS += \
+    confirmation.ui \
+    diamondhall.ui \
     economyhall.ui \
     login.ui \
     mainpage.ui \
     mainpage2.ui \
-    movieinformation.ui
+    movieinformation.ui \
+    seatselection.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
