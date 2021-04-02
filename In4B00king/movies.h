@@ -67,7 +67,9 @@ private:
     QString selectedTimeslot;
     int selectedHall;
 public:
-    MovieSelection(QString, QString, QString, int);    // movieName, movieDate, timeslot, hall
+    /* (5) When Customer clicks on movie timeslot, via this constructor, initialise data members, then load the hall layout. */
+    /* Calls displayLayout() based on hallID (eg if hallID<10, normal layout; if hallID>10, diamond layout) */
+    //MovieSelection(QString, QString, QString, int);    // movieName, movieDate, timeslot, hall
 };
 
 #endif

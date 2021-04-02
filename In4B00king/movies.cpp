@@ -85,9 +85,3 @@ void ShowtimesInfo::getShowtimes_Db(QString, QString) {
 void ShowtimesInfo::generateShowtimes(QString) {
 
 }
-
-/* (5) When Customer clicks on movie timeslot, via this constructor, initialise data members, then load the hall layout. */
-/* Calls displayLayout() based on hallID (eg if hallID<10, normal layout; if hallID>10, diamond layout) */
-MovieSelection::MovieSelection(QString, QString, QString, int) {
-
-}
