@@ -1,5 +1,5 @@
-#ifndef MAINPAGE2_H
-#define MAINPAGE2_H
+#ifndef MOVIELIST_H
+#define MOVIELIST_H
 
 #include <QMainWindow>
 #include "movieinformation.h"
@@ -10,13 +10,13 @@ namespace Ui {
 class Mainpage2;
 }
 
-class Mainpage2 : public QMainWindow
+class MovieList : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit Mainpage2(QWidget *parent = nullptr);
-    ~Mainpage2();
+    explicit MovieList(QWidget *parent = nullptr);
+    ~MovieList();
 
 private slots:
 

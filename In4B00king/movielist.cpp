@@ -1,9 +1,9 @@
-#include "mainpage2.h"
+#include "movielist.h"
 #include "ui_mainpage2.h"
 #include <QPixmap>
 #include <QMessageBox>
 
-Mainpage2::Mainpage2(QWidget *parent) :
+MovieList::MovieList(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Mainpage2)
 {
@@ -12,12 +12,12 @@ Mainpage2::Mainpage2(QWidget *parent) :
     diamondHall = new DiamondHall(this);
 }
 
-Mainpage2::~Mainpage2()
+MovieList::~MovieList()
 {
     delete ui;
 }
 
-void Mainpage2::on_SelectButton_clicked()
+void MovieList::on_SelectButton_clicked()
 {
     QMessageBox::information(this,"Hi","is_clicked");
     economyHall->show();
@@ -25,7 +25,7 @@ void Mainpage2::on_SelectButton_clicked()
     //movieinformation->show();
 }
 
-void Mainpage2::on_SelectButton_2_clicked()
+void MovieList::on_SelectButton_2_clicked()
 {
     diamondHall->show();
 }

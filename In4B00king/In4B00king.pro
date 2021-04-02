@@ -14,8 +14,9 @@ SOURCES += \
     main.cpp \
     login.cpp \
     mainpage.cpp \
-    mainpage2.cpp \
     movieinformation.cpp \
+    movielist.cpp \
+    movies.cpp \
     mydb.cpp \
     seatselection.cpp
 
@@ -24,8 +25,9 @@ HEADERS += \
     economyhall.h \
     login.h \
     mainpage.h \
-    mainpage2.h \
     movieinformation.h \
+    movielist.h \
+    movies.h \
     mydb.h \
     seatselection.h
 
@@ -34,8 +36,8 @@ FORMS += \
     economyhall.ui \
     login.ui \
     mainpage.ui \
-    mainpage2.ui \
     movieinformation.ui \
+    movielist.ui \
     seatselection.ui
 
 # Default rules for deployment.
