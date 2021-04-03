@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    confirmationscreen.cpp \
     diamondhall.cpp \
     economyhall.cpp \
     main.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
     seatselection.cpp
 
 HEADERS += \
+    confirmationscreen.h \
     diamondhall.h \
     economyhall.h \
     login.h \
@@ -34,6 +36,7 @@ HEADERS += \
     seatselection.h
 
 FORMS += \
+    confirmationscreen.ui \
     diamondhall.ui \
     economyhall.ui \
     login.ui \
