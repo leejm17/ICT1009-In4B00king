@@ -42,4 +42,6 @@ void ConfirmationScreen::on_confirm_clicked()
        }
 
     emit updateSeats();
+    this->close();
+    emit closeAll();
 }

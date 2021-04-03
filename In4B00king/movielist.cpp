@@ -16,10 +16,20 @@ MovieList::MovieList(QWidget *parent) :
     connect(economyHall,SIGNAL(showSeatSelection()),seatSelection,SLOT(showSeatSelection()));
     connect(diamondHall,SIGNAL(showSeatSelection()),seatSelection,SLOT(showSeatSelection()));
     connect(seatSelection,SIGNAL(showConfirmation(QString)),confirmationScreen,SLOT(showConfirmation(QString)));
+
     connect(confirmationScreen,SIGNAL(updateSeats()),economyHall,SLOT(updateSeats()));
     connect(confirmationScreen,SIGNAL(updateSeats()),diamondHall,SLOT(updateSeats()));
+
     connect(this,SIGNAL(updateSeats()),economyHall,SLOT(updateSeats()));
     connect(this,SIGNAL(updateSeats()),diamondHall,SLOT(updateSeats()));
+
+    //Close all windows
+    connect(economyHall,SIGNAL(closeAll()),seatSelection,SLOT(close()));
+    connect(economyHall,SIGNAL(closeAll()),confirmationScreen,SLOT(close()));
+    connect(diamondHall,SIGNAL(closeAll()),seatSelection,SLOT(close()));
+    connect(diamondHall,SIGNAL(closeAll()),confirmationScreen,SLOT(close()));
+
+    connect(confirmationScreen,SIGNAL(closeAll()),seatSelection,SLOT(close()));
 }
 
 MovieList::~MovieList()
