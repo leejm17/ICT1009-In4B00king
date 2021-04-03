@@ -2,7 +2,7 @@
 #define ECONOMYHALL_H
 
 #include <QDialog>
-#include "seatselection.h"
+#include "mydb.h"
 
 namespace Ui {
 class EconomyHall;
@@ -15,14 +15,16 @@ class EconomyHall : public QDialog
 public:
     explicit EconomyHall(QWidget *parent = nullptr);
     ~EconomyHall();
-    void updateSeats();
+
+signals:
+    void showSeatSelection();
 
 private slots:
     void on_book_clicked();
+    void updateSeats();
 
 private:
     Ui::EconomyHall *ui;
-    SeatSelection *seatSelection;
 };
 
 #endif // ECONOMYHALL_H
