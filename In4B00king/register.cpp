@@ -102,7 +102,9 @@ void Register::on_Register_2_clicked()
 // A Function to generate a unique OTP everytime
 char * generateOTP(int len)
 {
-    QString str = "0123456789";
+    srand(time(NULL));
+
+    QString str = "abcdefghijklmnopqrstuvwxyz0123456789";
     int n = str.length();
 
     QString OTP;
