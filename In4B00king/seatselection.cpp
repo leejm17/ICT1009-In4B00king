@@ -1,12 +1,15 @@
 #include "seatselection.h"
 #include "ui_seatselection.h"
+#include "confirmation.h"
+#include "ui_confirmation.h"
+
+#include <QMessageBox>
 
 SeatSelection::SeatSelection(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SeatSelection)
 {
     ui->setupUi(this);
-    book = ui->book;
 }
 
 SeatSelection::~SeatSelection()
@@ -38,6 +41,8 @@ void SeatSelection::updateSelection()
 
 void SeatSelection::on_book_clicked()
 {
-    qDebug() << "TEST";
-    confirmation->show();
+    emit sendData(ui->sselection->currentText());
+    qDebug() << ui->sselection->currentText();
+    sselection = new Confirmation(this);
+    sselection->show();
 }

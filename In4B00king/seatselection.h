@@ -17,14 +17,16 @@ public:
     explicit SeatSelection(QWidget *parent = nullptr);
     ~SeatSelection();
     void updateSelection();
-    QPushButton *book;
+
+signals:
+        void sendData(QString);
 
 private slots:
     void on_book_clicked();
 
 private:
     Ui::SeatSelection *ui;
-    confirmation *confirmation;
+    Confirmation *sselection;
 };
 
 #endif // SEATSELECTION_H

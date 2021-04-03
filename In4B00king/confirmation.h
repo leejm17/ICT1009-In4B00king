@@ -4,22 +4,22 @@
 #include <QDialog>
 
 namespace Ui {
-class confirmation;
+class Confirmation;
 }
 
-class confirmation : public QDialog
+class Confirmation : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit confirmation(QWidget *parent = nullptr);
-    ~confirmation();
+    explicit Confirmation(QWidget *parent = nullptr);
+    ~Confirmation();
 
 private slots:
-    void showReceiveForm();
+    void receiveData(QString data);
 
 private:
-    Ui::confirmation *ui;
+    Ui::Confirmation *ui;
 };
 
 #endif // CONFIRMATION_H

@@ -2,19 +2,24 @@
 #include "ui_confirmation.h"
 #include "seatselection.h"
 
-confirmation::confirmation(QWidget *parent) :
+Confirmation::Confirmation(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::confirmation)
+    ui(new Ui::Confirmation)
 {
     ui->setupUi(this);
+    SeatSelection *sselection = new SeatSelection;
+
+    connect(sselection,SIGNAL(sendData(QString)),this,SLOT(receiveData(QString)));
+    sselection->show();
 }
 
-confirmation::~confirmation()
+Confirmation::~Confirmation()
 {
     delete ui;
 }
 
-void confirmation::showReceiveForm()
+void Confirmation::receiveData(QString data)
 {
-    qDebug() << "TEST2";
+    ui->userInput->setText(data);
 }
+
