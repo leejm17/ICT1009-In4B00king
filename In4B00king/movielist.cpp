@@ -20,6 +20,11 @@ MovieList::MovieList(QWidget *parent) :
     connect(confirmationScreen,SIGNAL(updateSeats()),diamondHall,SLOT(updateSeats()));
     connect(this,SIGNAL(updateSeats()),economyHall,SLOT(updateSeats()));
     connect(this,SIGNAL(updateSeats()),diamondHall,SLOT(updateSeats()));
+
+    db = MyDB::getInstance()->getDBInstance();
+
+    currentOffset = 0;
+    updateUI();
 }
 
 MovieList::~MovieList()
@@ -29,7 +34,7 @@ MovieList::~MovieList()
 
 void MovieList::on_SelectButton_clicked()
 {
-    QMessageBox::information(this,"Hi","is_clicked");
+    //QMessageBox::information(this,"Hi","is_clicked");
     emit updateSeats();
     economyHall->show();
     //movieinformation = new MovieInformation(this);
