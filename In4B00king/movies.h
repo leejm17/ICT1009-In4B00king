@@ -22,12 +22,13 @@ private:
     QList<int> movieDurationList; // stores an array of movie duration in same order as movieNameList[] (from DB)
 public:
     void getMovieList_Db();
-    void displayMovieList(QList<QString>, QList<int>); // movieNameList[], movieDurationList[]
+    void displayMovieList(); // movieNameList[], movieDurationList[]
 };
 
 
 /* Class to store movie information for any 1 movie (Screen: MainScreen_Admin). */
 class MovieInfo {
+//friend void displayMovieDetails(MovieInfo, ShowtimesInfo);  // movieName, movieDuration, movieDesc, movieDates, timeslots, halls
 private:
     int movieID;    // store movieID from DB
     QString movieName;
@@ -43,7 +44,6 @@ public:
     void getMovieDetails_Db();
     void generateMovieDates();
 
-friend void displayMovieDetails(MovieInfo, ShowtimesInfo);  // movieName, movieDuration, movieDesc, movieDates, timeslots, halls
 friend void addMovie_Db(MovieInfo, ShowtimesInfo);   // movieName, movieDuration, movieDebut, movieFinale, movieDesc, movieDates, timeslots
 };
 
@@ -57,8 +57,8 @@ public:
     ShowtimesInfo();    // unused default constructor
     void getShowtimes_Db(QString, QString); // movieName, movieDate
     void generateShowtimes(QString); // movieDate
+    void displayMovieDetails();  // movieName, movieDuration, movieDesc, movieDates, timeslots, halls
 
-friend void displayMovieDetails(MovieInfo, ShowtimesInfo);  // movieName, movieDuration, movieDesc, movieDates, timeslots, halls
 friend void addMovie_Db(MovieInfo, ShowtimesInfo);   // movieName, movieDuration, movieDebut, movieFinale, movieDesc, movieDates, timeslots
 };
 
