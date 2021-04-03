@@ -20,6 +20,9 @@ public:
     explicit MovieList(QWidget *parent = nullptr);
     ~MovieList();
 
+signals:
+    void updateSeats();
+
 private slots:
 
     void on_SelectButton_clicked();
