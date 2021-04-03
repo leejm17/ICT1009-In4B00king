@@ -2,7 +2,7 @@
 #define DIAMONDHALL_H
 
 #include <QDialog>
-#include "seatselection.h"
+#include "mydb.h"
 
 namespace Ui {
 class DiamondHall;
@@ -15,14 +15,16 @@ class DiamondHall : public QDialog
 public:
     explicit DiamondHall(QWidget *parent = nullptr);
     ~DiamondHall();
-    void updateSeats();
+
+signals:
+    void showSeatSelection();
 
 private slots:
     void on_book_clicked();
+    void updateSeats();
 
 private:
     Ui::DiamondHall *ui;
-    SeatSelection *seatSelection;
 };
 
 #endif // DIAMONDHALL_H

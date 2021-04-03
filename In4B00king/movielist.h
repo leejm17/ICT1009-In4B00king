@@ -5,6 +5,8 @@
 #include "movieinformation.h"
 #include "economyhall.h"
 #include "diamondhall.h"
+#include "seatselection.h"
+#include "confirmationscreen.h"
 
 namespace Ui {
 class MovieList;
@@ -28,6 +30,8 @@ private:
     Ui::MovieList *ui;
     EconomyHall *economyHall;
     DiamondHall *diamondHall;
+    SeatSelection *seatSelection;
+    ConfirmationScreen *confirmationScreen;
 };
 
 #endif // MAINPAGE_H

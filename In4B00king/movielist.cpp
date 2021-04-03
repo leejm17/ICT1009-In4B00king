@@ -10,6 +10,14 @@ MovieList::MovieList(QWidget *parent) :
     ui->setupUi(this);
     economyHall = new EconomyHall(this);
     diamondHall = new DiamondHall(this);
+    seatSelection = new SeatSelection(this);
+    confirmationScreen = new ConfirmationScreen(this);
+
+    connect(economyHall,SIGNAL(showSeatSelection()),seatSelection,SLOT(showSeatSelection()));
+    connect(diamondHall,SIGNAL(showSeatSelection()),seatSelection,SLOT(showSeatSelection()));
+    connect(seatSelection,SIGNAL(showConfirmation(QString)),confirmationScreen,SLOT(showConfirmation(QString)));
+    connect(confirmationScreen,SIGNAL(updateSeats()),economyHall,SLOT(updateSeats()));
+    connect(confirmationScreen,SIGNAL(updateSeats()),diamondHall,SLOT(updateSeats()));
 }
 
 MovieList::~MovieList()
@@ -19,7 +27,7 @@ MovieList::~MovieList()
 
 void MovieList::on_SelectButton_clicked()
 {
-    QMessageBox::information(this,"Hi","is_clicked");
+    //QMessageBox::information(this,"Hi","is_clicked");
     economyHall->show();
     //movieinformation = new MovieInformation(this);
     //movieinformation->show();

@@ -6,7 +6,6 @@ EconomyHall::EconomyHall(QWidget *parent) :
     ui(new Ui::EconomyHall)
 {
     ui->setupUi(this);
-    seatSelection = new SeatSelection(this);
 
     updateSeats();
 }
@@ -45,8 +44,7 @@ void EconomyHall::updateSeats()
 }
 
 void EconomyHall::on_book_clicked()
-{
-    seatSelection->updateSelection();
-    seatSelection->show();
+{   
+    emit showSeatSelection();
 }
 

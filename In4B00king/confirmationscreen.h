@@ -2,6 +2,7 @@
 #define CONFIRMATIONSCREEN_H
 
 #include <QDialog>
+#include "mydb.h"
 
 namespace Ui {
 class ConfirmationScreen;
@@ -15,8 +16,12 @@ public:
     explicit ConfirmationScreen(QWidget *parent = nullptr);
     ~ConfirmationScreen();
 
+signals:
+    void updateSeats();
+
 private slots:
-    void receiveData(QString data);
+    void showConfirmation(QString seat);
+    void on_confirm_clicked();
 
 private:
     Ui::ConfirmationScreen *ui;

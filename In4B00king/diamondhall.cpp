@@ -6,7 +6,6 @@ DiamondHall::DiamondHall(QWidget *parent) :
     ui(new Ui::DiamondHall)
 {
     ui->setupUi(this);
-    seatSelection = new SeatSelection(this);
 
     updateSeats();
 }
@@ -45,6 +44,5 @@ void DiamondHall::updateSeats()
 }
 void DiamondHall::on_book_clicked()
 {
-    seatSelection->updateSelection();
-    seatSelection->show();
+    emit showSeatSelection();
 }
