@@ -83,7 +83,7 @@ void MovieList::updateUI()
     movies[2].title->setPalette(sample_palette);
     movies[2].duration->setPalette(sample_palette);
 
-    std::cout << "currentOffset: " << currentOffset << std::endl;
+    qDebug() << "currentOffset: " << currentOffset;
 
     QSqlQuery query(db);
     query.prepare("SELECT name, duration FROM MovieList LIMIT 3 OFFSET " + QString(std::to_string(3*currentOffset).c_str()));
@@ -113,8 +113,8 @@ void MovieList::updateUI()
 
             currentIndex++;
 
-            std::cout << "title: " << query.value(0).toString().toUtf8().constData();
-            std::cout << " duration : " << query.value(1).toString().toUtf8().constData() << std::endl;
+            qDebug() << "title: " << query.value(0).toString().toUtf8().constData();
+            qDebug() << " duration : " << query.value(1).toString().toUtf8().constData();
         }
     }
     query.finish();
