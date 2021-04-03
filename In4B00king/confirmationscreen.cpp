@@ -23,7 +23,7 @@ void ConfirmationScreen::showConfirmation(QString seat)
 void ConfirmationScreen::on_confirm_clicked()
 {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
-    query.prepare("update MovieSeats set MovieSeats.available='FALSE' where exists (select null from HallSeats inner join MovieSeats on HallSeats.seat_ID=MovieSeats.seat_ID where seat_num='"+ui->seat->text()+"' and MovieSeats.show_ID=1 and MovieSeats.available='TRUE' and HallSeats.condition='good')");
+    query.prepare("update MovieSeats set available='FALSE' where seat_ID=(select MovieSeats.seat_ID from MovieSeats inner join HallSeats on MovieSeats.seat_ID=HallSeats.seat_ID where HallSeats.seat_num='A1' and MovieSeats.show_ID=1 and MovieSeats.available='TRUE' and HallSeats.condition='good')");
 
     if(!query.exec())
     {
