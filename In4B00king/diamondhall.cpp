@@ -46,3 +46,7 @@ void DiamondHall::on_book_clicked()
 {
     emit showSeatSelection();
 }
+
+void DiamondHall::closeEvent(QCloseEvent *event){
+    emit closeAll();
+}

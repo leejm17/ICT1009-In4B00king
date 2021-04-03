@@ -18,6 +18,7 @@ public:
 
 signals:
     void showSeatSelection();
+    void closeAll();
 
 private slots:
     void on_book_clicked();
@@ -25,6 +26,7 @@ private slots:
 
 private:
     Ui::DiamondHall *ui;
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // DIAMONDHALL_H

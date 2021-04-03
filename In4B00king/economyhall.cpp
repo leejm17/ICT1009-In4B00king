@@ -48,3 +48,6 @@ void EconomyHall::on_book_clicked()
     emit showSeatSelection();
 }
 
+void EconomyHall::closeEvent(QCloseEvent *event){
+    emit closeAll();
+}

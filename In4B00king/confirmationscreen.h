@@ -18,6 +18,7 @@ public:
 
 signals:
     void updateSeats();
+    void closeAll();
 
 private slots:
     void showConfirmation(QString seat);
