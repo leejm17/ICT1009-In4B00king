@@ -4,6 +4,8 @@
 */
 
 #include <movies.h>
+#include <QDate>
+#include <QCalendar>
 
 /* Retrieves a list of movies & duration from DB & append to their respective arrays. */
 void MovieListInfo::getMovieList_Db() {
@@ -27,36 +29,28 @@ void MovieListInfo::getMovieList_Db() {
 }
 
 /* (1) Call displayMovieList() in MainScreen_Cust to display an array/series of movies currently on show. */
-void MovieListInfo::displayMovieList(QList<QString> movieNameList, QList<int> movieDurationList) {
+void MovieListInfo::displayMovieList() {
     getMovieList_Db();
     // movieNameList array stores a list of movies
     // movieDurationList stores a list of movies' duration
-    for(int cnt=0; cnt<movieNameList.size(); cnt++) {
-        qDebug() << movieNameList.at(cnt);
-        qDebug() << movieDurationList.at(cnt);
+    for (int cnt=0; cnt<this->movieNameList.size(); cnt++) {
+        qDebug() << this->movieNameList.at(cnt);
+        qDebug() << this->movieDurationList.at(cnt);
     }
 }
 
 /* (2) When Customer clicks on a Movie in MainScreen, via this Constructor, initialise the data members. */
 /* Calls getMovieDetails_Db() to retrieve description & array of movieDates, then initialise them. */
+/* Redirect Customer to MovieDetails screen. */
 MovieInfo::MovieInfo(QString movieName, int duration) {
     this->movieName = movieName;
     this->movieDuration = duration;
-    getMovieDetails_Db();
+    MovieInfo::getMovieDetails_Db();
+
+    // code to redirect customer to movieinformation page
 }
 
-/* When Admin creates a new movie in MainScreen_Admin, via this Constructor, initialise the data members. */
-MovieInfo::MovieInfo(QString movieName, int duration, QString debut, QString finale, QString desc) {
-    this->movieName = movieName;
-    this->movieDuration = duration;
-    this->movieDebut = debut;
-    this->movieFinale = finale;
-    this->movieDesc = desc;
-    /* SELECT MovieList.desc, MovieShowing.date FROM MovieList WHERE (MovieList.name=movieName)
-        ON (MovieList.movieId = MovieShowing.movieId). */
-}
-
-/* Call getMovieDetails_Db() in MovieInfo() Constructor. */
+/* Call getMovieDetails_Db() from MovieInfo() Constructor. */
 void MovieInfo::getMovieDetails_Db() {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare(
@@ -79,13 +73,99 @@ void MovieInfo::getMovieDetails_Db() {
     }
 }
 
-/* Call generateMovieDates() in MainScreen_Admin to generate an incremental list of movie show dates & append to movieDates[]. */
-void MovieInfo::generateMovieDates() {
-
+/* (3) Call displayMovieDetails() in MovieDetails to display a movie's information with its corresponding timeslots based on a given day. */
+void ShowtimesInfo::displayMovieDetails() {
+    // code to run when customer clicks on a date in movieinformation page
+    QString name;   // var of moviename from ui
+    QString date;   // var of moviedate from ui
+    ShowtimesInfo::getShowtimes_Db(name, date);
+    // display movie showtimes with timeslots & halls array
 }
 
-/* (4) Call displayMovieDetails() in MovieDetails to display a movie's information with its corresponding timeslots based on a given day. */
-void displayMovieDetails(MovieInfo, ShowtimesInfo) {
+/* (4) When Customer clicks on a movie date, call getShowtimes_Db(). */
+/* Retrieves a list of timeslots & hallIDs from DB, and append to their respective arrays. */
+void ShowtimesInfo::getShowtimes_Db(QString movieName, QString movieDate) {
+    QSqlQuery query(MyDB::getInstance()->getDBInstance());
+    query.prepare("SELECT timeslot, hall_ID FROM MovieShowing"
+                  " JOIN MovieList ON (MovieShowing.movie_ID = MovieList.movie_ID)"
+                  " WHERE (MovieList.name=:name AND MovieShowing.date=:date);");
+    query.bindValue(":name", movieName);
+    query.bindValue(":date", movieDate);
+
+    if(!query.exec()) {
+        qDebug() << query.lastError().text() << query.lastQuery();
+    } else {
+        qDebug() << "getShowtimes_Db() read query for " << movieName
+                 << " on " << movieDate
+                 << " was successful.";
+        while(query.next()) {
+            timeslots.append(query.value(0).toString());
+            halls.append(query.value(1).toInt());
+        }
+        MyDB::ResetInstance();
+    }
+}
+
+
+/* Admin Console: MovieInfo & addMovie_Db() */
+/* When Admin creates a new movie in MainScreen_Admin, via this Constructor, initialise the data members. */
+MovieInfo::MovieInfo(QString movieName, int duration, QString debut, QString finale, QString desc) {
+    this->movieName = movieName;
+    this->movieDuration = duration;
+    this->movieDebut = debut;
+    this->movieFinale = finale;
+    this->movieDesc = desc;
+    /* SELECT MovieList.desc, MovieShowing.date FROM MovieList WHERE (MovieList.name=movieName)
+        ON (MovieList.movieId = MovieShowing.movieId). */
+}
+
+/* Call generateMovieDates() in MainScreen_Admin to generate an incremental list of movie show dates & append to movieDates[]. */
+void MovieInfo::generateMovieDates() {
+    // given movieDebut & movieFinale
+    QDate debut = QDate::fromString("2021-12-10", "yyyy-MM-dd");
+    QDate finale = QDate::fromString("2022-02-02", "yyyy-MM-dd");
+
+    if (debut > finale) {
+        qDebug() << "Debut cannot be after Finale!";
+        exit(1);
+    }
+
+    QCalendar qCalendarObj;
+    for (int month=debut.month(); month<=12+finale.month(); month++) { // for every month between debut & finale
+        if (month > 12) {       // finale.month()+12 in case debut is Dec 2021 & finale is Feb 2022
+            break;
+        }
+        int daysThisMonth = qCalendarObj.daysInMonth(month, debut.year());
+        if (month == debut.month()) {                       // if month is same as debut month
+            for (int day=debut.day(); day<=daysThisMonth; day++) {  // from debut till end of month
+                QString date = QString::number(debut.year()).append("-")
+                        .append(QString::number(month)).append("-")
+                        .append(QString::number(day));
+                movieDates.append(date);    // append date to movieDates
+            }
+        } else if (month == finale.month()) {               // else if month is same as finale month
+            for (int day=1; day<=finale.day(); day++) {         // from start of month till finale
+                QString date = QString::number(debut.year()).append("-")
+                        .append(QString::number(month)).append("-")
+                        .append(QString::number(day));
+                movieDates.append(date);    // append date to movieDates
+            }
+        } else {                                            // else if month is NOT debut nor finale month
+            for (int day=1; day<=daysThisMonth; day++) {        // from start of month till end of month
+                QString date = QString::number(debut.year()).append("-")
+                        .append(QString::number(month)).append("-")
+                        .append(QString::number(day));
+                movieDates.append(date);    // append date to movieDates
+            }
+        }
+        if (month+12 == 12+finale.month()) {       // break if this month is the end of the same calendar year
+            break;
+        }
+    }
+}
+
+/* Call generateShowtimes() in MainScreen_Admin to generate a list of movie show times & match their halls, then append to their respective arrays. */
+void ShowtimesInfo::generateShowtimes(QString) {
 
 }
 
@@ -209,33 +289,4 @@ void addMovie_Db(MovieInfo movie, ShowtimesInfo showtime) {
         VALUES ('normal' OR 'diamond') */
 
     MyDB::ResetInstance();
-}
-
-/* (3) When Customer clicks on a movie date, call getShowtimes_Db(). */
-/* Retrieves a list of timeslots & hallIDs from DB, and append to their respective arrays. */
-void ShowtimesInfo::getShowtimes_Db(QString movieName, QString movieDate) {
-    QSqlQuery query(MyDB::getInstance()->getDBInstance());
-    query.prepare("SELECT timeslot, hall_ID FROM MovieShowing"
-                  " JOIN MovieList ON (MovieShowing.movie_ID = MovieList.movie_ID)"
-                  " WHERE (MovieList.name=:name AND MovieShowing.date=:date);");
-    query.bindValue(":name", movieName);
-    query.bindValue(":date", movieDate);
-
-    if(!query.exec()) {
-        qDebug() << query.lastError().text() << query.lastQuery();
-    } else {
-        qDebug() << "getShowtimes_Db() read query for " << movieName
-                 << " on " << movieDate
-                 << " was successful.";
-        while(query.next()) {
-            timeslots.append(query.value(0).toString());
-            halls.append(query.value(1).toInt());
-        }
-        MyDB::ResetInstance();
-    }
-}
-
-/* Call generateShowtimes() in MainScreen_Admin to generate a list of movie show times & match their halls, then append to their respective arrays. */
-void ShowtimesInfo::generateShowtimes(QString) {
-
 }
