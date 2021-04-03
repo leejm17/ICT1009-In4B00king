@@ -29,6 +29,7 @@ public:
 /* Class to store movie information for any 1 movie (Screen: MainScreen_Admin). */
 class MovieInfo {
 private:
+    int movieID;    // store movieID from DB
     QString movieName;
     int movieDuration;
     QString movieDebut;  // first date to show movie

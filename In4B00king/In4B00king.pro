@@ -13,6 +13,7 @@ CONFIG += c++11
 LIBS += -LC:/Qt/6.0.3/mingw81_64/lib -lcurl
 
 SOURCES += \
+    confirmationscreen.cpp \
     diamondhall.cpp \
     economyhall.cpp \
     main.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     seatselection.cpp
 
 HEADERS += \
+    confirmationscreen.h \
     diamondhall.h \
     economyhall.h \
     login.h \
@@ -38,6 +40,7 @@ HEADERS += \
     seatselection.h
 
 FORMS += \
+    confirmationscreen.ui \
     diamondhall.ui \
     economyhall.ui \
     login.ui \

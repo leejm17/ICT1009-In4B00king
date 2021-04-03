@@ -6,6 +6,10 @@ SeatSelection::SeatSelection(QWidget *parent) :
     ui(new Ui::SeatSelection)
 {
     ui->setupUi(this);
+    confirmationScreen = new ConfirmationScreen(this);
+
+    connect(this,SIGNAL(sendData(QString)),confirmationScreen,SLOT(receiveData(QString)));
+
 }
 
 SeatSelection::~SeatSelection()
@@ -34,4 +38,10 @@ void SeatSelection::updateSelection()
         ui->book->setEnabled(false);
     }
 
+}
+
+void SeatSelection::on_book_clicked()
+{
+    emit sendData(ui->sselection->currentText());
+    confirmationScreen->show();
 }
