@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include "movielist.h"
 #include "register.h"
-#include "forgetpassword.h"
 #include "mydb.h"
 
 QT_BEGIN_NAMESPACE

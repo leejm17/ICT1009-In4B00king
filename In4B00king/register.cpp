@@ -8,6 +8,8 @@ Register::Register(QWidget *parent) :
     ui(new Ui::Register)
 {
     ui->setupUi(this);
+    ui->comboBox->addItem("@gmail.com");
+    ui->comboBox->addItem("@hotmail.com");
 }
 
 Register::~Register()
@@ -18,13 +20,24 @@ Register::~Register()
 void Register::on_Register_2_clicked()
 {
     QString gender,email, pwd, pwd2, fname, lname;
+    bool emailcheck = false;
     bool accountcreated = false;
-    email = ui->Email->text();
+    email = ui->Email->text() + ui->comboBox->currentText();
     pwd = ui->Password->text();
     pwd2 = ui->Password_2->text();
     fname = ui->Fname->text();
     lname = ui->Lname->text();
     QString age = ui->Age->text();
+
+    QSqlQuery query(MyDB::getInstance()->getDBInstance());
+    query.prepare("SELECT * FROM User WHERE email_ID='" + email + "';");
+    if(!query.exec()){
+            qDebug() << query.lastError().text() << query.lastQuery();
+    }else if (query.exec()){
+        if(query.next()){
+            emailcheck = true;
+        }
+    }
     if(ui->Male->isChecked()){
         gender = "Male";
     }else if (ui->Female->isChecked()){
@@ -42,6 +55,8 @@ void Register::on_Register_2_clicked()
         QMessageBox::warning(this, "Empty last name", "Please enter your last name!");
     }else if (gender.isEmpty()){
         QMessageBox::warning(this, "Invalid gender", "Please select your gender!");
+    }else if (emailcheck){
+        QMessageBox::warning(this, "Duplicate Email", "Please enter a new email, email has been used already!");
     }else{
         QMessageBox::StandardButton reply = QMessageBox::question(this, "Register Account", "Are you sure you want to register this account?\nEmail:"+
                                                                   email + "\nFirst name:" + fname + "\nLast name:" + lname + "\nAge:" +
@@ -62,6 +77,8 @@ void Register::on_Register_2_clicked()
             query.bindValue(":lname", lname);
             query.bindValue(":age", age);
             query.bindValue(":gender", gender);
+            Login *loginpage = new Login();
+            loginpage->show();
             query.exec();
             accountcreated = true;
         } else {
@@ -71,35 +88,4 @@ void Register::on_Register_2_clicked()
     if (accountcreated){
         this->close();
     }
-}
-
-void Register::on_Close_clicked()
-{
-    close();
-}
-
-void Register::on_sendemail_clicked()
-{
-    bool emailcheck = false;
-    QSqlQuery query(MyDB::getInstance()->getDBInstance());
-    QString email = ui->Email->text();
-    query.prepare("SELECT * FROM User WHERE email_ID='" + email + "';");
-    if(!query.exec()){
-            qDebug() << query.lastError().text() << query.lastQuery();
-    }else if (query.exec()){
-        if(query.next()){
-            emailcheck = true;
-        }
-    }
-    if (emailcheck){
-            QMessageBox::warning(this, "Duplicate Email", "Please enter a new email, email has been used already!");
-            //Can check add regex if want otherwise just skip
-    }else{
-        //Disable button and send email to verify
-    }
-}
-
-void Register::on_verify_clicked()
-{
-    //Add the checking of curl email
 }
