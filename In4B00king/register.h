@@ -18,6 +18,11 @@ public:
 
 private slots:
     void on_Register_2_clicked();
+    void on_testBtn_clicked();
+
+    void on_verifyBtn_clicked();
+
+    void on_verifyBtn_2_clicked();
 
     void on_Close_clicked();
 
