@@ -7,9 +7,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
-#include "mydb.h"
-
-using namespace std;
+#include <mydb.h>
 
 /* Forward declaration for friend-function. */
 class ShowtimesInfo;
