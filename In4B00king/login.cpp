@@ -3,6 +3,8 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QCryptographicHash>
+#include "user.h"
+
 Login::Login(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Login)
@@ -33,13 +35,18 @@ void Login::on_pushButton_clicked()
         qDebug() << query.lastError().text() << query.lastQuery();
     }else{
         if(query.next()){
-            qDebug() << "read was successful "<< query.lastQuery();
+            //qDebug() << "read was successful "<< query.lastQuery();
             QMessageBox::information(this, "Login", "You have logged in successfully");
             close();
+
+            user user;
+            user.GetUserVariables(username);
+            qDebug() << user.type;
+
             mainpage = new MovieList(this);
             mainpage->show();
         }else{
-            qDebug() << "read was successful "<< query.lastQuery();
+            //qDebug() << "read was successful "<< query.lastQuery();
             QMessageBox::warning(this, "Login", "Wrong email or password");
         }
     }

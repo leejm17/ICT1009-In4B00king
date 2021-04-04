@@ -27,7 +27,7 @@ void MyDB::init()
 
 MyDB *MyDB::getInstance()
 {
-    qDebug() << "in MyDB::getInstance()";
+    //qDebug() << "in MyDB::getInstance()";
 
     if(instance == nullptr)
         instance = new MyDB();
@@ -37,19 +37,19 @@ MyDB *MyDB::getInstance()
 
 QSqlDatabase MyDB::getDBInstance()
 {
-    qDebug() <<"in getDBInstance()";
+    //qDebug() <<"in getDBInstance()";
     return db;
 }
 
 void MyDB::ResetInstance()
 {
-      qDebug() << "deleting instance of MyDB...";
+      //qDebug() << "deleting instance of MyDB...";
       delete instance;
       instance = nullptr;
 }
 
 MyDB::~MyDB()
 {
-   qDebug() << "closing database connection...";
+   //qDebug() << "closing database connection...";
    db.close();
 }

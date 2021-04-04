@@ -66,11 +66,13 @@ void Register::on_Register_2_clicked()
         QMessageBox::warning(this, "Invalid gender", "Please select your gender!");
     }else if (emailcheck){
         QMessageBox::warning(this, "Duplicate Email", "Please enter a new email, email has been used already!");
+    }else if (!verified){
+        QMessageBox::warning(this, "Title", "Msg");
     }else{
         QMessageBox::StandardButton reply = QMessageBox::question(this, "Register Account", "Are you sure you want to register this account?\nEmail:"+
                                                                   email + "\nFirst name:" + fname + "\nLast name:" + lname + "\nAge:" +
                                                                   age + "\nGender:" + gender, QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::Yes && verified == true) {
+        if (reply == QMessageBox::Yes) {
             qDebug() << "Yes was clicked";
             QSqlQuery query(MyDB::getInstance()->getDBInstance());
             query.prepare("INSERT INTO User(email_ID,password,first_name,last_name,age,gender,type) VALUES (:email, :password, :fname, :lname, :age, :gender, 'customer')");
