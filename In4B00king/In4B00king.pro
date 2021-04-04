@@ -26,7 +26,8 @@ SOURCES += \
     movies.cpp \
     mydb.cpp \
     register.cpp \
-    seatselection.cpp
+    seatselection.cpp \
+    user.cpp
 
 HEADERS += \
     confirmationscreen.h \
@@ -41,7 +42,8 @@ HEADERS += \
     movies.h \
     mydb.h \
     register.h \
-    seatselection.h
+    seatselection.h \
+    user.h
 
 FORMS += \
     confirmationscreen.ui \
