@@ -18,12 +18,21 @@ public:
 
     QString getType() const;
 
+    QString getFname() const;
+
+    QString getLname() const;
+
+    QString getEmail() const;
+
 private:
+    QString email;
     QString name;
     int age;
     QString gender;
     QString about;
     QString type;
+    QString fname;
+    QString lname;
 
 };
 

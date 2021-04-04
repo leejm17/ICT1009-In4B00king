@@ -219,7 +219,7 @@ void Register::on_verify_clicked()
 {
     //Add the checking of curl email
     QString verifyText;
-    verifyText = ui->verify->text();
+    verifyText = ui->verificationcode->text();
     if(verifyText == generated_OTP){
         qDebug() <<  "M A T C H E D";
         verified = true;

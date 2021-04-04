@@ -7,6 +7,9 @@
 #include "diamondhall.h"
 #include "seatselection.h"
 #include "confirmationscreen.h"
+#include "user.h"
+#include "editprofile.h"
+#include "editmovies.h"
 
 namespace Ui {
 class MovieList;
@@ -23,6 +26,7 @@ public:
 
 signals:
     void updateSeats();
+    void sendData(user);
 
 private slots:
 
@@ -46,7 +50,13 @@ private slots:
 
     void on_Edit_Profile_clicked();
 
-    void receiveData(QStringList);
+    void receiveData(user);
+
+
+
+    void on_logout_clicked();
+
+    void on_editmovie_clicked();
 
 private:
     Ui::MovieList *ui;
@@ -56,6 +66,10 @@ private:
     ConfirmationScreen *confirmationScreen;
 	int currentOffset;
     QSqlDatabase db;
+    user newuser;
+    editprofile *profilepage;
+    editmovies *moviespage;
+
 };
 
 #endif // MAINPAGE_H

@@ -2,6 +2,7 @@
 #define EDITPROFILE_H
 
 #include "mydb.h"
+#include "user.h"
 #include <QDialog>
 
 namespace Ui {
@@ -16,8 +17,18 @@ public:
     explicit editprofile(QWidget *parent = nullptr);
     ~editprofile();
 
+private slots:
+
+    void on_Close_clicked();
+    void receiveData(user);
+
+    void on_profilechange_clicked();
+
+    void on_pwdchange_clicked();
+
 private:
     Ui::editprofile *ui;
+    user edituser;
 };
 
 #endif // EDITPROFILE_H

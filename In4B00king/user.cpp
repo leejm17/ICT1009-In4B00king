@@ -16,7 +16,10 @@ void user::GetUserVariables(QString username){
         qDebug() << "Successful read";
 
         while(query.next()){
+            this->email = query.value(0).toString();
             this->name = query.value(2).toString() + query.value(3).toString();
+            this->fname = query.value(2).toString();
+            this->lname = query.value(3).toString();
             this->age = query.value(4).toInt();
             this->gender = query.value(5).toString();
             this->about = query.value(6).toString();
@@ -51,3 +54,17 @@ QString user::getType() const
     return type;
 }
 
+QString user::getFname() const
+{
+    return fname;
+}
+
+QString user::getLname() const
+{
+    return lname;
+}
+
+QString user::getEmail() const
+{
+    return email;
+}

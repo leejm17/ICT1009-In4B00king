@@ -34,17 +34,19 @@ void Login::on_pushButton_clicked()
     }else{
         if(query.next()){
             qDebug() << "read was successful "<< query.lastQuery();
-            QMessageBox::information(this, "Login", "You have logged in successfully");
+
+            QMessageBox::information(this, "Login", "You have logged in successfully as:" + username);
             close();
 
             //Create new movielist page
             mainpage = new MovieList(this);
             mainpage->show();
-            //Send username
-            connect(this, SIGNAL(sendData(QStringList)), mainpage, SLOT(receiveData(QStringList)));
-            QStringList sl;
-            sl.append(username);
-            emit sendData(sl);
+
+            connect(this, SIGNAL(sendData(user)), mainpage, SLOT(receiveData(user)));
+            user newuser;
+            newuser.GetUserVariables(username);
+            emit sendData(newuser);
+
 
         }else{
             qDebug() << "read was successful "<< query.lastQuery();

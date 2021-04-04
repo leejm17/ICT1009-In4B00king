@@ -53,7 +53,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_8">
       <item>
-       <widget class="QLineEdit" name="Email_2">
+       <widget class="QLineEdit" name="verificationcode">
         <property name="maximumSize">
          <size>
           <width>459</width>

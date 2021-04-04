@@ -6,6 +6,7 @@
 #include "register.h"
 #include "forgetpassword.h"
 #include "mydb.h"
+#include "user.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Login; }
@@ -22,11 +23,10 @@ public:
 private slots:
     void on_pushButton_clicked();
     void on_Register_clicked();
-
     void on_forgetpwd_clicked();
 
 signals:
-    void sendData(QStringList);
+    void sendData(user);
 
 private:
     Ui::Login *ui;

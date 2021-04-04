@@ -1,6 +1,7 @@
 #include "movielist.h"
 #include "ui_movielist.h"
 #include "editprofile.h"
+#include "user.h"
 #include <QPixmap>
 #include <QMessageBox>
 
@@ -35,6 +36,9 @@ MovieList::MovieList(QWidget *parent) :
 
     currentOffset = 0;
     updateUI();
+
+
+
 }
 
 MovieList::~MovieList()
@@ -42,12 +46,21 @@ MovieList::~MovieList()
     delete ui;
 }
 
-void MovieList::receiveData(QStringList sl){
+void MovieList::receiveData(user newuser){
+    this->newuser = newuser;
     QString labelText = "<P><b><i><font color='#ffffff' font_size=12>";
-    labelText.append("Welcome " + sl[0]);
+    labelText.append("Hello " + newuser.getEmail());
     labelText.append("</font></i></b></P></br>");
     ui->profile->setText(labelText);
+    if (newuser.getType() == "customer"){
+        ui->editmovie->setVisible(false);
+    }else{
+        ui->Edit_Profile->setVisible(false);
+    }
+
 }
+
+
 
 void MovieList::on_SelectButton_clicked()
 {
@@ -180,7 +193,21 @@ void MovieList::on_Select_Button1_clicked()
 
 void MovieList::on_Edit_Profile_clicked()
 {
-    editprofile profilepage;
-    profilepage.setModal(true);
-    profilepage.exec();
+    profilepage = new editprofile(this);
+    profilepage->show();
+    connect(this, SIGNAL(sendData(user)), profilepage, SLOT(receiveData(user)));
+    QString email = newuser.getEmail();
+    newuser.GetUserVariables(email);
+    emit sendData(newuser);
+}
+
+void MovieList::on_logout_clicked()
+{
+    close();
+}
+
+void MovieList::on_editmovie_clicked()
+{
+    moviespage = new editmovies(this);
+    moviespage->show();
 }
