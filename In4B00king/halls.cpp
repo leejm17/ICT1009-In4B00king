@@ -9,7 +9,7 @@
 //Hall newEconomyHall1("economy");
 //Hall newDiamondHall1("diamond");
 //newEconomyHall1.generateSeats(newEconomyHall1);
-//newDiamondHall1.generateSeats(newDiamondHall1)
+//newDiamondHall1.generateSeats(newDiamondHall1);
 
 /* Constructor for Halls */
 Hall::Hall(QString type) {
