@@ -34,7 +34,7 @@ void Login::on_pushButton_clicked()
     }else{
         if(query.next()){
             qDebug() << "read was successful "<< query.lastQuery();
-            QMessageBox::information(this, "Login", "You have logined successfully");
+            QMessageBox::information(this, "Login", "You have logged in successfully");
             close();
             mainpage = new MovieList(this);
             mainpage->show();
