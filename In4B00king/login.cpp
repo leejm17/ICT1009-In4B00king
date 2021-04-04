@@ -55,7 +55,4 @@ void Login::on_pushButton_clicked()
 void Login::on_Register_clicked()
 {
     this->close();
-    Register registerpage;
-    registerpage.setModal(true);
-    registerpage.exec();
 }

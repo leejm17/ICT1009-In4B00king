@@ -219,3 +219,11 @@ void Register::on_verifyBtn_clicked()
         verified = true;
     }
 }
+
+void Register::on_verifyBtn_2_clicked()
+{
+    this->close();
+    Login loginpage;
+    loginpage.setModal(true);
+    loginpage.exec();
+}

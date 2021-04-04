@@ -22,6 +22,8 @@ private slots:
 
     void on_verifyBtn_clicked();
 
+    void on_verifyBtn_2_clicked();
+
 private:
     Ui::Register *ui;
 };
