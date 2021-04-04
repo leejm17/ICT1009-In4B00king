@@ -23,7 +23,6 @@ void user::GetUserVariables(QString username){
             this->type = query.value(7).toString();
         }
     }
-
 }
 
 QString user::getName() const
