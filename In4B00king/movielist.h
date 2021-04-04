@@ -44,6 +44,10 @@ private slots:
 
     void on_Select_Button1_clicked();
 
+    void on_Edit_Profile_clicked();
+
+    void receiveData(QStringList);
+
 private:
     Ui::MovieList *ui;
     EconomyHall *economyHall;

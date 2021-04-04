@@ -1,5 +1,6 @@
 #include "movielist.h"
 #include "ui_movielist.h"
+#include "editprofile.h"
 #include <QPixmap>
 #include <QMessageBox>
 
@@ -39,6 +40,13 @@ MovieList::MovieList(QWidget *parent) :
 MovieList::~MovieList()
 {
     delete ui;
+}
+
+void MovieList::receiveData(QStringList sl){
+    QString labelText = "<P><b><i><font color='#ffffff' font_size=12>";
+    labelText.append("Welcome " + sl[0]);
+    labelText.append("</font></i></b></P></br>");
+    ui->profile->setText(labelText);
 }
 
 void MovieList::on_SelectButton_clicked()
@@ -168,4 +176,12 @@ void MovieList::on_Select_Button1_clicked()
 {
     hide();
     (new MovieInformation())->show();
+}
+
+void MovieList::on_Edit_Profile_clicked()
+{
+    this->close();
+    editprofile profilepage;
+    profilepage.setModal(true);
+    profilepage.exec();
 }
