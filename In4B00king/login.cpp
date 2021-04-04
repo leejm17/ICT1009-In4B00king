@@ -41,7 +41,7 @@ void Login::on_pushButton_clicked()
 
             user user;
             user.GetUserVariables(username);
-            qDebug() << user.type;
+            qDebug() << user.getType();
 
             mainpage = new MovieList(this);
             mainpage->show();
@@ -50,7 +50,6 @@ void Login::on_pushButton_clicked()
             QStringList sl;
             sl.append(username);
             emit sendData(sl);
-
         }else{
             //qDebug() << "read was successful "<< query.lastQuery();
             QMessageBox::warning(this, "Login", "Wrong email or password");

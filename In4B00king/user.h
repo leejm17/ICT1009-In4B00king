@@ -1,22 +1,29 @@
 #ifndef USER_H
 #define USER_H
-
 #include <QMainWindow>
 #include <QMessageBox>
-
-using namespace std;
 
 class user
 {
 public:
     user();
     void GetUserVariables(QString username);
-    QString type;
+    QString getName() const;
+
+    int getAge() const;
+
+    QString getGender() const;
+
+    QString getAbout() const;
+
+    QString getType() const;
+
 private:
-    QString email_ID;
     QString name;
-    QString age;
+    int age;
+    QString gender;
     QString about;
+    QString type;
 
 };
 

@@ -224,6 +224,6 @@ void Register::on_verifyBtn_2_clicked()
 {
     this->close();
     Login loginpage;
-    loginpage.setModal(true);
-    loginpage.exec();
+//    loginpage.setModal(true);
+//    loginpage.exec();
 }
