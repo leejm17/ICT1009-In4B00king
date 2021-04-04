@@ -180,7 +180,6 @@ void MovieList::on_Select_Button1_clicked()
 
 void MovieList::on_Edit_Profile_clicked()
 {
-    this->close();
     editprofile profilepage;
     profilepage.setModal(true);
     profilepage.exec();

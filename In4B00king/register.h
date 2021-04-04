@@ -24,6 +24,12 @@ private slots:
 
     void on_verifyBtn_2_clicked();
 
+    void on_Close_clicked();
+
+    void on_sendemail_clicked();
+
+    void on_verify_clicked();
+
 private:
     Ui::Register *ui;
 };

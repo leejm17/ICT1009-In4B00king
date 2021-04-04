@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>526</width>
-    <height>421</height>
+    <width>382</width>
+    <height>396</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>511</width>
-     <height>401</height>
+     <width>361</width>
+     <height>381</height>
     </rect>
    </property>
    <property name="title">
@@ -48,15 +48,12 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QComboBox" name="comboBox"/>
-      </item>
      </layout>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_8">
       <item>
-       <widget class="QLineEdit" name="Verify">
+       <widget class="QLineEdit" name="Email_2">
         <property name="maximumSize">
          <size>
           <width>459</width>
@@ -69,22 +66,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="verifyBtn">
+       <widget class="QPushButton" name="verify">
         <property name="text">
          <string>Verify</string>
-        </property>
-        <property name="autoDefault">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="testBtn">
+       <widget class="QPushButton" name="sendemail">
         <property name="text">
          <string>Send Email</string>
-        </property>
-        <property name="autoDefault">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -231,12 +222,9 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="verifyBtn_2">
+     <widget class="QPushButton" name="Close">
       <property name="text">
-       <string>Back</string>
-      </property>
-      <property name="autoDefault">
-       <bool>true</bool>
+       <string>Close</string>
       </property>
      </widget>
     </item>

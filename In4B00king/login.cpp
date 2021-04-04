@@ -3,8 +3,6 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QCryptographicHash>
-#include "user.h"
-
 Login::Login(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Login)
@@ -35,23 +33,21 @@ void Login::on_pushButton_clicked()
         qDebug() << query.lastError().text() << query.lastQuery();
     }else{
         if(query.next()){
-            //qDebug() << "read was successful "<< query.lastQuery();
+            qDebug() << "read was successful "<< query.lastQuery();
             QMessageBox::information(this, "Login", "You have logged in successfully");
             close();
 
-            user user;
-            user.GetUserVariables(username);
-            qDebug() << user.getType();
-
+            //Create new movielist page
             mainpage = new MovieList(this);
             mainpage->show();
-
+            //Send username
             connect(this, SIGNAL(sendData(QStringList)), mainpage, SLOT(receiveData(QStringList)));
             QStringList sl;
             sl.append(username);
             emit sendData(sl);
+
         }else{
-            //qDebug() << "read was successful "<< query.lastQuery();
+            qDebug() << "read was successful "<< query.lastQuery();
             QMessageBox::warning(this, "Login", "Wrong email or password");
         }
     }
@@ -59,15 +55,14 @@ void Login::on_pushButton_clicked()
 
 void Login::on_Register_clicked()
 {
-    this->close();
+    Register registerpage;
+    registerpage.setModal(true);
+    registerpage.exec();
 }
 
 void Login::on_forgetpwd_clicked()
 {
-    this->close();
-    /*
-    Register registerpage;
-    registerpage.setModal(true);
-    registerpage.exec();
-    */
+    forgetpassword forgetpwd;
+    forgetpwd.setModal(true);
+    forgetpwd.exec();
 }
