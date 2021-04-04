@@ -36,9 +36,11 @@ void Login::on_pushButton_clicked()
             qDebug() << "read was successful "<< query.lastQuery();
             QMessageBox::information(this, "Login", "You have logged in successfully");
             close();
+
+            //Create new movielist page
             mainpage = new MovieList(this);
             mainpage->show();
-
+            //Send username
             connect(this, SIGNAL(sendData(QStringList)), mainpage, SLOT(receiveData(QStringList)));
             QStringList sl;
             sl.append(username);
@@ -53,7 +55,6 @@ void Login::on_pushButton_clicked()
 
 void Login::on_Register_clicked()
 {
-    this->close();
     Register registerpage;
     registerpage.setModal(true);
     registerpage.exec();
@@ -61,10 +62,7 @@ void Login::on_Register_clicked()
 
 void Login::on_forgetpwd_clicked()
 {
-    this->close();
-    /*
-    Register registerpage;
-    registerpage.setModal(true);
-    registerpage.exec();
-    */
+    forgetpassword forgetpwd;
+    forgetpwd.setModal(true);
+    forgetpwd.exec();
 }
