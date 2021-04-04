@@ -38,6 +38,12 @@ void Login::on_pushButton_clicked()
             close();
             mainpage = new MovieList(this);
             mainpage->show();
+
+            connect(this, SIGNAL(sendData(QStringList)), mainpage, SLOT(receiveData(QStringList)));
+            QStringList sl;
+            sl.append(username);
+            emit sendData(sl);
+
         }else{
             qDebug() << "read was successful "<< query.lastQuery();
             QMessageBox::warning(this, "Login", "Wrong email or password");
@@ -51,4 +57,14 @@ void Login::on_Register_clicked()
     Register registerpage;
     registerpage.setModal(true);
     registerpage.exec();
+}
+
+void Login::on_forgetpwd_clicked()
+{
+    this->close();
+    /*
+    Register registerpage;
+    registerpage.setModal(true);
+    registerpage.exec();
+    */
 }

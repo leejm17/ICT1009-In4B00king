@@ -12,6 +12,8 @@ SOURCES += \
     confirmationscreen.cpp \
     diamondhall.cpp \
     economyhall.cpp \
+    editprofile.cpp \
+    forgetpassword.cpp \
     main.cpp \
     login.cpp \
     mainpage.cpp \
@@ -26,6 +28,8 @@ HEADERS += \
     confirmationscreen.h \
     diamondhall.h \
     economyhall.h \
+    editprofile.h \
+    forgetpassword.h \
     login.h \
     mainpage.h \
     movieinformation.h \
@@ -39,6 +43,8 @@ FORMS += \
     confirmationscreen.ui \
     diamondhall.ui \
     economyhall.ui \
+    editprofile.ui \
+    forgetpassword.ui \
     login.ui \
     mainpage.ui \
     movieinformation.ui \

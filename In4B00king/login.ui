@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>472</width>
-    <height>347</height>
+    <height>346</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>220</x>
       <y>70</y>
       <width>241</width>
-      <height>211</height>
+      <height>231</height>
      </rect>
     </property>
     <property name="title">
@@ -54,7 +54,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="password"/>
+        <widget class="QLineEdit" name="password">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -62,6 +66,13 @@
       <widget class="QPushButton" name="pushButton">
        <property name="text">
         <string>Login</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="forgetpwd">
+       <property name="text">
+        <string>Forget Password</string>
        </property>
       </widget>
      </item>
