@@ -215,7 +215,7 @@ void addMovie_Db(MovieInfo movie, ShowtimesInfo showtime) {
         for (int slotCnt=0; slotCnt<showtime.timeslots.length(); slotCnt++) {
             query.prepare(
                 "INSERT INTO MovieShowing (movie_ID, date, timeslot, hall_ID)"
-                " VALUES (:id, :date, :timeslot, :hall)"
+                " VALUES (:id, :date, :timeslot, :hall);"
             );
             query.bindValue(":id", showtime.movieID);
             query.bindValue(":date", showtime.movieDates[dateCnt]);
@@ -284,9 +284,6 @@ void addMovie_Db(MovieInfo movie, ShowtimesInfo showtime) {
             }
         }
     }
-
-    /* INSERT INTO Hall (type)
-        VALUES ('normal' OR 'diamond') */
 
     MyDB::ResetInstance();
 }
