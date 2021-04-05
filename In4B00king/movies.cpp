@@ -32,7 +32,7 @@ void MovieListInfo::displayMovieList(Movie* movies) {
 void MovieListInfo::getMovieList_Db() {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare(
-        "SELECT name, duration"
+        "SELECT movie_ID, name, duration"
         " FROM MovieList"
         " WHERE (debut <= DATE() AND finale >= DATE());"
     );
@@ -42,8 +42,8 @@ void MovieListInfo::getMovieList_Db() {
     } else {
         qDebug() << "getMovieList_Db() read query for all movies was successful.";
         while(query.next()) {
-            movieNameList.append(query.value(0).toString());
-            movieDurationList.append(query.value(1).toString());
+            movieNameList.append(query.value(1).toString());
+            movieDurationList.append(query.value(2).toString());
         }
     }
     MyDB::ResetInstance();
@@ -65,7 +65,7 @@ MovieInfo::MovieInfo(QString movieName, int duration) {
 void MovieInfo::getMovieDetails_Db() {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare(
-        "SELECT duration, debut, desc FROM MovieList"
+        "SELECT debut, description FROM MovieList"
         " WHERE (name=:name);"
     );
     query.bindValue(":name", this->movieName);
@@ -76,9 +76,8 @@ void MovieInfo::getMovieDetails_Db() {
         qDebug() << "getMovieDetails_Db() read query for " << this->movieName
                  << " was successful.";
         while(query.next()) {
-            this->movieDuration = query.value(0).toInt();
-            this->movieDebut = query.value(1).toString();
-            this->movieDesc = query.value(2).toString();
+            this->movieDebut = query.value(0).toString();
+            this->movieDesc = query.value(1).toString();
         }
     }
     MyDB::ResetInstance();
@@ -210,6 +209,7 @@ void MovieInfo::appendMovieDate(int year, int month, int day) {
     movieDates.append(date);
 }
 
+<<<<<<< Updated upstream
 void MovieInfo::getPriority_Db() {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare(
@@ -226,6 +226,24 @@ void MovieInfo::getPriority_Db() {
         }
     }
     MyDB::ResetInstance();  // close DB connection
+}
+
+QString MovieInfo::getMovieName()
+{
+    return movieName;
+}
+
+int MovieInfo::getMovieDuration()
+{
+    return movieDuration;
+}
+QString MovieInfo::getMovieDebut()
+{
+    return movieDebut;
+}
+QString MovieInfo::getMovieDesc()
+{
+    return movieDesc;
 }
 
 /* Call this function in MainScreen_Admin to generate a list of movie show times & match their halls, then append to their respective arrays. */

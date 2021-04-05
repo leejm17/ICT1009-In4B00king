@@ -2,6 +2,7 @@
 #define MOVIELIST_H
 
 #include <QMainWindow>
+#include <QLabel>
 #include "movieinformation.h"
 #include "economyhall.h"
 #include "diamondhall.h"
@@ -10,9 +11,13 @@
 #include "user.h"
 #include "editprofile.h"
 #include "editmovies.h"
+#include "movies.h"
+//#include "movies2.h"
 
 /* Forward declaration for friend-function. */
 class MovieListInfo;    // found in movies.h
+
+
 
 namespace Ui {
 class MovieList;
@@ -30,6 +35,7 @@ public:
 signals:
     void updateSeats();
     void sendData(user);
+    void sendMovieData(MovieInfo);
 
 private slots:
 
@@ -61,6 +67,10 @@ private slots:
 
     void on_editmovie_clicked();
 
+    void on_Select_Button2_clicked();
+
+    void on_Select_Button3_clicked();
+
 private:
     Ui::MovieList *ui;
     EconomyHall *economyHall;
@@ -72,15 +82,10 @@ private:
     user newuser;
     editprofile *profilepage;
     editmovies *moviespage;
+    MovieInformation *movieInfoWindow;
 
-};
-
-struct Movie
-{
-
-    QLabel* title;
-    QLabel* duration;
-
+    Movie movies[3];
 };
 
 #endif // MAINPAGE_H
+

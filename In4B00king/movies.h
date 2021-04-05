@@ -7,19 +7,27 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
-#include <movielist.h>
+//#include <movielist.h>
 #include "mydb.h"
+//#include "movies2.h"
 
-using namespace std;
+//using namespace std;
 
 /* Forward declaration for friend-function. */
 //class ShowtimesInfo;
+
+struct Movie
+{
+    QLabel* title;
+    QLabel* duration;
+};
 
 /* Class to store movie information for a list of movies (Screen: MainScreen). */
 class MovieListInfo {
 private:
     QList<QString> movieNameList;    // stores an array of movie names in same order as movieDurationList[] (from DB)
     QList<QString> movieDurationList; // stores an array of movie duration in same order as movieNameList[] (from DB)
+
 public:
     MovieListInfo();    // default constructor
     void getMovieList_Db();
@@ -45,7 +53,11 @@ private:
     QList<QString> diamond_timeslots;   // similar to economy_timeslots, but for diamond halls
     QList<int> diamond_halls;           // similar to economy_halls, but for diamond halls
 public:
+<<<<<<< Updated upstream
     //MovieInfo();    // unused default constructor
+=======
+    MovieInfo() {};    // unused default constructor
+>>>>>>> Stashed changes
     MovieInfo(QString, int);  // movieName, movieDuration
     void getMovieDetails_Db();
 
@@ -55,6 +67,12 @@ public:
     void getPriority_Db();
     void generateShowtimes();
     void addMovie_Db();   // movieName, movieDuration, movieDebut, movieFinale, movieDesc, movieDates, timeslots
+    QString getMovieName();
+    int getMovieDuration();
+    QString getMovieDebut();
+    QString getMovieDesc();
+
+friend void addMovie_Db(MovieInfo, ShowtimesInfo);   // movieName, movieDuration, movieDebut, movieFinale, movieDesc, movieDates, timeslots
 };
 
 

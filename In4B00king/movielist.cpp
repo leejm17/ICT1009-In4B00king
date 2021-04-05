@@ -93,7 +93,6 @@ void MovieList::updateUI()
     movie2.title = ui->Movie_Title_3;
     movie2.duration = ui->Duration_3;
 
-    Movie movies[3];
     movies[0] = movie0;
     movies[1] = movie1;
     movies[2] = movie2;
@@ -175,13 +174,19 @@ void MovieList::on_Next_Button_clicked()
 
 void MovieList::on_Select_Button1_clicked()
 {
+    movieInfoWindow = new MovieInformation(this);
     hide();
-    (new MovieInformation())->show();
+    movieInfoWindow->show();
+
+    MovieInfo movieInfo(movies[0].title->text(), movies[0].duration->text().split(" ").at(0).toInt());
+
+    connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
+    emit sendMovieData(movieInfo);
 }
 
 void MovieList::on_Edit_Profile_clicked()
 {
-    profilepage = new editprofile(this);
+    profilepage = new editprofile();
     profilepage->show();
     connect(this, SIGNAL(sendData(user)), profilepage, SLOT(receiveData(user)));
     QString email = newuser.getEmail();
@@ -196,6 +201,30 @@ void MovieList::on_logout_clicked()
 
 void MovieList::on_editmovie_clicked()
 {
-    moviespage = new editmovies(this);
+    moviespage = new editmovies();
     moviespage->show();
+}
+
+void MovieList::on_Select_Button2_clicked()
+{
+    movieInfoWindow = new MovieInformation(this);
+    hide();
+    movieInfoWindow->show();
+
+    MovieInfo movieInfo(movies[1].title->text(), movies[1].duration->text().split(" ").at(0).toInt());
+
+    connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
+    emit sendMovieData(movieInfo);
+}
+
+void MovieList::on_Select_Button3_clicked()
+{
+    movieInfoWindow = new MovieInformation(this);
+    hide();
+    movieInfoWindow->show();
+
+    MovieInfo movieInfo(movies[2].title->text(), movies[2].duration->text().split(" ").at(0).toInt());
+
+    connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
+    emit sendMovieData(movieInfo);
 }
