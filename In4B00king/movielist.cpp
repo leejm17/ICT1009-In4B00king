@@ -2,6 +2,7 @@
 #include "ui_movielist.h"
 #include "editprofile.h"
 #include "user.h"
+#include "movies.h"
 #include <QPixmap>
 #include <QMessageBox>
 
@@ -32,7 +33,7 @@ MovieList::MovieList(QWidget *parent) :
 
     connect(confirmationScreen,SIGNAL(closeAll()),seatSelection,SLOT(close()));
 
-    db = MyDB::getInstance()->getDBInstance();
+    //db = MyDB::getInstance()->getDBInstance();
 
     currentOffset = 0;
     updateUI();
@@ -79,16 +80,8 @@ void MovieList::on_SelectButton_2_clicked()
 
 void MovieList::updateUI()
 {
-    struct Movie
-    {
-
-        QLabel* title;
-        QLabel* duration;
-
-    };
-
-    // just some bindings
-    Movie movie0;
+    // bindings to movie labels
+    Movie movie0;       // Movie is a struct defined in movielist.h
     movie0.title = ui->Movie_Title_1;
     movie0.duration = ui->Duration_1;
 
@@ -120,7 +113,7 @@ void MovieList::updateUI()
 
     qDebug() << "currentOffset: " << currentOffset;
 
-    QSqlQuery query(db);
+/**    QSqlQuery query(db);
     query.prepare("SELECT name, duration FROM MovieList LIMIT 3 OFFSET " + QString(std::to_string(3*currentOffset).c_str()));
     if(!query.exec())
     {
@@ -131,12 +124,6 @@ void MovieList::updateUI()
         int currentIndex = 0;
         while (query.next())
         {
-            /**
-            if (currentIndex == 3)
-            {
-                currentIndex = 0;
-            }**/
-
             movies[currentIndex].title->setText(query.value(0).toString());
             auto duration = query.value(1).toString();
             if (duration !=  QString("TBA"))
@@ -152,8 +139,9 @@ void MovieList::updateUI()
             qDebug() << " duration : " << query.value(1).toString().toUtf8().constData();
         }
     }
-    query.finish();
+    query.finish();**/
 
+    MovieListInfo().displayMovieList(movies);   // movies is a struct array
 
     QPixmap pix(":/resources/img/Tom_and_Jerry.jpg");
     ui->Movie1->setPixmap(pix.scaled(221,300,Qt::KeepAspectRatio));
