@@ -140,7 +140,7 @@ void MovieList::updateUI()
     }
     query.finish();**/
 
-    MovieListInfo().displayMovieList(movies);   // movies is a struct array
+    MovieListInfo().displayMovieList(movies, currentOffset);   // movies is a struct array
     qDebug() << "hi2";
 
     QPixmap pix(":/resources/img/Tom_and_Jerry.jpg");

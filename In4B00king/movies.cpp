@@ -17,7 +17,8 @@ MovieListInfo::MovieListInfo() {
 void MovieListInfo::displayMovieList(Movie* movies) {
     getMovieList_Db();  // populate movieNameList & movieDurationList variables
     qDebug() << "hi3";
-    for (int cnt=0; cnt < this->movieNameList.size(); cnt++) {
+    //for (int cnt=0; cnt < this->movieNameList.size(); cnt++) {
+    for (int cnt=0; cnt < 3; cnt++) {
         qDebug() << "hi4";
         QString duration = movieDurationList.at(cnt);
         if (duration == "0") {
