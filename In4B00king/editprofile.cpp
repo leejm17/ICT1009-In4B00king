@@ -106,9 +106,9 @@ void editprofile::on_pwdchange_clicked()
             qDebug() << "read was successful "<< query.lastQuery();
 
             if (newpassword.isEmpty()){
-                QMessageBox::warning(this, "Change Password", "Empty new password!");
+                QMessageBox::warning(this, "Please enter new password", "Empty new password!");
             }else if (newpassword2.isEmpty()){
-                QMessageBox::warning(this, "Change Password", "Empty confirm new password!");
+                QMessageBox::warning(this, "Please confirm new password", "Empty confirm new password!");
             }else if (newpassword == newpassword2){
                 QSqlQuery updatequery(MyDB::getInstance()->getDBInstance());
                 updatequery.prepare("UPDATE User SET password ='"+ inputHash2 +"' WHERE email_ID='"+ username +"';");
@@ -117,15 +117,15 @@ void editprofile::on_pwdchange_clicked()
                 }else{
                     qDebug() << "read was successful "<< updatequery.lastQuery();
                 }
-                QMessageBox::information(this, "Change Password", "Password has been changed");
+                QMessageBox::information(this, "Successful Change", "Password has been changed");
                 close();
             }else{
-                QMessageBox::warning(this, "Change Password", "Password does not match");
+                QMessageBox::warning(this, "Password Mismatch", "Password does not match");
             }
 
         }else{
             qDebug() << "read was successful "<< query.lastQuery();
-            QMessageBox::warning(this, "Change Password", "Wrong current password");
+            QMessageBox::warning(this, "Current Password Wrong", "Wrong current password");
         }
     }
 }

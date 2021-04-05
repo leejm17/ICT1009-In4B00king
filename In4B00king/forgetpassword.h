@@ -23,6 +23,8 @@ private slots:
 
     void on_resetpassword_3_clicked();
 
+    void on_verifyButton_clicked();
+
 private:
     Ui::forgetpassword *ui;
 };

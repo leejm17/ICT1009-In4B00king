@@ -14,8 +14,9 @@ class Register : public QDialog
 
 public:
     explicit Register(QWidget *parent = nullptr);
+    void generateOTP(int len);
     ~Register();
-
+    char* Generate_Email_With_OTP();
 private slots:
     void on_Register_2_clicked();
 
@@ -27,6 +28,7 @@ private slots:
 
 private:
     Ui::Register *ui;
+    char * payload_text[];
 };
 
 #endif // REGISTER_H

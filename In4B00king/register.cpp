@@ -8,7 +8,7 @@
 
 #define FROM    "<InForBooking@gmail.com>"
 #define TO      "<testing@gmail.com>"
-char* generated_OTP;
+char* verify_email_OTP;
 bool verified = false;
 
 Register::Register(QWidget *parent) :
@@ -51,7 +51,7 @@ void Register::on_Register_2_clicked()
     }else if (gender.isEmpty()){
         QMessageBox::warning(this, "Invalid gender", "Please select your gender!");
     }else if (!verified){
-        QMessageBox::warning(this, "Title", "Msg");
+        QMessageBox::warning(this, "Verify Email", "Email not Verified.");
     }else{
         QMessageBox::StandardButton reply = QMessageBox::question(this, "Register Account", "Are you sure you want to register this account?\nEmail:"+
                                                                   email + "\nFirst name:" + fname + "\nLast name:" + lname + "\nAge:" +
@@ -85,7 +85,7 @@ void Register::on_Register_2_clicked()
 
 
 // A Function to generate a unique OTP everytime
-char * generateOTP(int len)
+char * generate_email_OTP(int len)
 {
     srand(time(NULL));
 
@@ -103,7 +103,7 @@ char * generateOTP(int len)
 
     strcpy(otp_array, OTP.toStdString().c_str());
 
-    generated_OTP = &otp_array[0];
+    verify_email_OTP = &otp_array[0];
     return(&otp_array[0]);
 }
 
@@ -112,7 +112,7 @@ char *payload_text[] = {
         "To: " TO "\r\n",
         "From: " FROM "\r\n",
         "Subject: [InForBooking] Email Verification \r\n",
-        "Your OTP is ",generateOTP(6),"\r\n",
+        "Your OTP is ",generate_email_OTP(6),"\r\n",
 
 };
 
@@ -219,8 +219,9 @@ void Register::on_verify_clicked()
 {
     //Add the checking of curl email
     QString verifyText;
+    qDebug() <<  "Verifying " << verify_email_OTP;
     verifyText = ui->verificationcode->text();
-    if(verifyText == generated_OTP){
+    if(verifyText == verify_email_OTP){
         qDebug() <<  "M A T C H E D";
         verified = true;
     }
