@@ -141,6 +141,7 @@ void MovieList::updateUI()
     query.finish();**/
 
     MovieListInfo().displayMovieList(movies);   // movies is a struct array
+    qDebug() << "hi2";
 
     QPixmap pix(":/resources/img/Tom_and_Jerry.jpg");
     ui->Movie1->setPixmap(pix.scaled(221,300,Qt::KeepAspectRatio));
@@ -162,6 +163,7 @@ void MovieList::updateUI()
     ui->Movie_Title_3->setText("FF9");
     ui->Duration_3->setText("120min");
     **/
+    qDebug() << "hi";
 }
 
 

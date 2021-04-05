@@ -16,7 +16,9 @@ MovieListInfo::MovieListInfo() {
 /* (1) Call this func in MainScreen_Cust to display an array/series of movies currently on show. */
 void MovieListInfo::displayMovieList(Movie* movies) {
     getMovieList_Db();  // populate movieNameList & movieDurationList variables
+    qDebug() << "hi3";
     for (int cnt=0; cnt < this->movieNameList.size(); cnt++) {
+        qDebug() << "hi4";
         QString duration = movieDurationList.at(cnt);
         if (duration == "0") {
             duration = "TBA";
@@ -26,6 +28,7 @@ void MovieListInfo::displayMovieList(Movie* movies) {
         movies[cnt].title->setText(this->movieNameList.at(cnt));
         movies[cnt].duration->setText(duration);
     }
+    qDebug() << "hi5";
 }
 
 /* DB QUERY to retrieves a list of movies & duration from DB & append to their respective arrays. */
@@ -209,7 +212,6 @@ void MovieInfo::appendMovieDate(int year, int month, int day) {
     movieDates.append(date);
 }
 
-<<<<<<< Updated upstream
 void MovieInfo::getPriority_Db() {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare(

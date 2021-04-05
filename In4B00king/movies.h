@@ -53,11 +53,8 @@ private:
     QList<QString> diamond_timeslots;   // similar to economy_timeslots, but for diamond halls
     QList<int> diamond_halls;           // similar to economy_halls, but for diamond halls
 public:
-<<<<<<< Updated upstream
     //MovieInfo();    // unused default constructor
-=======
     MovieInfo() {};    // unused default constructor
->>>>>>> Stashed changes
     MovieInfo(QString, int);  // movieName, movieDuration
     void getMovieDetails_Db();
 
@@ -72,7 +69,7 @@ public:
     QString getMovieDebut();
     QString getMovieDesc();
 
-friend void addMovie_Db(MovieInfo, ShowtimesInfo);   // movieName, movieDuration, movieDebut, movieFinale, movieDesc, movieDates, timeslots
+//friend void addMovie_Db(MovieInfo, ShowtimesInfo);   // movieName, movieDuration, movieDebut, movieFinale, movieDesc, movieDates, timeslots
 };
 
 
