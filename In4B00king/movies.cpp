@@ -73,6 +73,8 @@ MovieInfo::MovieInfo(QString movieName, int duration) {
 /* DB QUERY to get movie information. */
 void MovieInfo::getMovieDetails_Db() {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
+
+    /* (1) SELECT MovieDetails from MovieList */
     query.prepare(
         "SELECT debut, description FROM MovieList"
         " WHERE (name=:name);"
@@ -82,13 +84,33 @@ void MovieInfo::getMovieDetails_Db() {
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();
     } else {
-        qDebug() << "getMovieDetails_Db() read query for " << this->movieName
+        qDebug() << "getMovieDetails_Db() read movieinfo query for " << this->movieName
                  << " was successful.";
         while(query.next()) {
             this->movieDebut = query.value(0).toString();
             this->movieDesc = query.value(1).toString();
         }
     }
+
+    /* (2) SELECT MovieDates from MovieShowing */
+    query.prepare(
+        "SELECT DISTINCT date"
+        " FROM MovieShowing"
+        " JOIN MovieList ON (MovieShowing.movie_ID = MovieList.movie_ID)"
+        " WHERE (MovieList.name=:name);"
+    );
+    query.bindValue(":name", this->movieName);
+
+    if(!query.exec()) {
+        qDebug() << query.lastError().text() << query.lastQuery();
+    } else {
+        qDebug() << "getMovieDetails_Db() read dates query for " << this->movieName
+                 << " was successful.";
+        while(query.next()) {
+            this->movieDates.append(query.value(0).toString());
+        }
+    }
+
     MyDB::ResetInstance();
 }
 
