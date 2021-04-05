@@ -74,14 +74,16 @@ public:
 
 
 /* Class to store showtimes for any 1 movie based on a given date (Screen: MovieDetails & MainScreen_Admin). */
-class ShowtimesInfo : MovieInfo {
+class ShowtimesInfo {
 private:
+    QString movieName;
+    QString movieDate;
     QList<QString> retrieve_timeslots;
     QList<int> retrieve_halls;
 public:
     ShowtimesInfo();    // unused default constructor
+    void displayMovieDetails(QString, QString);  // movieName, movieDate
     void getShowtimes_Db(QString, QString); // movieName, movieDate
-    void displayMovieDetails();  // movieName, movieDuration, movieDesc, movieDates, timeslots, halls
 };
 
 

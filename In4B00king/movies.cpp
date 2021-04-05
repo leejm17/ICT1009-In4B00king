@@ -68,8 +68,6 @@ MovieInfo::MovieInfo(QString movieName, int duration) {
     this->movieName = movieName;
     this->movieDuration = duration;
     getMovieDetails_Db();
-
-    // code to redirect customer to movieinformation page
 }
 
 /* DB QUERY to get movie information. */
@@ -94,13 +92,19 @@ void MovieInfo::getMovieDetails_Db() {
     MyDB::ResetInstance();
 }
 
-/* (3) Call displayMovieDetails() in MovieDetails to display a movie's information with its corresponding timeslots based on a given day. */
-void ShowtimesInfo::displayMovieDetails() {
+/* (3) Call this func in MovieDetails to display a movie's information with its corresponding timeslots based on a given day. */
+void ShowtimesInfo::displayMovieDetails(QString name, QString date) {
+    this->movieName = name;
+    this->movieDate = date;
+
     // code to run when customer clicks on a date in movieinformation page
-    QString name;   // var of moviename from ui
-    QString date;   // var of moviedate from ui
     ShowtimesInfo::getShowtimes_Db(name, date);
+
     // display movie showtimes with timeslots & halls array
+    for (int cnt=0; cnt<retrieve_timeslots.length(); cnt++) {
+        //movies[cnt].title->setText(this->movieNameList.at(cnt));
+        //movies[cnt].duration->setText(duration);
+    }
 }
 
 /* (4) When Customer clicks on a movie date, call getShowtimes_Db(). */
