@@ -213,6 +213,7 @@ void Register::on_sendemail_clicked()
             ui->sendemail->setEnabled(false);
         }
     }
+    QMessageBox::information(this, "Verification", "Email sent! Please check your email and enter the verification code!");
 }
 
 void Register::on_verify_clicked()
@@ -224,5 +225,10 @@ void Register::on_verify_clicked()
     if(verifyText == verify_email_OTP){
         qDebug() <<  "M A T C H E D";
         verified = true;
+    }
+    if (verified){
+        QMessageBox::information(this, "Verified", "Verification successful");
+    }else{
+        QMessageBox::information(this, "Verification", "Wrong verification code! Please try again");
     }
 }

@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <curl/curl.h>
 #include "register.h"
+#include <QCryptographicHash>
 
 #define FROM    "<InForBooking@gmail.com>"
 #define TO      "<testing@gmail.com>"
@@ -87,7 +88,31 @@ void forgetpassword::on_HomePage_clicked()
 
 void forgetpassword::on_resetpassword_clicked()
 {
+    QString username = ui->Email->text();
+    QString pwd1 = ui->pwd->text();
+    QString pwd2 = ui->pwd2->text();
+    QString salted_password = username + pwd1;
+    // SHA1 Hash
+    QByteArray hashed_password = QCryptographicHash::hash(salted_password.toUtf8(),QCryptographicHash::Md5);
+    QString inputHash = QLatin1String(hashed_password.toHex());
 
+    if (pwd1.isEmpty()){
+        QMessageBox::warning(this, "Please enter new password", "Empty new password!");
+    }else if (pwd2.isEmpty()){
+        QMessageBox::warning(this, "Please confirm new password", "Empty confirm new password!");
+    }else if (pwd1 == pwd2){
+        QSqlQuery updatequery(MyDB::getInstance()->getDBInstance());
+        updatequery.prepare("UPDATE User SET password ='"+ inputHash +"' WHERE email_ID='"+ username +"';");
+        if(!updatequery.exec()){
+                qDebug() << updatequery.lastError().text() << updatequery.lastQuery();
+        }else{
+            qDebug() << "read was successful "<< updatequery.lastQuery();
+        }
+        QMessageBox::information(this, "Successful Change", "Password has been changed");
+        close();
+    }else{
+        QMessageBox::warning(this, "Password Mismatch", "Password does not match");
+    }
 }
 
 void forgetpassword::on_resetpassword_3_clicked()
@@ -154,6 +179,7 @@ void forgetpassword::on_resetpassword_3_clicked()
         curl_easy_cleanup(curl);
         qDebug() << "Forgot Password Email Sent!";
     }
+    QMessageBox::information(this, "Verification", "Email sent! Please check your email and enter the verification code!");
 }
 
 void forgetpassword::on_verifyButton_clicked()
@@ -163,6 +189,9 @@ void forgetpassword::on_verifyButton_clicked()
     if(verifyText == forget_password_OTP){
         qDebug() <<  "M A T C H E D";
         ui->resetpassword->setEnabled(true);
+        QMessageBox::information(this, "Verified", "Verification successful");
         // Update Changed Password here.
+    }else{
+        QMessageBox::information(this, "Verification", "Wrong verification code! Please try again");
     }
 }
