@@ -7,11 +7,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
-//#include <movielist.h>
 #include "mydb.h"
-//#include "movies2.h"
-
-//using namespace std;
 
 /* Forward declaration for friend-function. */
 //class ShowtimesInfo;
@@ -25,19 +21,20 @@ struct Movie
 /* Class to store movie information for a list of movies (Screen: MainScreen). */
 class MovieListInfo {
 private:
+    QList<int> movieIDList;         // stores an array of movie IDs in the same order as the two lists below (from DB)
     QList<QString> movieNameList;    // stores an array of movie names in same order as movieDurationList[] (from DB)
     QList<QString> movieDurationList; // stores an array of movie duration in same order as movieNameList[] (from DB)
-
 public:
     MovieListInfo();    // default constructor
-    void getMovieList_Db();
+    void getMovieList_Db();     // getMovies for customer where date range of movie is within current date
     void displayMovieList(Movie*); // Movie is a struct defined in movielist.h, but passing over a struct array
+    void getAllMovieList_Db();  // getAllMovies for admin
+    QList<QString> getMovieNameList();  // getter to get movieNameList
 };
 
 
 /* Class to store movie information for any 1 movie (Screen: MainScreen_Admin). */
 class MovieInfo {
-//friend void displayMovieDetails(MovieInfo, ShowtimesInfo);  // movieName, movieDuration, movieDesc, movieDates, timeslots, halls
 private:
     int movieID;    // store movieID from DB
     QString movieName;
@@ -53,8 +50,7 @@ private:
     QList<QString> diamond_timeslots;   // similar to economy_timeslots, but for diamond halls
     QList<int> diamond_halls;           // similar to economy_halls, but for diamond halls
 public:
-    //MovieInfo();    // unused default constructor
-    MovieInfo() {};    // unused default constructor
+    MovieInfo();    // default constructor
     MovieInfo(QString, int);  // movieName, movieDuration
     void getMovieDetails_Db();
 
@@ -64,12 +60,16 @@ public:
     void getPriority_Db();
     void generateShowtimes();
     void addMovie_Db();   // movieName, movieDuration, movieDebut, movieFinale, movieDesc, movieDates, timeslots
+    void deleteMovie_Db(QString);  // movieName
+
+    /* Getters & Setters */
+    MovieInfo(QString);     // movieName
     QString getMovieName();
     int getMovieDuration();
     QString getMovieDebut();
     QString getMovieDesc();
-
-//friend void addMovie_Db(MovieInfo, ShowtimesInfo);   // movieName, movieDuration, movieDebut, movieFinale, movieDesc, movieDates, timeslots
+    void updateMovieDetails();
+    MovieInfo(QString, QString, int, QString);  // oldMovieName, newMovieName, duration, desc
 };
 
 

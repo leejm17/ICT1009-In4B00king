@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QDebug>
-#include "movies.h"
+#include <movies.h>
 
 namespace Ui {
 class MovieInformation;
