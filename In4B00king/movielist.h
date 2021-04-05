@@ -11,6 +11,9 @@
 #include "editprofile.h"
 #include "editmovies.h"
 
+/* Forward declaration for friend-function. */
+class MovieListInfo;    // found in movies.h
+
 namespace Ui {
 class MovieList;
 }
@@ -69,6 +72,14 @@ private:
     user newuser;
     editprofile *profilepage;
     editmovies *moviespage;
+
+};
+
+struct Movie
+{
+
+    QLabel* title;
+    QLabel* duration;
 
 };
 

@@ -7,6 +7,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <movielist.h>
 #include "mydb.h"
 
 using namespace std;
@@ -14,15 +15,15 @@ using namespace std;
 /* Forward declaration for friend-function. */
 class ShowtimesInfo;
 
-
 /* Class to store movie information for a list of movies (Screen: MainScreen). */
 class MovieListInfo {
 private:
     QList<QString> movieNameList;    // stores an array of movie names in same order as movieDurationList[] (from DB)
-    QList<int> movieDurationList; // stores an array of movie duration in same order as movieNameList[] (from DB)
+    QList<QString> movieDurationList; // stores an array of movie duration in same order as movieNameList[] (from DB)
 public:
+    MovieListInfo();    // unused default constructor
     void getMovieList_Db();
-    void displayMovieList(); // movieNameList[], movieDurationList[]
+    void displayMovieList(Movie*); // Movie is a struct defined in movielist.h, but passing over a struct array
 };
 
 
@@ -43,6 +44,7 @@ public:
     MovieInfo(QString, int, QString, QString, QString); // movieName, movieDuration, movieDebut, movieFinale, movieDesc
     void getMovieDetails_Db();
     void generateMovieDates();
+    void appendMovieDate(int, int, int);    // year, month, date
 
 friend void addMovie_Db(MovieInfo, ShowtimesInfo);   // movieName, movieDuration, movieDebut, movieFinale, movieDesc, movieDates, timeslots
 };

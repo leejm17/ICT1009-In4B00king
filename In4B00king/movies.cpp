@@ -6,6 +6,11 @@
 #include <movies.h>
 #include <QDate>
 #include <QCalendar>
+#include <QLabel>
+
+MovieListInfo::MovieListInfo() {
+
+}
 
 /* Retrieves a list of movies & duration from DB & append to their respective arrays. */
 void MovieListInfo::getMovieList_Db() {
@@ -22,20 +27,23 @@ void MovieListInfo::getMovieList_Db() {
         qDebug() << "getMovieList_Db() read query for all movies was successful.";
         while(query.next()) {
             movieNameList.append(query.value(0).toString());
-            movieDurationList.append(query.value(1).toInt());
+            movieDurationList.append(query.value(1).toString());
         }
         MyDB::ResetInstance();
     }
 }
 
 /* (1) Call displayMovieList() in MainScreen_Cust to display an array/series of movies currently on show. */
-void MovieListInfo::displayMovieList() {
-    getMovieList_Db();
-    // movieNameList array stores a list of movies
-    // movieDurationList stores a list of movies' duration
-    for (int cnt=0; cnt<this->movieNameList.size(); cnt++) {
-        qDebug() << this->movieNameList.at(cnt);
-        qDebug() << this->movieDurationList.at(cnt);
+void MovieListInfo::displayMovieList(Movie* movies) {
+    getMovieList_Db();  // populate movieNameList & movieDurationList variables
+    for (int cnt=0; cnt < this->movieNameList.size(); cnt++) {
+        QString duration = movieDurationList.at(cnt);
+        if (duration !=  QString("TBA"))
+        {
+            duration += QString(" mins");
+        }
+        movies[cnt].title->setText(this->movieNameList.at(cnt));
+        movies[cnt].duration->setText(duration);
     }
 }
 
@@ -45,7 +53,7 @@ void MovieListInfo::displayMovieList() {
 MovieInfo::MovieInfo(QString movieName, int duration) {
     this->movieName = movieName;
     this->movieDuration = duration;
-    MovieInfo::getMovieDetails_Db();
+    getMovieDetails_Db();
 
     // code to redirect customer to movieinformation page
 }
@@ -138,30 +146,43 @@ void MovieInfo::generateMovieDates() {
         int daysThisMonth = qCalendarObj.daysInMonth(month, debut.year());
         if (month == debut.month()) {                       // if month is same as debut month
             for (int day=debut.day(); day<=daysThisMonth; day++) {  // from debut till end of month
-                QString date = QString::number(debut.year()).append("-")
-                        .append(QString::number(month)).append("-")
-                        .append(QString::number(day));
-                movieDates.append(date);    // append date to movieDates
+                appendMovieDate(debut.year(), month, day);    // append date to movieDates
             }
         } else if (month == finale.month()) {               // else if month is same as finale month
             for (int day=1; day<=finale.day(); day++) {         // from start of month till finale
-                QString date = QString::number(debut.year()).append("-")
-                        .append(QString::number(month)).append("-")
-                        .append(QString::number(day));
-                movieDates.append(date);    // append date to movieDates
+                appendMovieDate(debut.year(), month, day);    // append date to movieDates
             }
         } else {                                            // else if month is NOT debut nor finale month
             for (int day=1; day<=daysThisMonth; day++) {        // from start of month till end of month
-                QString date = QString::number(debut.year()).append("-")
-                        .append(QString::number(month)).append("-")
-                        .append(QString::number(day));
-                movieDates.append(date);    // append date to movieDates
+                appendMovieDate(debut.year(), month, day);    // append date to movieDates
             }
         }
         if (month+12 == 12+finale.month()) {       // break if this month is the end of the same calendar year
             break;
         }
     }
+}
+
+/* Called by generateMovieDates() to append incremental movie dates to movieDates */
+void MovieInfo::appendMovieDate(int year, int month, int day) {
+    QString newMonth;
+    QString newDay;
+
+    if (month < 10) {                               // ensure month is 2 digits
+        newMonth = "0" + QString::number(month);    // append a 0 to front if month is 1 digit
+    } else {
+        newMonth = QString::number(month);
+    }
+    if (day < 10) {                                 // ensure day is 2 digits
+        newDay = "0" + QString::number(day);        // append a 0 to front if day is 1 digit
+    } else {
+        newDay = QString::number(day);
+    }
+
+    QString date = QString::number(year).append("-")
+            .append(newMonth).append("-")
+            .append(newDay);
+    movieDates.append(date);
 }
 
 /* Call generateShowtimes() in MainScreen_Admin to generate a list of movie show times & match their halls, then append to their respective arrays. */
