@@ -65,14 +65,13 @@ void Hall::addNewHall_Db() {
 
     /* (1) INSERT hall details INTO Halls */
     query.prepare(
-        "INSERT INTO Halls (type, numOfRows, numOfCols, numOfSeats, numOfTables)"
-        " VALUES (:type, :rows, :cols, :seats, :tables);"
+        "INSERT INTO Halls (type, numOfRows, numOfCols, numOfSeats)"
+        " VALUES (:type, :rows, :cols, :seats);"
     );
     query.bindValue(":type", this->hallType);
     query.bindValue(":rows", this->numOfRows);
     query.bindValue(":cols", this->numOfCols);
     query.bindValue(":seats", this->numOfSeats);
-    query.bindValue(":tables", this->numOfTables);
 
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();
@@ -104,12 +103,35 @@ void Hall::addNewHall_Db() {
         );
         query.bindValue(":id", this->hallID);
         query.bindValue(":seat", this->seatAllocation[seatCnt]);
-        query.bindValue(":type", "single");
-        query.bindValue(":condition", "good");
+
+        if (this->hallID <= 6) {    // handicap seats for economy hall
+            if (seatAllocation[seatCnt] == "A1" || seatAllocation[seatCnt] == "A2" || seatAllocation[seatCnt] == "A13" || seatAllocation[seatCnt] == "A14") {
+                query.bindValue(":type", "handicap");
+                query.bindValue(":condition", "good");
+            } else if (this->seatAllocation[seatCnt] == "B13" || this->seatAllocation[seatCnt] == "C3") {
+                query.bindValue(":type", "single");
+                query.bindValue(":condition", "broken");
+            } else {
+                query.bindValue(":type", "single");
+                query.bindValue(":condition", "good");
+            }
+        } else {                    // handicap seats for diamond hall
+            if (seatAllocation[seatCnt] == "A1" || seatAllocation[seatCnt] == "A2" || seatAllocation[seatCnt] == "A10" || seatAllocation[seatCnt] == "A11") {
+                query.bindValue(":type", "handicap");
+                query.bindValue(":condition", "good");
+            } else if (this->seatAllocation[seatCnt] == "B2" || this->seatAllocation[seatCnt] == "C10") {
+                query.bindValue(":type", "single");
+                query.bindValue(":condition", "broken");
+            } else {
+                query.bindValue(":type", "single");
+                query.bindValue(":condition", "good");
+            }
+        }
         if(!query.exec()) {
             qDebug() << query.lastError().text() << query.lastQuery();
         } else {
-            qDebug() << "addNewHall() into HallSeats write query for hallID: " << this->hallID
+            qDebug() << "addNewHall() into HallSeats write query for hallID:" << this->hallID
+                     << " and seatID:" << this->seatAllocation[seatCnt]
                      << " was successful.";
         }
     }

@@ -25,8 +25,7 @@ private:
     int numOfRows;
     int numOfCols;
     int numOfSeats;
-    int numOfTables;
-
+    int numOfTables;    // not inserted into db for our proof-of-concept (POC)
     int hallID;
     QList<QString> seatAllocation;
 public:
