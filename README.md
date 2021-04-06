@@ -22,4 +22,4 @@ Follow the steps below to recompile the program with cURL.
 
 1. You might need to install the latest cURL for Windows at https://curl.se/download.html.
 2. Extract the contents (lib, include and bin) and place them in the respective directories of your Qt Folder (i.e. C:\Qt\6.0.3\mingw81_64).
-3. Edit the LIBS path (bolded text) in In4B00king.pro to the path where you placed curl in Qt (i.e. LIBS += -L**C:/Qt/6.0.3/mingw81_64/lib** -lcurl).
+3. Edit the LIBS path (bolded text) in In4B00king.pro to the path where you placed curl in Qt (i.e. LIBS += -L**C:\Qt\6.0.3\mingw81_64\lib** -lcurl).
