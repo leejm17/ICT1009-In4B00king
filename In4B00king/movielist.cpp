@@ -123,11 +123,11 @@ void MovieList::updateUI()
     MovieListInfo().displayMovieList(movies);   // movies is a struct array
     qDebug() << "hi2";
 
-    QPixmap pix(":/resources/img/Tom_and_Jerry.jpg");
-    ui->Movie1->setPixmap(pix.scaled(221,300,Qt::KeepAspectRatio));
-    QPixmap pix2(":/resources/img/Godzilla_Vs_Kong.jpg");
+ QPixmap pix(":/resources/img/" + movies[0].title->text().replace(" ", "_") + ".jpg");
+ ui->Movie1->setPixmap(pix.scaled(221,300,Qt::KeepAspectRatio));
+ QPixmap pix2(":/resources/img/" + movies[1].title->text().replace(" ", "_") + ".jpg");
     ui->Movie2->setPixmap(pix2.scaled(221,300,Qt::KeepAspectRatio));
-    QPixmap pix3(":/resources/img/FF9.jpg");
+    QPixmap pix3(":/resources/img/" + movies[2].title->text().replace(" ", "_") + ".jpg");
     ui->Movie3->setPixmap(pix3.scaled(221,300,Qt::KeepAspectRatio));
     /**
 
