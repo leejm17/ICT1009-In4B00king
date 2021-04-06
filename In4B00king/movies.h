@@ -7,6 +7,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QComboBox>
 #include "mydb.h"
 
 /* Forward declaration for friend-function. */
@@ -80,10 +81,15 @@ private:
     QString movieDate;
     QList<QString> retrieve_timeslots;
     QList<int> retrieve_halls;
+    QList<QString> retrieve_dates;
 public:
-    ShowtimesInfo();    // unused default constructor
+    ShowtimesInfo() {};   // unused default constructor
     void displayMovieDetails(QString, QString);  // movieName, movieDate
     void getShowtimes_Db(QString, QString); // movieName, movieDate
+
+    // 2nd
+    void displayMovieDetails(QString, QComboBox*);  // movieName, movieDate
+    void getShowtimes_Db(QString); // movieName, movieDate
 };
 
 

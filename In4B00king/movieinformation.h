@@ -22,6 +22,8 @@ private slots:
 
     void on_Back_clicked();
 
+    void on_SelectSeats_clicked();
+
 private:
     Ui::MovieInformation *ui;
 };

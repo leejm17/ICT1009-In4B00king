@@ -29,6 +29,9 @@ void MovieInformation::receiveData(MovieInfo movieInfo)
     ui->Date->setText(movieInfo.getMovieDebut());
     ui->Time->setText(isMins);
     ui->Description->setText(movieInfo.getMovieDesc());
+
+    // fetch from db dates and time
+    ShowtimesInfo().displayMovieDetails(movieInfo.getMovieName(), ui->DropdownDate);
 }
 
 void MovieInformation::on_Back_clicked()
@@ -36,4 +39,13 @@ void MovieInformation::on_Back_clicked()
     hide();
     parentWidget()->show();
 
+}
+
+void MovieInformation::on_SelectSeats_clicked()
+{
+    QString selection = ui->DropdownDate->currentText();
+    QString selectedTime = selection.split(" ").at(0);
+    QString selectedDate = selection.split(" ").at(1);
+    qDebug() << "Time is " << selectedTime;
+    qDebug() << "Date is " << selectedDate;
 }

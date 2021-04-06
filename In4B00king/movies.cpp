@@ -7,6 +7,7 @@
 #include <QDate>
 #include <QCalendar>
 #include <QLabel>
+#include <QComboBox>
 
 /* Default constructor */
 MovieListInfo::MovieListInfo() {
@@ -149,6 +150,46 @@ void ShowtimesInfo::getShowtimes_Db(QString movieName, QString movieDate) {
         while(query.next()) {
             retrieve_timeslots.append(query.value(0).toString());
             retrieve_halls.append(query.value(1).toInt());
+        }
+    }
+    MyDB::ResetInstance();
+}
+
+
+/* (3_2) Call this func in MovieDetails to display a movie's information with its corresponding timeslots based on a given day. */
+void ShowtimesInfo::displayMovieDetails(QString name, QComboBox *dateComboBox) {
+    this->movieName = name;
+
+    // code to run when customer clicks on a date in movieinformation page
+    ShowtimesInfo::getShowtimes_Db(name);
+
+    // display movie showtimes with timeslots & halls array
+    qDebug() << "retrieve_dates - " << retrieve_dates.length();
+    for (int cnt=0; cnt<retrieve_dates.length(); cnt++) {
+        dateComboBox->addItem(retrieve_dates.at(cnt) + " " + retrieve_timeslots.at(cnt));
+        //movies[cnt].title->setText(this->movieNameList.at(cnt));
+        //movies[cnt].duration->setText(duration);
+    }
+}
+
+/* (4_2) When Customer clicks on a movie date, call getShowtimes_Db(). */
+/* Retrieves a list of timeslots & hallIDs from DB, and append to their respective arrays. */
+void ShowtimesInfo::getShowtimes_Db(QString movieName) {
+    QSqlQuery query(MyDB::getInstance()->getDBInstance());
+    query.prepare("SELECT timeslot, date FROM MovieShowing"
+                  " JOIN MovieList ON (MovieShowing.movie_ID = MovieList.movie_ID)"
+                  " WHERE MovieList.name=:name;");
+    query.bindValue(":name", movieName);
+
+    if(!query.exec()) {
+        qDebug() << query.lastError().text() << query.lastQuery();
+    } else {
+        qDebug() << "getShowtimes_Db() read query for " << movieName
+                 << " 4_2"
+                 << " was successful.";
+        while(query.next()) {
+            retrieve_timeslots.append(query.value(0).toString());
+            retrieve_dates.append(query.value(1).toString());
         }
     }
     MyDB::ResetInstance();
