@@ -547,6 +547,9 @@ MovieInfo::MovieInfo(QString movieName) {
     this->movieName = movieName;
     getMovieDetails_Db();
 }
+int MovieInfo::getMovieID() {
+	return movieID;
+}
 QString MovieInfo::getMovieName() {
     return movieName;
 }
