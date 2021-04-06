@@ -9,10 +9,10 @@ MyDB::MyDB()
 
 void MyDB::init()
 {
-    qDebug() << "in init()";
     db = QSqlDatabase::addDatabase("QSQLITE", "Data");
     db.setDatabaseName("../in4b00king.db");
 
+    // Checks whether DB file exists.
     if(QFile::exists("../in4b00king.db"))
             qDebug() << "DB file exist.";
         else
@@ -27,8 +27,6 @@ void MyDB::init()
 
 MyDB *MyDB::getInstance()
 {
-    //qDebug() << "in MyDB::getInstance()";
-
     if(instance == nullptr)
         instance = new MyDB();
 

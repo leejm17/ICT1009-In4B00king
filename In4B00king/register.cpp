@@ -23,21 +23,21 @@ Register::~Register()
     delete ui;
 }
 
+// Onclick event for the register button
 void Register::on_Register_2_clicked()
 {
-    QString gender,email, pwd, pwd2, fname, lname;
+    QString gender,email, pwd, pwd2, fname, lname, age;
     bool accountcreated = false;
-    email = ui->Email->text();
-    pwd = ui->Password->text();
-    pwd2 = ui->Password_2->text();
-    fname = ui->Fname->text();
-    lname = ui->Lname->text();
-    QString age = ui->Age->text();
+    email = ui->Email->text(); pwd = ui->Password->text();pwd2 = ui->Password_2->text();
+    fname = ui->Fname->text(); lname = ui->Lname->text();age = ui->Age->text();
+
     if(ui->Male->isChecked()){
         gender = "Male";
     }else if (ui->Female->isChecked()){
         gender = "Female";
     }
+
+    // Checks for empty fields or if they entered their email.
     if (ui->Email->text().isEmpty()){
         QMessageBox::warning(this, "Empty Email", "Please enter your email!");
     }else if (ui->Password->text().isEmpty() || ui->Password->text().isEmpty()){
@@ -57,7 +57,6 @@ void Register::on_Register_2_clicked()
                                                                   email + "\nFirst name:" + fname + "\nLast name:" + lname + "\nAge:" +
                                                                   age + "\nGender:" + gender, QMessageBox::Yes | QMessageBox::No);
         if (reply == QMessageBox::Yes) {
-            qDebug() << "Yes was clicked";
             QSqlQuery query(MyDB::getInstance()->getDBInstance());
             query.prepare("INSERT INTO User(email_ID,password,first_name,last_name,age,gender,type) VALUES (:email, :password, :fname, :lname, :age, :gender, 'customer')");
             query.bindValue(":email", email);
@@ -87,6 +86,7 @@ void Register::on_Register_2_clicked()
 // A Function to generate a unique OTP everytime
 char * generate_email_OTP(int len)
 {
+    // Uses computer clock to control seed to ensure each OTP is unique.
     srand(time(NULL));
 
     QString str = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -165,30 +165,27 @@ void Register::on_sendemail_clicked()
             QMessageBox::warning(this, "Duplicate Email", "Please enter a new email, email has been used already!");
             //Can check add regex if want otherwise just skip
     }else{
-        //Disable button and send email to verify
-        qDebug() << "test was clicked";
         QString email;
         email = ui->Email->text();
+        // Grabs user input for email and sets it as the receipient
         QByteArray ba = email.toLocal8Bit();
         const char *char_email = ba.data();
         #define TO char_email
+        // Initializing CURL
         CURL *curl;
         CURLcode res = CURLE_OK;
         struct curl_slist *recipients = NULL;
         struct upload_status upload_ctx;
-
         upload_ctx.lines_read = 0;
-
         curl = curl_easy_init();
+
         // Email Settings
-        // TODO: Hide the Username and Password
         if (curl) {
-            curl_easy_setopt(curl, CURLOPT_USERNAME, "InForBooking@gmail.com");
+            curl_easy_setopt(curl, CURLOPT_USERNAME, FROM);
             curl_easy_setopt(curl, CURLOPT_PASSWORD, "!@QWaszx");
             curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:587");
             curl_easy_setopt(curl, CURLOPT_USE_SSL, (long) CURLUSESSL_ALL);
             curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
-            qDebug() << "loading cert";
             curl_easy_setopt(curl, CURLOPT_CAINFO, "../google.pem");
             curl_easy_setopt(curl, CURLOPT_CAPATH, "../google.pem");
             curl_easy_setopt(curl, CURLOPT_MAIL_FROM, FROM);
@@ -201,29 +198,27 @@ void Register::on_sendemail_clicked()
 
             res = curl_easy_perform(curl);
 
-            // Checks for
+            // Checks to ensure that the email has been sent out successfully.
             if (res != CURLE_OK)
                 fprintf(stderr, "curl_easy_perform() failed: %s\n",
                         curl_easy_strerror(res));
 
             curl_slist_free_all(recipients);
-
             curl_easy_cleanup(curl);
-            qDebug() << "Email Sent!";
             ui->sendemail->setEnabled(false);
         }
     }
     QMessageBox::information(this, "Verification", "Email sent! Please check your email and enter the verification code!");
 }
-
+// Onclick event for Verify button.
 void Register::on_verify_clicked()
 {
     //Add the checking of curl email
     QString verifyText;
-    qDebug() <<  "Verifying " << verify_email_OTP;
     verifyText = ui->verificationcode->text();
+
+    // Checks if the code they enter matches
     if(verifyText == verify_email_OTP){
-        qDebug() <<  "M A T C H E D";
         verified = true;
     }
     if (verified){

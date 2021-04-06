@@ -20,6 +20,7 @@ forgetpassword::forgetpassword(QWidget *parent) :
 // A Function to generate a unique OTP everytime
 char * generate_password_OTP(int len)
 {
+    // Uses computer clock to control seed to ensure each OTP is unique.
     srand(time(NULL));
 
     QString str = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -39,6 +40,7 @@ char * generate_password_OTP(int len)
     forget_password_OTP = &otp_array[0];
     return(&otp_array[0]);
 }
+
 
 // Variable to send the OTP to the user's email every time.
 char *forgetpw_text[] = {
@@ -118,6 +120,7 @@ void forgetpassword::on_resetpassword_clicked()
 void forgetpassword::on_resetpassword_3_clicked()
 {
     bool emailcheck = false;
+    // Initializes SQL.
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     QString email = ui->Email->text();
     query.prepare("SELECT * FROM User WHERE email_ID='" + email + "';");
@@ -149,14 +152,12 @@ void forgetpassword::on_resetpassword_3_clicked()
 
     curl = curl_easy_init();
     // Email Settings
-    // TODO: Hide the Username and Password
     if (curl) {
-        curl_easy_setopt(curl, CURLOPT_USERNAME, "InForBooking@gmail.com");
+        curl_easy_setopt(curl, CURLOPT_USERNAME, FROM);
         curl_easy_setopt(curl, CURLOPT_PASSWORD, "!@QWaszx");
         curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:587");
         curl_easy_setopt(curl, CURLOPT_USE_SSL, (long) CURLUSESSL_ALL);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
-        qDebug() << "loading cert";
         curl_easy_setopt(curl, CURLOPT_CAINFO, "../google.pem");
         curl_easy_setopt(curl, CURLOPT_CAPATH, "../google.pem");
         curl_easy_setopt(curl, CURLOPT_MAIL_FROM, FROM);
@@ -169,7 +170,7 @@ void forgetpassword::on_resetpassword_3_clicked()
 
         res = curl_easy_perform(curl);
 
-        // Checks for
+        // Checks whether email sent successfully
         if (res != CURLE_OK)
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
                     curl_easy_strerror(res));
@@ -177,20 +178,18 @@ void forgetpassword::on_resetpassword_3_clicked()
         curl_slist_free_all(recipients);
 
         curl_easy_cleanup(curl);
-        qDebug() << "Forgot Password Email Sent!";
     }
     QMessageBox::information(this, "Verification", "Email sent! Please check your email and enter the verification code!");
 }
-
+// Onclick Event for Verify button.
+// Checks OTP and if matches, enable the reset password button.
 void forgetpassword::on_verifyButton_clicked()
 {
     QString verifyText;
     verifyText = ui->verify->text();
     if(verifyText == forget_password_OTP){
-        qDebug() <<  "M A T C H E D";
         ui->resetpassword->setEnabled(true);
         QMessageBox::information(this, "Verified", "Verification successful");
-        // Update Changed Password here.
     }else{
         QMessageBox::information(this, "Verification", "Wrong verification code! Please try again");
     }
