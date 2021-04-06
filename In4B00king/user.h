@@ -36,4 +36,22 @@ private:
 
 };
 
+class customer : public user{
+public:
+    customer();
+    customer(QString);
+};
+
+class administrator : public user{
+private:
+    int privileges;
+
+public:
+    administrator();
+    administrator(QString);
+    int getpriv();
+};
+
+
+
 #endif // USER_H

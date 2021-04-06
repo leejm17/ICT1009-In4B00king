@@ -38,8 +38,6 @@ MovieList::MovieList(QWidget *parent) :
     currentOffset = 0;
     updateUI();
 
-
-
 }
 
 MovieList::~MovieList()
@@ -57,6 +55,15 @@ void MovieList::receiveData(user newuser){
         ui->editmovie->setVisible(false);
     }else{
         ui->Edit_Profile->setVisible(false);
+    }
+
+    if (newuser.getType() == "customer"){
+        customer newcustomer(newuser.getEmail());
+        this->newcustomer = newcustomer;
+
+    }else{
+        administrator newadmin(newuser.getEmail());
+        this->newadmin = newadmin;
     }
 
 }
@@ -190,10 +197,8 @@ void MovieList::on_Edit_Profile_clicked()
 {
     profilepage = new editprofile();
     profilepage->show();
-    connect(this, SIGNAL(sendData(user)), profilepage, SLOT(receiveData(user)));
-    QString email = newuser.getEmail();
-    newuser.GetUserVariables(email);
-    emit sendData(newuser);
+    connect(this, SIGNAL(sendData(customer)), profilepage, SLOT(receiveData(customer)));
+    emit sendData(newcustomer);
 }
 
 void MovieList::on_logout_clicked()
@@ -203,9 +208,18 @@ void MovieList::on_logout_clicked()
 
 void MovieList::on_editmovie_clicked()
 {  
+    /*
     editmovies editmoviepage;
     editmoviepage.setModal(true);
     editmoviepage.exec();
+    */
+
+    editmoviespage = new editmovies();
+    editmoviespage->show();
+    QString privilegelvl = (QString::number(newadmin.getpriv()));
+    connect(this, SIGNAL(sendData2(QString)), editmoviespage, SLOT(receiveData(QString)));
+    emit sendData2(privilegelvl);
+
 }
 
 void MovieList::on_Select_Button2_clicked()

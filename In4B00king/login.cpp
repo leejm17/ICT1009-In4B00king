@@ -47,7 +47,7 @@ void Login::on_pushButton_clicked()
 
             connect(this, SIGNAL(sendData(user)), mainpage, SLOT(receiveData(user)));
             user newuser;
-            newuser.GetUserVariables(username);
+            newuser.GetUserVariables(username);          
             emit sendData(newuser);
 
 

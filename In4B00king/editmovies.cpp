@@ -22,6 +22,14 @@ editmovies::~editmovies()
     delete ui;
 }
 
+void editmovies::receiveData(QString priv){
+    if (priv == "2"){
+        qDebug() << "Priv is 2";
+        ui->deletemovie->setEnabled(false);
+        ui->editmovie->setEnabled(false);
+    }
+}
+
 
 
 void editmovies::on_CreateMovie_clicked()

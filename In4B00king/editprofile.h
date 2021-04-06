@@ -20,7 +20,7 @@ public:
 private slots:
 
     void on_Close_clicked();
-    void receiveData(user);
+    void receiveData(customer);
 
     void on_profilechange_clicked();
 
@@ -28,7 +28,7 @@ private slots:
 
 private:
     Ui::editprofile *ui;
-    user edituser;
+    customer edituser;
 };
 
 #endif // EDITPROFILE_H

@@ -28,6 +28,8 @@ private slots:
 
     void on_deletemovie_clicked();
 
+    void receiveData(QString);
+
 signals:
     void sendData(QString);
 

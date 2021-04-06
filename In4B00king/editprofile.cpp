@@ -16,8 +16,8 @@ editprofile::~editprofile()
     delete ui;
 }
 
-void editprofile::receiveData(user newuser){
-    edituser = newuser;
+void editprofile::receiveData(customer newcust){
+    edituser = newcust;
     ui->Fname->setText(edituser.getFname());
     ui->Lname->setText(edituser.getLname());
     ui->Age->setValue(edituser.getAge());

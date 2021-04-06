@@ -7,6 +7,36 @@ user::user()
 
 }
 
+customer::customer(){
+
+}
+
+customer::customer(QString username){
+    user::GetUserVariables(username);
+}
+
+administrator::administrator(){
+
+}
+
+administrator::administrator(QString username){
+    user::GetUserVariables(username);
+}
+
+int administrator::getpriv(){
+    QSqlQuery query(MyDB::getInstance()->getDBInstance());
+    query.prepare("Select * FROM User WHERE email_ID='" + this->getEmail() + "';");
+    if(!query.exec()){
+        qDebug() << query.lastError().text() << query.lastQuery();
+    }else{
+        qDebug() << "Successful read";
+        while(query.next()){
+            this->privileges = query.value(8).toInt();
+        }
+    }
+    return privileges;
+}
+
 void user::GetUserVariables(QString username){
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare("Select * FROM User WHERE email_ID='" + username + "';");
