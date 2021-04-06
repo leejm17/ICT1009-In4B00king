@@ -71,12 +71,12 @@ void forgetpassword::on_resetpassword_3_clicked()
     } else{
         //Disable send email button
         ui->resetpassword_3->setEnabled(false);
-
+        email.SendEmail(user_email);
+        ui->verifyButton->setEnabled(true);
+        QMessageBox::information(this, "Verification", "Email sent! Please check your email and enter the verification code!");
     }
 
-    email.SendEmail(user_email);
-    ui->verifyButton->setEnabled(true);
-    QMessageBox::information(this, "Verification", "Email sent! Please check your email and enter the verification code!");
+
 }
 // Onclick Event for Verify button.
 // Checks OTP and if matches, enable the reset password button.

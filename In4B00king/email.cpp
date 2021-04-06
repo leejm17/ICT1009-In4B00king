@@ -73,7 +73,6 @@ static size_t payload_source(void *ptr, size_t size, size_t nmemb, void *userp)
 
 void email::SendEmail(QString email){
     setEmail_OTP(generate_OTP(6));
-    qDebug() << email_OTP;
     strcpy_s(toEmail, email.toStdString().c_str());
     strcpy_s(bodyText, email_OTP.toStdString().c_str());
 

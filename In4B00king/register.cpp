@@ -79,6 +79,8 @@ void Register::on_Register_2_clicked()
     }
     if (accountcreated){
         this->close();
+        QMessageBox::information(this, "Success", "Successfully registered");
+
     }
 }
 
