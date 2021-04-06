@@ -15,18 +15,19 @@ class SeatSelection : public QDialog
 public:
     explicit SeatSelection(QWidget *parent = nullptr);
     ~SeatSelection();
-    void updateSelection();
+    void updateSelection(int);
 
 signals:
-    void showConfirmation(QString);
+    void showConfirmation(QString, int);
 
 private slots:
     void on_book_clicked();
-    void showSeatSelection();
+    void showSeatSelection(int);
 
 
 private:
     Ui::SeatSelection *ui;
+    int show_ID;
 };
 
 #endif // SEATSELECTION_H

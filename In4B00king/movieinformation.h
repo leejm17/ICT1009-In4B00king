@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QDebug>
 #include <movies.h>
+#include "mydb.h"
 
 namespace Ui {
 class MovieInformation;
@@ -17,6 +18,10 @@ public:
     explicit MovieInformation(QWidget *parent = nullptr);
     ~MovieInformation();
 
+signals:
+    void updateESeats(QString, QString, int);
+    void updateDSeats(QString, QString, int);
+
 private slots:
     void receiveData(MovieInfo);
 
@@ -26,6 +31,7 @@ private slots:
 
 private:
     Ui::MovieInformation *ui;
+    int MovieID;
 };
 
 #endif // MOVIEINFORMATION_H
