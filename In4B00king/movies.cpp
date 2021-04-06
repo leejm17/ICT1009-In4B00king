@@ -77,7 +77,7 @@ void MovieInfo::getMovieDetails_Db() {
 
     /* (1) SELECT MovieDetails from MovieList */
     query.prepare(
-        "SELECT debut, description, duration FROM MovieList"
+        "SELECT movie_ID, debut, description, duration FROM MovieList"
         " WHERE (name=:name);"
     );
     query.bindValue(":name", this->movieName);
@@ -88,9 +88,10 @@ void MovieInfo::getMovieDetails_Db() {
         qDebug() << "getMovieDetails_Db() read movieinfo query for " << this->movieName
                  << " was successful.";
         while(query.next()) {
-            this->movieDebut = query.value(0).toString();
-            this->movieDesc = query.value(1).toString();
-            this->movieDuration = query.value(2).toInt();
+			this->movieID = query.value(0).toString();
+            this->movieDebut = query.value(1).toString();
+            this->movieDesc = query.value(2).toString();
+            this->movieDuration = query.value(3).toInt();
         }
     }
 
