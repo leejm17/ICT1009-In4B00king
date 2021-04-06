@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include "mydb.h"
-
+#include "email.h"
 namespace Ui {
 class Register;
 }
@@ -28,7 +28,7 @@ private slots:
 
 private:
     Ui::Register *ui;
-    char * payload_text[];
+    email email;
 };
 
 #endif // REGISTER_H
