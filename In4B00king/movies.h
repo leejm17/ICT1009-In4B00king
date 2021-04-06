@@ -65,6 +65,7 @@ public:
 
     /* Getters & Setters */
     MovieInfo(QString);     // movieName
+	int getMovieID();
     QString getMovieName();
     int getMovieDuration();
     QString getMovieDebut();

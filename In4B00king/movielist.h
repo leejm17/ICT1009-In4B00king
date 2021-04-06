@@ -31,10 +31,8 @@ public:
 	void updateUI();
 
 signals:
-    void updateSeats();
-    void sendData(customer);
+    void sendData(user);
     void sendMovieData(MovieInfo);
-    void sendData2(QString);
 
 private slots:
 
@@ -78,13 +76,10 @@ private:
     ConfirmationScreen *confirmationScreen;
 	int currentOffset;
     QSqlDatabase db;
+    user newuser;
     editprofile *profilepage;
     editmovies *moviespage;
-    editmovies *editmoviespage;
     MovieInformation *movieInfoWindow;
-    user newuser;
-    administrator newadmin;
-    customer newcustomer;
 
     Movie movies[3];
 };

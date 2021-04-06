@@ -14,8 +14,9 @@ ConfirmationScreen::~ConfirmationScreen()
     delete ui;
 }
 
-void ConfirmationScreen::showConfirmation(QString seat)
+void ConfirmationScreen::showConfirmation(QString seat, int show_ID)
 {
+    this->show_ID =show_ID;
     ui->seat->setText(seat);
     this->show();
 }

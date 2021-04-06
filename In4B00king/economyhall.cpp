@@ -6,8 +6,6 @@ EconomyHall::EconomyHall(QWidget *parent) :
     ui(new Ui::EconomyHall)
 {
     ui->setupUi(this);
-
-    updateSeats();
 }
 
 EconomyHall::~EconomyHall()
@@ -15,8 +13,9 @@ EconomyHall::~EconomyHall()
     delete ui;
 }
 
-void EconomyHall::updateSeats()
+void EconomyHall::updateSeats(QString selectedTime, QString selectedDate, int show_ID)
 {
+    this->show_ID = show_ID;
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare("select HallSeats.seat_num,MovieSeats.available,HallSeats.condition,HallSeats.type from HallSeats inner join MovieSeats on HallSeats.seat_ID=MovieSeats.seat_ID where MovieSeats.show_ID=1");
 
@@ -41,11 +40,13 @@ void EconomyHall::updateSeats()
             }
         }
     }
+
+    this->show();
 }
 
 void EconomyHall::on_book_clicked()
 {   
-    emit showSeatSelection();
+    emit showSeatSelection(show_ID);
 }
 
 void EconomyHall::closeEvent(QCloseEvent *event){

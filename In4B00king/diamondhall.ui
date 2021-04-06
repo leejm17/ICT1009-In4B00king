@@ -16,7 +16,7 @@
   <widget class="QLabel" name="sc5">
    <property name="geometry">
     <rect>
-     <x>360</x>
+     <x>340</x>
      <y>350</y>
      <width>31</width>
      <height>31</height>
@@ -33,7 +33,7 @@
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>350</y>
+     <y>340</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -48,7 +48,7 @@
   <widget class="QLabel" name="sc6">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>300</x>
      <y>350</y>
      <width>31</width>
      <height>31</height>
@@ -84,7 +84,7 @@
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>280</y>
+     <y>270</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -100,7 +100,7 @@
    <property name="geometry">
     <rect>
      <x>490</x>
-     <y>350</y>
+     <y>340</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -116,7 +116,7 @@
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>210</y>
+     <y>200</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -164,7 +164,7 @@
    <property name="geometry">
     <rect>
      <x>490</x>
-     <y>280</y>
+     <y>270</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -180,7 +180,7 @@
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>350</y>
+     <y>340</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -211,7 +211,7 @@
   <widget class="QLabel" name="sa8">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>220</x>
      <y>210</y>
      <width>31</width>
      <height>31</height>
@@ -227,8 +227,8 @@
   <widget class="QLabel" name="sc11">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>350</y>
+     <x>40</x>
+     <y>340</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -243,8 +243,8 @@
   <widget class="QLabel" name="sa10">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>210</y>
+     <x>80</x>
+     <y>200</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -260,7 +260,7 @@
    <property name="geometry">
     <rect>
      <x>490</x>
-     <y>210</y>
+     <y>200</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -276,7 +276,7 @@
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>210</y>
+     <y>200</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -291,8 +291,8 @@
   <widget class="QLabel" name="sb9">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>280</y>
+     <x>120</x>
+     <y>270</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -307,8 +307,8 @@
   <widget class="QLabel" name="sc10">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>350</y>
+     <x>80</x>
+     <y>340</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -323,8 +323,8 @@
   <widget class="QLabel" name="sc9">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>350</y>
+     <x>120</x>
+     <y>340</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -339,7 +339,7 @@
   <widget class="QLabel" name="sb7">
    <property name="geometry">
     <rect>
-     <x>280</x>
+     <x>260</x>
      <y>280</y>
      <width>31</width>
      <height>31</height>
@@ -355,8 +355,8 @@
   <widget class="QLabel" name="sa11">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>210</y>
+     <x>40</x>
+     <y>200</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -368,27 +368,11 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="sb12">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>280</y>
-     <width>31</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>B12</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
   <widget class="QLabel" name="sb11">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>280</y>
+     <x>40</x>
+     <y>270</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -403,7 +387,7 @@
   <widget class="QLabel" name="sc4">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>380</x>
      <y>350</y>
      <width>31</width>
      <height>31</height>
@@ -419,8 +403,8 @@
   <widget class="QLabel" name="sb10">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>280</y>
+     <x>80</x>
+     <y>270</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -435,7 +419,7 @@
   <widget class="QLabel" name="sa5">
    <property name="geometry">
     <rect>
-     <x>360</x>
+     <x>340</x>
      <y>210</y>
      <width>31</width>
      <height>31</height>
@@ -451,7 +435,7 @@
   <widget class="QLabel" name="sc8">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>220</x>
      <y>350</y>
      <width>31</width>
      <height>31</height>
@@ -468,7 +452,7 @@
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>280</y>
+     <y>270</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -483,7 +467,7 @@
   <widget class="QLabel" name="sa7">
    <property name="geometry">
     <rect>
-     <x>280</x>
+     <x>260</x>
      <y>210</y>
      <width>31</width>
      <height>31</height>
@@ -499,7 +483,7 @@
   <widget class="QLabel" name="sb6">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>300</x>
      <y>280</y>
      <width>31</width>
      <height>31</height>
@@ -515,7 +499,7 @@
   <widget class="QLabel" name="sa6">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>300</x>
      <y>210</y>
      <width>31</width>
      <height>31</height>
@@ -531,7 +515,7 @@
   <widget class="QLabel" name="sb5">
    <property name="geometry">
     <rect>
-     <x>360</x>
+     <x>340</x>
      <y>280</y>
      <width>31</width>
      <height>31</height>
@@ -547,7 +531,7 @@
   <widget class="QLabel" name="sc7">
    <property name="geometry">
     <rect>
-     <x>280</x>
+     <x>260</x>
      <y>350</y>
      <width>31</width>
      <height>31</height>
@@ -563,7 +547,7 @@
   <widget class="QLabel" name="sa4">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>380</x>
      <y>210</y>
      <width>31</width>
      <height>31</height>
@@ -579,7 +563,7 @@
   <widget class="QLabel" name="sb4">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>380</x>
      <y>280</y>
      <width>31</width>
      <height>31</height>
@@ -595,7 +579,7 @@
   <widget class="QLabel" name="sb8">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>220</x>
      <y>280</y>
      <width>31</width>
      <height>31</height>
@@ -624,49 +608,17 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="sc12">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>350</y>
-     <width>31</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>C12</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
   <widget class="QLabel" name="sa9">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>210</y>
+     <x>120</x>
+     <y>200</y>
      <width>31</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
     <string>A9</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="sa12">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>210</y>
-     <width>31</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>A12</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

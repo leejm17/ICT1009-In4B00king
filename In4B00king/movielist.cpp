@@ -16,27 +16,26 @@ MovieList::MovieList(QWidget *parent) :
     seatSelection = new SeatSelection(this);
     confirmationScreen = new ConfirmationScreen(this);
 
-    connect(economyHall,SIGNAL(showSeatSelection()),seatSelection,SLOT(showSeatSelection()));
-    connect(diamondHall,SIGNAL(showSeatSelection()),seatSelection,SLOT(showSeatSelection()));
-    connect(seatSelection,SIGNAL(showConfirmation(QString)),confirmationScreen,SLOT(showConfirmation(QString)));
+    connect(economyHall,SIGNAL(showSeatSelection(int)),seatSelection,SLOT(showSeatSelection(int)));
+    connect(diamondHall,SIGNAL(showSeatSelection(int)),seatSelection,SLOT(showSeatSelection(int)));
+    connect(seatSelection,SIGNAL(showConfirmation(QString,int)),confirmationScreen,SLOT(showConfirmation(QString,int)));
     connect(confirmationScreen,SIGNAL(updateSeats()),economyHall,SLOT(updateSeats()));
     connect(confirmationScreen,SIGNAL(updateSeats()),diamondHall,SLOT(updateSeats()));
 
-    connect(this,SIGNAL(updateSeats()),economyHall,SLOT(updateSeats()));
-    connect(this,SIGNAL(updateSeats()),diamondHall,SLOT(updateSeats()));
-
     //Close all windows
-    connect(economyHall,SIGNAL(closeAll()),seatSelection,SLOT(close()));
+    /*connect(economyHall,SIGNAL(closeAll()),seatSelection,SLOT(close()));
     connect(economyHall,SIGNAL(closeAll()),confirmationScreen,SLOT(close()));
     connect(diamondHall,SIGNAL(closeAll()),seatSelection,SLOT(close()));
     connect(diamondHall,SIGNAL(closeAll()),confirmationScreen,SLOT(close()));
 
-    connect(confirmationScreen,SIGNAL(closeAll()),seatSelection,SLOT(close()));
+    connect(confirmationScreen,SIGNAL(closeAll()),seatSelection,SLOT(close()));*/
 
     //db = MyDB::getInstance()->getDBInstance();
 
     currentOffset = 0;
     updateUI();
+
+
 
 }
 
@@ -48,7 +47,7 @@ MovieList::~MovieList()
 void MovieList::receiveData(user newuser){
     this->newuser = newuser;
     QString labelText = "<P><b><i><font color='#ffffff' font_size=12>";
-    labelText.append("Hello " + newuser.getEmail());
+    labelText.append("Hello " + newuser.getName());
     labelText.append("</font></i></b></P></br>");
     ui->profile->setText(labelText);
     if (newuser.getType() == "customer"){
@@ -57,32 +56,6 @@ void MovieList::receiveData(user newuser){
         ui->Edit_Profile->setVisible(false);
     }
 
-    if (newuser.getType() == "customer"){
-        customer newcustomer(newuser.getEmail());
-        this->newcustomer = newcustomer;
-
-    }else{
-        administrator newadmin(newuser.getEmail());
-        this->newadmin = newadmin;
-    }
-
-}
-
-
-
-void MovieList::on_SelectButton_clicked()
-{
-    //QMessageBox::information(this,"Hi","is_clicked");
-    emit updateSeats();
-    economyHall->show();
-    //movieinformation = new MovieInformation(this);
-    //movieinformation->show();
-}
-
-void MovieList::on_SelectButton_2_clicked()
-{
-    emit updateSeats();
-    diamondHall->show();
 }
 
 void MovieList::updateUI()
@@ -150,11 +123,11 @@ void MovieList::updateUI()
     MovieListInfo().displayMovieList(movies);   // movies is a struct array
     qDebug() << "hi2";
 
-    QPixmap pix(":/resources/img/Tom_and_Jerry.jpg");
-    ui->Movie1->setPixmap(pix.scaled(221,300,Qt::KeepAspectRatio));
-    QPixmap pix2(":/resources/img/Godzilla_Vs_Kong.jpg");
+ QPixmap pix(":/resources/img/" + movies[0].title->text().replace(" ", "_") + ".jpg");
+ ui->Movie1->setPixmap(pix.scaled(221,300,Qt::KeepAspectRatio));
+ QPixmap pix2(":/resources/img/" + movies[1].title->text().replace(" ", "_") + ".jpg");
     ui->Movie2->setPixmap(pix2.scaled(221,300,Qt::KeepAspectRatio));
-    QPixmap pix3(":/resources/img/FF9.jpg");
+    QPixmap pix3(":/resources/img/" + movies[2].title->text().replace(" ", "_") + ".jpg");
     ui->Movie3->setPixmap(pix3.scaled(221,300,Qt::KeepAspectRatio));
     /**
 
@@ -190,6 +163,8 @@ void MovieList::on_Select_Button1_clicked()
     MovieInfo movieInfo(movies[0].title->text(), movies[0].duration->text().split(" ").at(0).toInt());
 
     connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
+    connect(movieInfoWindow,SIGNAL(updateESeats(QString,QString,int)),economyHall,SLOT(updateSeats(QString,QString,int)));
+    connect(movieInfoWindow,SIGNAL(updateDSeats(QString,QString,int)),diamondHall,SLOT(updateSeats(QString,QString,int)));
     emit sendMovieData(movieInfo);
 }
 
@@ -197,8 +172,10 @@ void MovieList::on_Edit_Profile_clicked()
 {
     profilepage = new editprofile();
     profilepage->show();
-    connect(this, SIGNAL(sendData(customer)), profilepage, SLOT(receiveData(customer)));
-    emit sendData(newcustomer);
+    connect(this, SIGNAL(sendData(user)), profilepage, SLOT(receiveData(user)));
+    QString email = newuser.getEmail();
+    newuser.GetUserVariables(email);
+    emit sendData(newuser);
 }
 
 void MovieList::on_logout_clicked()
@@ -208,18 +185,9 @@ void MovieList::on_logout_clicked()
 
 void MovieList::on_editmovie_clicked()
 {  
-    /*
     editmovies editmoviepage;
     editmoviepage.setModal(true);
     editmoviepage.exec();
-    */
-
-    editmoviespage = new editmovies();
-    editmoviespage->show();
-    QString privilegelvl = (QString::number(newadmin.getpriv()));
-    connect(this, SIGNAL(sendData2(QString)), editmoviespage, SLOT(receiveData(QString)));
-    emit sendData2(privilegelvl);
-
 }
 
 void MovieList::on_Select_Button2_clicked()
@@ -231,6 +199,8 @@ void MovieList::on_Select_Button2_clicked()
     MovieInfo movieInfo(movies[1].title->text(), movies[1].duration->text().split(" ").at(0).toInt());
 
     connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
+    connect(movieInfoWindow,SIGNAL(updateESeats(QString,QString,int)),economyHall,SLOT(updateSeats(QString,QString,int)));
+    connect(movieInfoWindow,SIGNAL(updateDSeats(QString,QString,int)),diamondHall,SLOT(updateSeats(QString,QString,int)));
     emit sendMovieData(movieInfo);
 }
 
@@ -243,5 +213,7 @@ void MovieList::on_Select_Button3_clicked()
     MovieInfo movieInfo(movies[2].title->text(), movies[2].duration->text().split(" ").at(0).toInt());
 
     connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
+    connect(movieInfoWindow,SIGNAL(updateESeats(QString,QString,int)),economyHall,SLOT(updateSeats(QString,QString,int)));
+    connect(movieInfoWindow,SIGNAL(updateDSeats(QString,QString,int)),diamondHall,SLOT(updateSeats(QString,QString,int)));
     emit sendMovieData(movieInfo);
 }
