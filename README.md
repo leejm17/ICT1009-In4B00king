@@ -1,17 +1,25 @@
 # ICT1009-In4B00king
 
-A Movie-booking Database Management System, this project is written in C++ using the QT Creator IDE.
+A Movie-booking Database Management System, this project is written in C++ using the Qt Creator IDE.
 
 The objective of this project is to experiment Object-oriented Programming (OOP) features on C++.
 
 # Pre-requisites
-If you need to load the project and see the UI, please install QT Creator at https://www.qt.io/download .
 
-Load the project by File -> Open File or Project -> In4B00king.pro.
+Follow the steps below for program code inspection, or re-compilation and run through the program.
 
-Our project also uses CURL for some functionality, so for in order to compile probably you would need to install the latest Curl for Windows at https://curl.se/download.html
+### Load the Project
+1. Go to https://www.qt.io/download.
+2. Click 'Download Qt Now' & Register for a trial account (a valid Qt account is required to start the installation).
+3. Install Qt Creator.
+4a. Once done, load the project by File -> Open File or Project -> In4B00king.pro.
+4b. Or you could double-click on In4B00king.pro to launch Qt Creator (after installation).
 
-Extract the contents (lib, include and bin) and place them in your QT Folder. (i.e. C:\Qt\6.0.3\mingw81_64)
+### cURL (for re-compilation of program)
+Our project also uses CURL for some functionality.
 
-After that, edit the LIBS path (bolded text) in In4Booking.pro to the path where you placed curl. (i.e. LIBS += -L**C:/Qt/6.0.3/mingw81_64/lib** -lcurl)
+Follow the steps below to recompile the program with cURL.
 
+1. You might need to install the latest cURL for Windows at https://curl.se/download.html.
+2. Extract the contents (lib, include and bin) and place them in the respective directories of your Qt Folder (i.e. C:\Qt\6.0.3\mingw81_64).
+3. Edit the LIBS path (bolded text) in In4B00king.pro to the path where you placed curl in Qt (i.e. LIBS += -L**C:/Qt/6.0.3/mingw81_64/lib** -lcurl).
