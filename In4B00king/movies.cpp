@@ -76,7 +76,7 @@ void MovieInfo::getMovieDetails_Db() {
 
     /* (1) SELECT MovieDetails from MovieList */
     query.prepare(
-        "SELECT debut, description FROM MovieList"
+        "SELECT debut, description, duration FROM MovieList"
         " WHERE (name=:name);"
     );
     query.bindValue(":name", this->movieName);
@@ -89,6 +89,7 @@ void MovieInfo::getMovieDetails_Db() {
         while(query.next()) {
             this->movieDebut = query.value(0).toString();
             this->movieDesc = query.value(1).toString();
+            this->movieDuration = query.value(2).toInt();
         }
     }
 
@@ -487,9 +488,8 @@ void MovieInfo::deleteMovie_Db(QString movieName) {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare(
         "DELETE FROM MovieList"
-        " WHERE movieName=:movieName;"
+        " WHERE name='" + movieName +"';"
     );
-    query.bindValue(":movieName", movieName);
 
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();
@@ -527,15 +527,12 @@ MovieInfo::MovieInfo(QString oldName, QString newName, int duration, QString des
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare(
         "UPDATE MovieList"
-        " SET name=:newName,"
-            " duration=:duration"
-            " description=:desc"
-        " WHERE name=:oldName;"
+        " SET name='" + newName + "',"
+            " duration="+ QString::number(duration) +
+            " ,description='" + desc + "'"
+        " WHERE name='" + oldName + "';"
     );
-    query.bindValue(":newName", newName);
-    query.bindValue(":duration", duration);
-    query.bindValue(":desc", desc);
-    query.bindValue(":oldName", oldName);
+
 
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();

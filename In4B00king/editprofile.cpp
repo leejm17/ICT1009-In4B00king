@@ -32,7 +32,7 @@ void editprofile::receiveData(user newuser){
 
 void editprofile::on_Close_clicked()
 {
-    close();
+    hide();
 }
 
 void editprofile::on_profilechange_clicked()
@@ -72,7 +72,7 @@ void editprofile::on_profilechange_clicked()
                 qDebug() << "read was successful "<< updatequery.lastQuery();
             }
             QMessageBox::information(this, "Edit profile", "Details have been changed");
-            close();
+            hide();
 
         }else{
             qDebug() << "read was successful "<< query.lastQuery();
@@ -118,7 +118,7 @@ void editprofile::on_pwdchange_clicked()
                     qDebug() << "read was successful "<< updatequery.lastQuery();
                 }
                 QMessageBox::information(this, "Successful Change", "Password has been changed");
-                close();
+                hide();
             }else{
                 QMessageBox::warning(this, "Password Mismatch", "Password does not match");
             }

@@ -50,7 +50,7 @@ MovieList::~MovieList()
 void MovieList::receiveData(user newuser){
     this->newuser = newuser;
     QString labelText = "<P><b><i><font color='#ffffff' font_size=12>";
-    labelText.append("Hello " + newuser.getEmail());
+    labelText.append("Hello " + newuser.getName());
     labelText.append("</font></i></b></P></br>");
     ui->profile->setText(labelText);
     if (newuser.getType() == "customer"){
@@ -202,9 +202,10 @@ void MovieList::on_logout_clicked()
 }
 
 void MovieList::on_editmovie_clicked()
-{
-    moviespage = new editmovies();
-    moviespage->show();
+{  
+    editmovies editmoviepage;
+    editmoviepage.setModal(true);
+    editmoviepage.exec();
 }
 
 void MovieList::on_Select_Button2_clicked()
