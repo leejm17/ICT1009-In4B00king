@@ -19,12 +19,10 @@ Hall::Hall(QString type) {
         this->numOfRows = ECONOMYHALL_ROWS;
         this->numOfCols = ECONOMYHALL_COLS;
         this->numOfSeats = ECONOMYHALL_SEATS;
-        this->numOfTables = ECONOMYHALL_TABLES;
     } else {
         this->numOfRows = DIAMONDHALL_ROWS;
         this->numOfCols = DIAMONDHALL_COLS;
         this->numOfSeats = DIAMONDHALL_SEATS;
-        this->numOfTables = DIAMONDHALL_TABLES;
     }
 }
 
