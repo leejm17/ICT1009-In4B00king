@@ -58,7 +58,7 @@ void Register::on_Register_2_clicked()
                                                                   age + "\nGender:" + gender, QMessageBox::Yes | QMessageBox::No);
         if (reply == QMessageBox::Yes) {
             QSqlQuery query(MyDB::getInstance()->getDBInstance());
-            query.prepare("INSERT INTO User(email_ID,password,first_name,last_name,age,gender,type) VALUES (:email, :password, :fname, :lname, :age, :gender, 'customer')");
+            query.prepare("INSERT INTO User(email_ID,password,first_name,last_name,age,gender,type, perms) VALUES (:email, :password, :fname, :lname, :age, :gender, 'customer', 0)");
             query.bindValue(":email", email);
             // "Salt"
             QString salted_password = email + pwd;
@@ -71,8 +71,10 @@ void Register::on_Register_2_clicked()
             query.bindValue(":lname", lname);
             query.bindValue(":age", age);
             query.bindValue(":gender", gender);
+            query.bindValue(":perms", 0);
             query.exec();
             accountcreated = true;
+            qDebug() << "Successful Account Creation";
         } else {
             qDebug() << "Yes was not clicked";
         }
@@ -181,7 +183,7 @@ void Register::on_sendemail_clicked()
 
         // Email Settings
         if (curl) {
-            curl_easy_setopt(curl, CURLOPT_USERNAME, FROM);
+            curl_easy_setopt(curl, CURLOPT_USERNAME, "<InForBooking@gmail.com>");
             curl_easy_setopt(curl, CURLOPT_PASSWORD, "!@QWaszx");
             curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:587");
             curl_easy_setopt(curl, CURLOPT_USE_SSL, (long) CURLUSESSL_ALL);
@@ -214,9 +216,9 @@ void Register::on_sendemail_clicked()
 void Register::on_verify_clicked()
 {
     //Add the checking of curl email
+    qDebug() << verify_email_OTP;
     QString verifyText;
     verifyText = ui->verificationcode->text();
-
     // Checks if the code they enter matches
     if(verifyText == verify_email_OTP){
         verified = true;

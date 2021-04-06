@@ -48,7 +48,7 @@ MovieList::~MovieList()
 void MovieList::receiveData(user newuser){
     this->newuser = newuser;
     QString labelText = "<P><b><i><font color='#ffffff' font_size=12>";
-    labelText.append("Hello " + newuser.getName());
+    labelText.append("Hello " + newuser.getEmail());
     labelText.append("</font></i></b></P></br>");
     ui->profile->setText(labelText);
     if (newuser.getType() == "customer"){

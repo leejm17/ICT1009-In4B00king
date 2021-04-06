@@ -79,6 +79,8 @@ void editprofile::on_profilechange_clicked()
             QMessageBox::warning(this, "Login", "Wrong password");
         }
     }
+    qApp->processEvents();
+
 }
 
 void editprofile::on_pwdchange_clicked()

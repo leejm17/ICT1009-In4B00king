@@ -153,7 +153,7 @@ void forgetpassword::on_resetpassword_3_clicked()
     curl = curl_easy_init();
     // Email Settings
     if (curl) {
-        curl_easy_setopt(curl, CURLOPT_USERNAME, FROM);
+        curl_easy_setopt(curl, CURLOPT_USERNAME, "<InForBooking@gmail.com>");
         curl_easy_setopt(curl, CURLOPT_PASSWORD, "!@QWaszx");
         curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:587");
         curl_easy_setopt(curl, CURLOPT_USE_SSL, (long) CURLUSESSL_ALL);
