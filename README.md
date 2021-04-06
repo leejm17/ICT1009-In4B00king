@@ -4,9 +4,7 @@ A Movie-booking Database Management System, this project is written in C++ using
 
 The objective of this project is to experiment Object-oriented Programming (OOP) features on C++.
 
-# Installation
-
-## For Windows
+# Pre-requisites
 If you need to load the project and see the UI, please install QT Creator at https://www.qt.io/download .
 
 Load the project by File -> Open File or Project -> In4B00king.pro.
