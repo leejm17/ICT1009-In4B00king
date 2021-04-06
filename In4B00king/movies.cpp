@@ -88,7 +88,7 @@ void MovieInfo::getMovieDetails_Db() {
         qDebug() << "getMovieDetails_Db() read movieinfo query for " << this->movieName
                  << " was successful.";
         while(query.next()) {
-			this->movieID = query.value(0).toString();
+            this->movieID = query.value(0).toInt();
             this->movieDebut = query.value(1).toString();
             this->movieDesc = query.value(2).toString();
             this->movieDuration = query.value(3).toInt();
@@ -167,7 +167,7 @@ void ShowtimesInfo::displayMovieDetails(QString name, QComboBox *dateComboBox) {
     // display movie showtimes with timeslots & halls array
     qDebug() << "retrieve_dates - " << retrieve_dates.length();
     for (int cnt=0; cnt<retrieve_dates.length(); cnt++) {
-        dateComboBox->addItem(retrieve_dates.at(cnt) + " " + retrieve_timeslots.at(cnt));
+        dateComboBox->addItem(QString::number(retrieve_halls.at(cnt)) + " " + retrieve_dates.at(cnt) + " " + retrieve_timeslots.at(cnt));
         //movies[cnt].title->setText(this->movieNameList.at(cnt));
         //movies[cnt].duration->setText(duration);
     }
@@ -177,7 +177,7 @@ void ShowtimesInfo::displayMovieDetails(QString name, QComboBox *dateComboBox) {
 /* Retrieves a list of timeslots & hallIDs from DB, and append to their respective arrays. */
 void ShowtimesInfo::getShowtimes_Db(QString movieName) {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
-    query.prepare("SELECT timeslot, date FROM MovieShowing"
+    query.prepare("SELECT hall_ID, timeslot, date FROM MovieShowing"
                   " JOIN MovieList ON (MovieShowing.movie_ID = MovieList.movie_ID)"
                   " WHERE MovieList.name=:name;");
     query.bindValue(":name", movieName);
@@ -189,8 +189,9 @@ void ShowtimesInfo::getShowtimes_Db(QString movieName) {
                  << " 4_2"
                  << " was successful.";
         while(query.next()) {
-            retrieve_timeslots.append(query.value(0).toString());
-            retrieve_dates.append(query.value(1).toString());
+            retrieve_halls.append(query.value(0).toInt());
+            retrieve_timeslots.append(query.value(1).toString());
+            retrieve_dates.append(query.value(2).toString());
         }
     }
     MyDB::ResetInstance();
