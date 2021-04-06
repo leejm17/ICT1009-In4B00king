@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "mydb.h"
+#include "email.h"
 
 namespace Ui {
 class forgetpassword;
@@ -27,6 +28,7 @@ private slots:
 
 private:
     Ui::forgetpassword *ui;
+    email email;
 };
 
 #endif // FORGETPASSWORD_H

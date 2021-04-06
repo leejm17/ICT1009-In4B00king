@@ -17,6 +17,7 @@ SOURCES += \
     editmovie.cpp \
     editmovies.cpp \
     editprofile.cpp \
+    email.cpp \
     forgetpassword.cpp \
     main.cpp \
     login.cpp \
@@ -37,6 +38,7 @@ HEADERS += \
     editmovie.h \
     editmovies.h \
     editprofile.h \
+    email.h \
     forgetpassword.h \
     login.h \
     mainpage.h \
