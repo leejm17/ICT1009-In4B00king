@@ -40,6 +40,7 @@ class customer : public user{
 public:
     customer();
     customer(QString);
+    void loadCust(QString);
 };
 
 class administrator : public user{

@@ -32,13 +32,12 @@ public:
 
 signals:
     void sendData(user);
+    void sendData(customer);
+    void sendData2(QString);
     void sendMovieData(MovieInfo);
 
 private slots:
 
-    void on_SelectButton_clicked();
-
-    void on_SelectButton_2_clicked();
 	
 	void on_Next_Button_clicked();
 
@@ -76,10 +75,12 @@ private:
     ConfirmationScreen *confirmationScreen;
 	int currentOffset;
     QSqlDatabase db;
-    user newuser;
     editprofile *profilepage;
-    editmovies *moviespage;
+    editmovies *editmoviespage;
     MovieInformation *movieInfoWindow;
+    user newuser;
+    administrator newadmin;
+    customer newcustomer;
 
     Movie movies[3];
 };

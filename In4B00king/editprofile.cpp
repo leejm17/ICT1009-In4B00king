@@ -18,6 +18,7 @@ editprofile::~editprofile()
 
 void editprofile::receiveData(customer newcust){
     edituser = newcust;
+    edituser.loadCust(newcust.getEmail());
     ui->Fname->setText(edituser.getFname());
     ui->Lname->setText(edituser.getLname());
     ui->Age->setValue(edituser.getAge());
@@ -27,6 +28,7 @@ void editprofile::receiveData(customer newcust){
     }else{
         ui->Female->setChecked(true);
     }
+
 }
 
 

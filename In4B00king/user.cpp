@@ -16,6 +16,10 @@ customer::customer(QString username){
     user::GetUserVariables(username);
 }
 
+void customer::loadCust(QString email){
+    user::GetUserVariables(email);
+}
+
 administrator::administrator(){
 
 }
