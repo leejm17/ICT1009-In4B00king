@@ -36,10 +36,6 @@ signals:
 
 private slots:
 
-    void on_SelectButton_clicked();
-
-    void on_SelectButton_2_clicked();
-	
 	void on_Next_Button_clicked();
 
 

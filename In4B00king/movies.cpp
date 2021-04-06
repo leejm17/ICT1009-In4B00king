@@ -100,7 +100,8 @@ void MovieInfo::getMovieDetails_Db() {
         "SELECT DISTINCT date"
         " FROM MovieShowing"
         " JOIN MovieList ON (MovieShowing.movie_ID = MovieList.movie_ID)"
-        " WHERE (MovieList.name=:name);"
+        " WHERE (MovieList.name=:name)"
+           " AND (MovieShowing.date||' '||MovieShowing.timeslot >= DATETIME());"
     );
     query.bindValue(":name", this->movieName);
 
@@ -165,7 +166,7 @@ void ShowtimesInfo::displayMovieDetails(QString name, QComboBox *dateComboBox) {
     ShowtimesInfo::getShowtimes_Db(name);
 
     // display movie showtimes with timeslots & halls array
-    qDebug() << "retrieve_dates - " << retrieve_dates.length();
+    //qDebug() << "retrieve_dates - " << retrieve_dates.length();
     for (int cnt=0; cnt<retrieve_dates.length(); cnt++) {
         dateComboBox->addItem(QString::number(retrieve_halls.at(cnt)) + " " + retrieve_dates.at(cnt) + " " + retrieve_timeslots.at(cnt));
         //movies[cnt].title->setText(this->movieNameList.at(cnt));
@@ -179,7 +180,9 @@ void ShowtimesInfo::getShowtimes_Db(QString movieName) {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare("SELECT hall_ID, timeslot, date FROM MovieShowing"
                   " JOIN MovieList ON (MovieShowing.movie_ID = MovieList.movie_ID)"
-                  " WHERE MovieList.name=:name;");
+                  " WHERE (MovieList.name=:name)"
+                    " AND (MovieShowing.date||' '||MovieShowing.timeslot >= DATETIME());"
+    );
     query.bindValue(":name", movieName);
 
     if(!query.exec()) {
@@ -223,16 +226,12 @@ MovieInfo::MovieInfo(QString movieName, int duration, QString debut, QString fin
     /*for (int i=0; i<movieDates.length(); i++) {
         qDebug() << movieDates[i];
     }*/
-    /* SELECT MovieList.description, MovieShowing.date FROM MovieList WHERE (MovieList.name=movieName)
-        ON (MovieList.movieId = MovieShowing.movieId). */
 }
 
 /* Call this function in MainScreen_Admin to generate an incremental list of movie show dates & append to movieDates[]. */
 void MovieInfo::generateMovieDates() {
     QDate debut = QDate::fromString(this->movieDebut, "yyyy-MM-dd");
     QDate finale = QDate::fromString(this->movieFinale, "yyyy-MM-dd");
-    //QDate debut = QDate::fromString("2021-12-10", "yyyy-MM-dd");
-    //QDate finale = QDate::fromString("2022-02-02", "yyyy-MM-dd");
 
     QCalendar qCalendarObj;
     for (int month=debut.month(); month<=12+finale.month(); month++) { // for every month between debut & finale
