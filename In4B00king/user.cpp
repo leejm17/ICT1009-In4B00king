@@ -11,6 +11,7 @@ customer::customer(){
 
 }
 
+// This function gets the username for the customer class
 customer::customer(QString username){
     user::GetUserVariables(username);
 }
@@ -19,10 +20,12 @@ administrator::administrator(){
 
 }
 
+// This function gets the username for the administrator class
 administrator::administrator(QString username){
     user::GetUserVariables(username);
 }
 
+// This function gets the privilege levels for the Administrators
 int administrator::getpriv(){
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare("Select * FROM User WHERE email_ID='" + this->getEmail() + "';");
@@ -37,6 +40,7 @@ int administrator::getpriv(){
     return privileges;
 }
 
+// This function gets the privilege levels for the Administrators
 void user::GetUserVariables(QString username){
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare("Select * FROM User WHERE email_ID='" + username + "';");
