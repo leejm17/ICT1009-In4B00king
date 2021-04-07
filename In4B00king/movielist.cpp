@@ -130,7 +130,6 @@ void MovieList::updateUI()
     query.finish();**/
 
     MovieListInfo().displayMovieList(movies);   // movies is a struct array
-    qDebug() << "hi2";
 
     QPixmap pix(":/resources/img/" + movies[0].title->text().replace(" ", "_") + ".jpg");
     ui->Movie1->setPixmap(pix.scaled(221,300,Qt::KeepAspectRatio));
@@ -152,7 +151,6 @@ void MovieList::updateUI()
     ui->Movie_Title_3->setText("FF9");
     ui->Duration_3->setText("120min");
     **/
-    qDebug() << "hi";
 }
 
 
@@ -170,6 +168,7 @@ void MovieList::on_Select_Button1_clicked()
     movieInfoWindow->show();
 
     MovieInfo movieInfo(movies[0].title->text(), movies[0].duration->text().split(" ").at(0).toInt());
+    movieInfo.getMovieDetails_Db(); // get details of the selected movie
 
     connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
     connect(movieInfoWindow,SIGNAL(updateESeats(QString,QString,int)),economyHall,SLOT(updateSeats(QString,QString,int)));
@@ -207,6 +206,7 @@ void MovieList::on_Select_Button2_clicked()
     movieInfoWindow->show();
 
     MovieInfo movieInfo(movies[1].title->text(), movies[1].duration->text().split(" ").at(0).toInt());
+    movieInfo.getMovieDetails_Db(); // get details of the selected movie
 
     connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
     connect(movieInfoWindow,SIGNAL(updateESeats(QString,QString,int)),economyHall,SLOT(updateSeats(QString,QString,int)));
@@ -221,6 +221,7 @@ void MovieList::on_Select_Button3_clicked()
     movieInfoWindow->show();
 
     MovieInfo movieInfo(movies[2].title->text(), movies[2].duration->text().split(" ").at(0).toInt());
+    movieInfo.getMovieDetails_Db(); // get details of the selected movie
 
     connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
     connect(movieInfoWindow,SIGNAL(updateESeats(QString,QString,int)),economyHall,SLOT(updateSeats(QString,QString,int)));

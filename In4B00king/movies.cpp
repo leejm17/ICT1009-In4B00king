@@ -9,11 +9,6 @@
 #include <QLabel>
 #include <QComboBox>
 
-/* Default constructor */
-MovieListInfo::MovieListInfo() {
-
-}
-
 /* Getter functions */
 QList<QString> MovieListInfo::getMovieNameList() {
     getAllMovieList_Db();
@@ -57,19 +52,30 @@ void MovieListInfo::getMovieList_Db() {
     MyDB::ResetInstance();
 }
 
-/* Default constructor */
-MovieInfo::MovieInfo() {
+/* Parameterised Constructor */
+MovieBasic::MovieBasic(QString movieName, int duration) {
+    this->movieName = movieName;
+    this->movieDuration = duration;
+}
 
+QString MovieBasic::getName() {
+    return movieName;
+}
+void MovieBasic::setName(QString name) {
+    this->movieName = name;
+}
+int MovieBasic::getDuration() {
+    return movieDuration;
+}
+void MovieBasic::setDuration(int duration) {
+    this->movieDuration = duration;
 }
 
 /* (2) When Customer clicks on a Movie in MainScreen via this Constructor, initialise the data members. */
 /* Calls getMovieDetails_Db() to retrieve description & array of movieDates, then initialise them. */
 /* Redirect Customer to MovieDetails screen. */
-MovieInfo::MovieInfo(QString movieName, int duration) {
-    this->movieName = movieName;
-    this->movieDuration = duration;
-    getMovieDetails_Db();
-}
+MovieInfo::MovieInfo(QString movieName, int duration)
+    : MovieBasic(movieName, duration) {};
 
 /* DB QUERY to get movie information. */
 void MovieInfo::getMovieDetails_Db() {
@@ -80,18 +86,18 @@ void MovieInfo::getMovieDetails_Db() {
         "SELECT movie_ID, debut, description, duration FROM MovieList"
         " WHERE (name=:name);"
     );
-    query.bindValue(":name", this->movieName);
+    query.bindValue(":name", MovieBasic::getName());
 
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();
     } else {
-        qDebug() << "getMovieDetails_Db() read movieinfo query for " << this->movieName
+        qDebug() << "getMovieDetails_Db() read movieinfo query for " << MovieBasic::getName()
                  << " was successful.";
         while(query.next()) {
             this->movieID = query.value(0).toInt();
             this->movieDebut = query.value(1).toString();
             this->movieDesc = query.value(2).toString();
-            this->movieDuration = query.value(3).toInt();
+            MovieBasic::setDuration(query.value(3).toInt());
         }
     }
 
@@ -103,12 +109,12 @@ void MovieInfo::getMovieDetails_Db() {
         " WHERE (MovieList.name=:name)"
            " AND (MovieShowing.date||' '||MovieShowing.timeslot >= DATETIME());"
     );
-    query.bindValue(":name", this->movieName);
+    query.bindValue(":name", MovieBasic::getName());
 
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();
     } else {
-        qDebug() << "getMovieDetails_Db() read dates query for " << this->movieName
+        qDebug() << "getMovieDetails_Db() read dates query for " << MovieBasic::getName()
                  << " was successful.";
         while(query.next()) {
             this->movieDates.append(query.value(0).toString());
@@ -169,8 +175,6 @@ void ShowtimesInfo::displayMovieDetails(QString name, QComboBox *dateComboBox) {
     //qDebug() << "retrieve_dates - " << retrieve_dates.length();
     for (int cnt=0; cnt<retrieve_dates.length(); cnt++) {
         dateComboBox->addItem(QString::number(retrieve_halls.at(cnt)) + " " + retrieve_dates.at(cnt) + " " + retrieve_timeslots.at(cnt));
-        //movies[cnt].title->setText(this->movieNameList.at(cnt));
-        //movies[cnt].duration->setText(duration);
     }
 }
 
@@ -206,9 +210,8 @@ void ShowtimesInfo::getShowtimes_Db(QString movieName) {
 /* Call generateMovieDates() to generate dates from movie debut to movie finale. */
 /* Call generateShowtimes() to generate showtimes based on a user-supplied movie priority. */
 /* Call addMovie_Db() to add movie information + dates + showtimes into respective Tables in DB. */
-MovieInfo::MovieInfo(QString movieName, int duration, QString debut, QString finale, QString desc) {
-    this->movieName = movieName;
-    this->movieDuration = duration;
+MovieInfo::MovieInfo(QString movieName, int duration, QString debut, QString finale, QString desc)
+    : MovieBasic(movieName, duration) {
     this->movieDebut = debut;
     this->movieFinale = finale;
     this->movieDesc = desc;
@@ -372,8 +375,8 @@ void MovieInfo::addMovie_Db() {
         "INSERT INTO MovieList (name, duration, debut, finale, description)"
         " VALUES (:name, :duration, :debut, :finale, :desc);"
     );
-    query.bindValue(":name", this->movieName);
-    query.bindValue(":duration", this->movieDuration);
+    query.bindValue(":name", MovieBasic::getName());
+    query.bindValue(":duration", MovieBasic::getDuration());
     query.bindValue(":debut", this->movieDebut);
     query.bindValue(":finale", this->movieFinale);
     query.bindValue(":desc", this->movieDesc);
@@ -384,7 +387,7 @@ void MovieInfo::addMovie_Db() {
         /*qDebug() << "addMovie() into MovieList write query for " << this->movieName
                  << " was successful.";*/
     }
-    qDebug() << "Finished INSERT details INTO MovieList for " << this->movieName;
+    qDebug() << "Finished INSERT details INTO MovieList for " << MovieBasic::getName();
 
     /* (2) INSERT details INTO MovieShowing */
     /* (2a) SELECT movie_ID of Movie to add */
@@ -393,7 +396,7 @@ void MovieInfo::addMovie_Db() {
         " FROM MovieList"
         " WHERE (name=:name);"
     );
-    query.bindValue(":name", this->movieName);
+    query.bindValue(":name", MovieBasic::getName());
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();
     } else {
@@ -403,7 +406,7 @@ void MovieInfo::addMovie_Db() {
             this->movieID = query.value(0).toInt();
         }
     }
-    qDebug() << "Finished SELECT movie_ID FROM MovieList for " << this->movieName;
+    qDebug() << "Finished SELECT movie_ID FROM MovieList for " << MovieBasic::getName();
 
     /* (2b) For every Date and their respective Timeslot,
      * INSERT the date, timeslots and halls INTO MovieShowing */
@@ -445,7 +448,7 @@ void MovieInfo::addMovie_Db() {
             }
         }
     }
-    qDebug() << "Finished INSERT details INTO MovieShowing for " << this->movieName;
+    qDebug() << "Finished INSERT details INTO MovieShowing for " << MovieBasic::getName();
 
     /* (3) INSERT INTO MovieSeats to make Seats available for booking */
     /* (3a) SELECT show_ID and their respective seat_ID & seat's condition based on hall_ID seating plan */
@@ -470,7 +473,7 @@ void MovieInfo::addMovie_Db() {
             seatsCondition.append(query.value(2).toString());
         }
     }
-    qDebug() << "Finished SELECT show_ID, hall_ID, seat_ID FROM MovieShowing & HallSeats for " << this->movieName;
+    qDebug() << "Finished SELECT show_ID, hall_ID, seat_ID FROM MovieShowing & HallSeats for " << MovieBasic::getName();
 
     /* (3b) For every record, if seatsCondition is NOT 'good', replace it with 'FALSE', else 'TRUE' */
     for (int cnt=0; cnt<seatsCondition.length(); cnt++) {
@@ -500,7 +503,7 @@ void MovieInfo::addMovie_Db() {
             }
         }
     }
-    qDebug() << "Finished INSERT details INTO MovieSeats for " << this->movieName;
+    qDebug() << "Finished INSERT details INTO MovieSeats for " << MovieBasic::getName();
 
     MyDB::ResetInstance();
 }
@@ -544,45 +547,42 @@ void MovieInfo::deleteMovie_Db(QString movieName) {
 
 
 /* Getters & Setters */
-MovieInfo::MovieInfo(QString movieName) {
-    this->movieName = movieName;
-    getMovieDetails_Db();
+MovieInfo::MovieInfo(QString movieName)
+    : MovieBasic::MovieBasic() {
+    MovieBasic::setName(movieName);
 }
 int MovieInfo::getMovieID() {
 	return movieID;
 }
-QString MovieInfo::getMovieName() {
-    return movieName;
-}
-QString MovieInfo::getMovieDebut() {
+QString MovieInfo::getDebut() {
     return movieDebut;
 }
-int MovieInfo::getMovieDuration() {
-    return movieDuration;
-}
-QString MovieInfo::getMovieDesc() {
+QString MovieInfo::getDesc() {
     return movieDesc;
 }
+QString MovieInfo::getNewName() {
+    return newMovieName;
+}
 /* Constructor to update movie information */
-MovieInfo::MovieInfo(QString oldName, QString newName, int duration, QString desc) {
-    this->movieName = newName;
-    this->movieDuration = duration;
+MovieInfo::MovieInfo(QString oldName, QString newName, int duration, QString desc)
+    : MovieBasic(oldName, duration){
+    this->newMovieName = newName;
     this->movieDesc = desc;
-
+}
+void MovieInfo::updateMovie_Db() {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare(
         "UPDATE MovieList"
-        " SET name='" + newName + "',"
-            " duration="+ QString::number(duration) +
-            " ,description='" + desc + "'"
-        " WHERE name='" + oldName + "';"
+        " SET name='" + MovieInfo::getNewName() + "'" +
+        ", duration="+ QString::number(MovieBasic::getDuration()) +
+        ", description='" + MovieInfo::getDesc() + "'"
+        " WHERE name='" + MovieBasic::getName() + "';"
     );
-
 
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();
     } else {
-        qDebug() << "UPDATE MovieList for " << oldName
+        qDebug() << "UPDATE MovieList for " << MovieBasic::getName()
                  <<" was successful.";
     }
     MyDB::ResetInstance();
