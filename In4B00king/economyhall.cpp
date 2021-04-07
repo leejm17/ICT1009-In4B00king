@@ -52,7 +52,3 @@ void EconomyHall::on_book_clicked()
 {   
     emit showSeatSelection(bookingInfo);
 }
-
-void EconomyHall::closeEvent(QCloseEvent *event){
-    parentWidget()->show();
-}

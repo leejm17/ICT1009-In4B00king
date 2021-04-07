@@ -27,7 +27,6 @@ private slots:
 
 private:
     Ui::EconomyHall *ui;
-    void closeEvent(QCloseEvent *event);
     BookingInfo bookingInfo;
 };
 

@@ -52,7 +52,3 @@ void DiamondHall::on_book_clicked()
 {
     emit showSeatSelection(bookingInfo);
 }
-
-void DiamondHall::closeEvent(QCloseEvent *event){
-    parentWidget()->show();
-}

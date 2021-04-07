@@ -18,6 +18,7 @@ void ConfirmationScreen::showConfirmation(QString seat, BookingInfo bookingInfo)
 {
     this->bookingInfo = bookingInfo;
     ui->seat->setText(seat);
+    ui->hall->setText(bookingInfo.get_hall_Type());
     this->show();
 }
 
@@ -42,5 +43,9 @@ void ConfirmationScreen::on_confirm_clicked()
         }
        }
 
-    emit updateSeats(bookingInfo);
+    if(bookingInfo.get_hall_Type().compare("economy") == 0){
+        emit updateESeats(bookingInfo);
+    } else {
+    emit updateDSeats(bookingInfo);
+       }
 }

@@ -29,7 +29,6 @@ private slots:
 
 private:
     Ui::DiamondHall *ui;
-    void closeEvent(QCloseEvent *event);
     BookingInfo bookingInfo;
 };
 
