@@ -40,7 +40,11 @@ void EconomyHall::updateSeats(BookingInfo bookingInfo)
             }
         }
     }
+}
 
+void EconomyHall::updateESeats(BookingInfo bookingInfo)
+{
+    this->updateSeats(bookingInfo);
     this->show();
 }
 
@@ -50,5 +54,5 @@ void EconomyHall::on_book_clicked()
 }
 
 void EconomyHall::closeEvent(QCloseEvent *event){
-    emit closeAll();
+    parentWidget()->show();
 }

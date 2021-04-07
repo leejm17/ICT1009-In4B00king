@@ -19,11 +19,11 @@ public:
 
 signals:
     void showSeatSelection(BookingInfo);
-    void closeAll();
 
 private slots:
     void on_book_clicked();
     void updateSeats(BookingInfo);
+    void updateESeats(BookingInfo);
 
 private:
     Ui::EconomyHall *ui;

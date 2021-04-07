@@ -40,14 +40,19 @@ void DiamondHall::updateSeats(BookingInfo bookingInfo)
             }
         }
     }
+}
 
+void DiamondHall::updateDSeats(BookingInfo bookingInfo)
+{
+    this->updateSeats(bookingInfo);
     this->show();
 }
+
 void DiamondHall::on_book_clicked()
 {
     emit showSeatSelection(bookingInfo);
 }
 
 void DiamondHall::closeEvent(QCloseEvent *event){
-    emit closeAll();
+    parentWidget()->show();
 }

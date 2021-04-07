@@ -18,8 +18,7 @@ public:
     ~ConfirmationScreen();
 
 signals:
-    void updateSeats();
-    void closeAll();
+    void updateSeats(BookingInfo);
 
 private slots:
     void showConfirmation(QString, BookingInfo);

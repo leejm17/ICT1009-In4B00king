@@ -19,18 +19,8 @@ MovieList::MovieList(QWidget *parent) :
     connect(economyHall,SIGNAL(showSeatSelection(BookingInfo)),seatSelection,SLOT(showSeatSelection(BookingInfo)));
     connect(diamondHall,SIGNAL(showSeatSelection(BookingInfo)),seatSelection,SLOT(showSeatSelection(BookingInfo)));
     connect(seatSelection,SIGNAL(showConfirmation(QString,BookingInfo)),confirmationScreen,SLOT(showConfirmation(QString,BookingInfo)));
-    connect(confirmationScreen,SIGNAL(updateSeats()),economyHall,SLOT(updateSeats()));
-    connect(confirmationScreen,SIGNAL(updateSeats()),diamondHall,SLOT(updateSeats()));
-
-    //Close all windows
-    /*connect(economyHall,SIGNAL(closeAll()),seatSelection,SLOT(close()));
-    connect(economyHall,SIGNAL(closeAll()),confirmationScreen,SLOT(close()));
-    connect(diamondHall,SIGNAL(closeAll()),seatSelection,SLOT(close()));
-    connect(diamondHall,SIGNAL(closeAll()),confirmationScreen,SLOT(close()));
-
-    connect(confirmationScreen,SIGNAL(closeAll()),seatSelection,SLOT(close()));*/
-
-    //db = MyDB::getInstance()->getDBInstance();
+    connect(confirmationScreen,SIGNAL(updateSeats(BookingInfo)),economyHall,SLOT(updateSeats(BookingInfo)));
+    connect(confirmationScreen,SIGNAL(updateSeats(BookingInfo)),diamondHall,SLOT(updateSeats(BookingInfo)));
 
     currentOffset = 0;
     updateUI();
@@ -172,8 +162,9 @@ void MovieList::on_Select_Button1_clicked()
     MovieInfo movieInfo(movies[0].title->text(), movies[0].duration->text().split(" ").at(0).toInt());
 
     connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
-    connect(movieInfoWindow,SIGNAL(updateESeats(BookingInfo)),economyHall,SLOT(updateSeats(BookingInfo)));
-    connect(movieInfoWindow,SIGNAL(updateDSeats(BookingInfo)),diamondHall,SLOT(updateSeats(BookingInfo)));
+    connect(movieInfoWindow,SIGNAL(updateESeats(BookingInfo)),economyHall,SLOT(updateESeats(BookingInfo)));
+    connect(movieInfoWindow,SIGNAL(updateDSeats(BookingInfo)),diamondHall,SLOT(updateDSeats(BookingInfo)));
+    //connect(confirmationScreen,SIGNAL(closeAll()),economyHall,SLOT(showMovieInfo()));
     emit sendMovieData(movieInfo);
 }
 
@@ -209,8 +200,8 @@ void MovieList::on_Select_Button2_clicked()
     MovieInfo movieInfo(movies[1].title->text(), movies[1].duration->text().split(" ").at(0).toInt());
 
     connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
-    connect(movieInfoWindow,SIGNAL(updateESeats(BookingInfo)),economyHall,SLOT(updateSeats(BookingInfo)));
-    connect(movieInfoWindow,SIGNAL(updateDSeats(BookingInfo)),diamondHall,SLOT(updateSeats(BookingInfo)));
+    connect(movieInfoWindow,SIGNAL(updateESeats(BookingInfo)),economyHall,SLOT(updateESeats(BookingInfo)));
+    connect(movieInfoWindow,SIGNAL(updateDSeats(BookingInfo)),diamondHall,SLOT(updateDSeats(BookingInfo)));
     emit sendMovieData(movieInfo);
 }
 
@@ -223,7 +214,7 @@ void MovieList::on_Select_Button3_clicked()
     MovieInfo movieInfo(movies[2].title->text(), movies[2].duration->text().split(" ").at(0).toInt());
 
     connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
-    connect(movieInfoWindow,SIGNAL(updateESeats(BookingInfo)),economyHall,SLOT(updateSeats(BookingInfo)));
-    connect(movieInfoWindow,SIGNAL(updateDSeats(BookingInfo)),diamondHall,SLOT(updateSeats(BookingInfo)));
+    connect(movieInfoWindow,SIGNAL(updateESeats(BookingInfo)),economyHall,SLOT(updateESeats(BookingInfo)));
+    connect(movieInfoWindow,SIGNAL(updateDSeats(BookingInfo)),diamondHall,SLOT(updateDSeats(BookingInfo)));
     emit sendMovieData(movieInfo);
 }
