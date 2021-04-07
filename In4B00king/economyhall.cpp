@@ -17,7 +17,7 @@ void EconomyHall::updateSeats(QString selectedTime, QString selectedDate, int sh
 {
     this->show_ID = show_ID;
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
-    query.prepare("select HallSeats.seat_num,MovieSeats.available,HallSeats.condition,HallSeats.type from HallSeats inner join MovieSeats on HallSeats.seat_ID=MovieSeats.seat_ID where MovieSeats.show_ID=1");
+    query.prepare("select HallSeats.seat_num,MovieSeats.available,HallSeats.condition,HallSeats.type from HallSeats inner join MovieSeats on HallSeats.seat_ID=MovieSeats.seat_ID where MovieSeats.show_ID=" + QString::number(show_ID));
 
     if(!query.exec())
     {
