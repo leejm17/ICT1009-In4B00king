@@ -30,7 +30,7 @@ void EconomyHall::updateSeats(BookingInfo bookingInfo)
         QLabel *sptr = this->findChild<QLabel*>(sLabel);
         if(sptr!=nullptr)
         {
-            if(query.value(1).toString().compare("TRUE") == 0 && query.value(2).toString().compare("good") == 0 && query.value(3).toString().compare("disabled") == 0)
+            if(query.value(1).toString().compare("TRUE") == 0 && query.value(2).toString().compare("good") == 0 && query.value(3).toString().compare("handicap") == 0)
             {
                 sptr->setStyleSheet("QLabel { background-color : blue; }");
             }else if(query.value(1).toString().compare("TRUE") == 0 && query.value(2).toString().compare("good") == 0){
