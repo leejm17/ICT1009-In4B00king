@@ -23,7 +23,7 @@ void editprofile::receiveData(customer newcust){
     ui->Lname->setText(edituser.getLname());
     ui->Age->setValue(edituser.getAge());
     ui->about->setText(edituser.getAbout());
-    if (edituser.getGender() == "male"){
+    if (edituser.getGender() == "Male"){
         ui->Male->setChecked(true);
     }else{
         ui->Female->setChecked(true);
