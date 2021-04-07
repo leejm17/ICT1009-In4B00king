@@ -11,6 +11,7 @@ CONFIG += c++11
 LIBS += -LC:\Qt\6.0.3\mingw81_64\lib -lcurl
 
 SOURCES += \
+    bookinginfo.cpp \
     confirmationscreen.cpp \
     diamondhall.cpp \
     economyhall.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
     user.cpp
 
 HEADERS += \
+    bookinginfo.h \
     confirmationscreen.h \
     diamondhall.h \
     economyhall.h \
