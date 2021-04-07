@@ -13,16 +13,23 @@ void MyDB::init()
     db.setDatabaseName("../in4b00king.db");
 
     // Checks whether DB file exists.
-    if(QFile::exists("../in4b00king.db"))
-            qDebug() << "DB file exist.";
-        else
-           qDebug() << "DB file doesn't exists.";
+    try {
+        if(QFile::exists("../in4b00king.db"))
+                qDebug() << "DB file exist.";
+            else
+               qDebug() << "DB file doesn't exists.";
 
-        if (!db.open())
-            qDebug() << db.lastError().text();
-        else
-            qDebug() << "Database loaded successfully!";
+            if (!db.open())
+                qDebug() << db.lastError().text();
+            else
+                qDebug() << "Database loaded successfully!";
+    }catch(std::exception& e){
+       qDebug() << e.what();
 
+    }
+    catch (...) {
+        qDebug() << "Unknown Error";
+    }
 }
 
 MyDB *MyDB::getInstance()
