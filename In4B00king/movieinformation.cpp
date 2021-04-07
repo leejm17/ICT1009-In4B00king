@@ -25,6 +25,9 @@ void MovieInformation::receiveData(MovieInfo movieInfo)
         isMins = QString("TBA");
     }
 
+    QPixmap pix(":/resources/img/" + movieInfo.getMovieName().replace(" ", "_") + ".jpg");
+    ui->Movie->setPixmap(pix.scaled(351,525,Qt::KeepAspectRatio));
+
     ui->Title->setText(movieInfo.getMovieName());
     ui->Date->setText(movieInfo.getMovieDebut());
     ui->Time->setText(isMins);
