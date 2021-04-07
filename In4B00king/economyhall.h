@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "mydb.h"
+#include "bookinginfo.h"
 
 namespace Ui {
 class EconomyHall;
@@ -17,17 +18,17 @@ public:
     ~EconomyHall();
 
 signals:
-    void showSeatSelection(int);
+    void showSeatSelection(BookingInfo);
     void closeAll();
 
 private slots:
     void on_book_clicked();
-    void updateSeats(QString, QString, int);
+    void updateSeats(BookingInfo);
 
 private:
     Ui::EconomyHall *ui;
     void closeEvent(QCloseEvent *event);
-    int show_ID;
+    BookingInfo bookingInfo;
 };
 
 #endif // ECONOMYHALL_H

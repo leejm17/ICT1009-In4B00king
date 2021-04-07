@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "mydb.h"
+#include "bookinginfo.h"
 
 namespace Ui {
 class ConfirmationScreen;
@@ -21,12 +22,12 @@ signals:
     void closeAll();
 
 private slots:
-    void showConfirmation(QString seat, int show_ID);
+    void showConfirmation(QString, BookingInfo);
     void on_confirm_clicked();
 
 private:
     Ui::ConfirmationScreen *ui;
-    int show_ID;
+    BookingInfo bookingInfo;
 };
 
 #endif // CONFIRMATIONSCREEN_H

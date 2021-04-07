@@ -14,9 +14,9 @@ ConfirmationScreen::~ConfirmationScreen()
     delete ui;
 }
 
-void ConfirmationScreen::showConfirmation(QString seat, int show_ID)
+void ConfirmationScreen::showConfirmation(QString seat, BookingInfo bookingInfo)
 {
-    this->show_ID =show_ID;
+    this->bookingInfo = bookingInfo;
     ui->seat->setText(seat);
     this->show();
 }
@@ -24,7 +24,7 @@ void ConfirmationScreen::showConfirmation(QString seat, int show_ID)
 void ConfirmationScreen::on_confirm_clicked()
 {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
-    query.prepare("update MovieSeats set available='FALSE' where seat_ID=(select MovieSeats.seat_ID from MovieSeats inner join HallSeats on MovieSeats.seat_ID=HallSeats.seat_ID where HallSeats.seat_num='"+ui->seat->text()+"' and MovieSeats.show_ID='"+QString::number(show_ID)+"')");
+    query.prepare("update MovieSeats set available='FALSE' where seat_ID=(select MovieSeats.seat_ID from MovieSeats inner join HallSeats on MovieSeats.seat_ID=HallSeats.seat_ID where HallSeats.seat_num='"+ui->seat->text()+"' and MovieSeats.show_ID='"+QString::number(bookingInfo.get_show_ID())+"')");
 
     if(!query.exec())
     {

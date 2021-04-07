@@ -61,11 +61,11 @@ void MovieInformation::on_SelectSeats_clicked()
     }
     while(query.next())
     {
-    qDebug() << query.value(1).toString();
+        BookingInfo bookingInfo(query.value(0).toInt(), selectedDate, selectedTime, query.value(1).toString());
             if(query.value(1).toString().compare("economy") == 0){
-            emit updateESeats(selectedTime, selectedDate, query.value(0).toInt());
+            emit updateESeats(bookingInfo);
             } else {
-                emit updateDSeats(selectedTime, selectedDate, query.value(0).toInt());
+                emit updateDSeats(bookingInfo);
             }
     }
 }

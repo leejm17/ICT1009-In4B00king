@@ -13,11 +13,11 @@ EconomyHall::~EconomyHall()
     delete ui;
 }
 
-void EconomyHall::updateSeats(QString selectedTime, QString selectedDate, int show_ID)
+void EconomyHall::updateSeats(BookingInfo bookingInfo)
 {
-    this->show_ID = show_ID;
+    this->bookingInfo = bookingInfo;
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
-    query.prepare("select HallSeats.seat_num,MovieSeats.available,HallSeats.condition,HallSeats.type from HallSeats inner join MovieSeats on HallSeats.seat_ID=MovieSeats.seat_ID where MovieSeats.show_ID=" + QString::number(show_ID));
+    query.prepare("select HallSeats.seat_num,MovieSeats.available,HallSeats.condition,HallSeats.type from HallSeats inner join MovieSeats on HallSeats.seat_ID=MovieSeats.seat_ID where MovieSeats.show_ID=" + QString::number(bookingInfo.get_show_ID()));
 
     if(!query.exec())
     {
@@ -46,7 +46,7 @@ void EconomyHall::updateSeats(QString selectedTime, QString selectedDate, int sh
 
 void EconomyHall::on_book_clicked()
 {   
-    emit showSeatSelection(show_ID);
+    emit showSeatSelection(bookingInfo);
 }
 
 void EconomyHall::closeEvent(QCloseEvent *event){

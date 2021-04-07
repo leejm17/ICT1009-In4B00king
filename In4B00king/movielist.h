@@ -12,6 +12,7 @@
 #include "editprofile.h"
 #include "editmovies.h"
 #include "movies.h"
+#include "bookinginfo.h"
 
 /* Forward declaration for friend-function. */
 class MovieListInfo;    // found in movies.h

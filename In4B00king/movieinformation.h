@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <movies.h>
 #include "mydb.h"
+#include "bookinginfo.h"
 
 namespace Ui {
 class MovieInformation;
@@ -19,8 +20,8 @@ public:
     ~MovieInformation();
 
 signals:
-    void updateESeats(QString, QString, int);
-    void updateDSeats(QString, QString, int);
+    void updateESeats(BookingInfo);
+    void updateDSeats(BookingInfo);
 
 private slots:
     void receiveData(MovieInfo);

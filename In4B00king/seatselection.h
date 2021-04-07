@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "mydb.h"
+#include "bookinginfo.h"
 
 namespace Ui {
 class SeatSelection;
@@ -15,19 +16,19 @@ class SeatSelection : public QDialog
 public:
     explicit SeatSelection(QWidget *parent = nullptr);
     ~SeatSelection();
-    void updateSelection(int);
+    void updateSelection(BookingInfo);
 
 signals:
-    void showConfirmation(QString, int);
+    void showConfirmation(QString, BookingInfo);
 
 private slots:
     void on_book_clicked();
-    void showSeatSelection(int);
+    void showSeatSelection(BookingInfo);
 
 
 private:
     Ui::SeatSelection *ui;
-    int show_ID;
+    BookingInfo bookingInfo;
 };
 
 #endif // SEATSELECTION_H

@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include "mydb.h"
+#include "bookinginfo.h"
+
 
 namespace Ui {
 class DiamondHall;
@@ -17,17 +19,17 @@ public:
     ~DiamondHall();
 
 signals:
-    void showSeatSelection(int);
+    void showSeatSelection(BookingInfo);
     void closeAll();
 
 private slots:
     void on_book_clicked();
-    void updateSeats(QString, QString, int);
+    void updateSeats(BookingInfo);
 
 private:
     Ui::DiamondHall *ui;
     void closeEvent(QCloseEvent *event);
-    int show_ID;
+    BookingInfo bookingInfo;
 };
 
 #endif // DIAMONDHALL_H
