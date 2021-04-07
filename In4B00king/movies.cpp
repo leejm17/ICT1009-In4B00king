@@ -6,12 +6,40 @@
 #include <movies.h>
 #include <QDate>
 #include <QCalendar>
+#include <QLabel>
+#include <QComboBox>
 
-/* Retrieves a list of movies & duration from DB & append to their respective arrays. */
+/* Default constructor */
+MovieListInfo::MovieListInfo() {
+
+}
+
+/* Getter functions */
+QList<QString> MovieListInfo::getMovieNameList() {
+    getAllMovieList_Db();
+    return movieNameList;
+}
+
+/* (1) Call this func in MainScreen_Cust to display an array/series of movies currently on show. */
+void MovieListInfo::displayMovieList(Movie* movies) {
+    getMovieList_Db();  // populate movieNameList & movieDurationList variables
+    for (int cnt=0; cnt<3; cnt++) {
+        QString duration = movieDurationList.at(cnt);
+        if (duration == "0") {
+            duration = "TBA";
+        } else {
+            duration += QString(" mins");
+        }
+        movies[cnt].title->setText(this->movieNameList.at(cnt));
+        movies[cnt].duration->setText(duration);
+    }
+}
+
+/* DB QUERY to retrieve a list of movies & duration from DB & append to their respective arrays. */
 void MovieListInfo::getMovieList_Db() {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare(
-        "SELECT name, duration"
+        "SELECT movie_ID, name, duration"
         " FROM MovieList"
         " WHERE (debut <= DATE() AND finale >= DATE());"
     );
@@ -21,40 +49,35 @@ void MovieListInfo::getMovieList_Db() {
     } else {
         qDebug() << "getMovieList_Db() read query for all movies was successful.";
         while(query.next()) {
-            movieNameList.append(query.value(0).toString());
-            movieDurationList.append(query.value(1).toInt());
+            movieIDList.append(query.value(0).toInt());
+            movieNameList.append(query.value(1).toString());
+            movieDurationList.append(query.value(2).toString());
         }
-        MyDB::ResetInstance();
     }
+    MyDB::ResetInstance();
 }
 
-/* (1) Call displayMovieList() in MainScreen_Cust to display an array/series of movies currently on show. */
-void MovieListInfo::displayMovieList() {
-    getMovieList_Db();
-    // movieNameList array stores a list of movies
-    // movieDurationList stores a list of movies' duration
-    for (int cnt=0; cnt<this->movieNameList.size(); cnt++) {
-        qDebug() << this->movieNameList.at(cnt);
-        qDebug() << this->movieDurationList.at(cnt);
-    }
+/* Default constructor */
+MovieInfo::MovieInfo() {
+
 }
 
-/* (2) When Customer clicks on a Movie in MainScreen, via this Constructor, initialise the data members. */
+/* (2) When Customer clicks on a Movie in MainScreen via this Constructor, initialise the data members. */
 /* Calls getMovieDetails_Db() to retrieve description & array of movieDates, then initialise them. */
 /* Redirect Customer to MovieDetails screen. */
 MovieInfo::MovieInfo(QString movieName, int duration) {
     this->movieName = movieName;
     this->movieDuration = duration;
-    MovieInfo::getMovieDetails_Db();
-
-    // code to redirect customer to movieinformation page
+    getMovieDetails_Db();
 }
 
-/* Call getMovieDetails_Db() from MovieInfo() Constructor. */
+/* DB QUERY to get movie information. */
 void MovieInfo::getMovieDetails_Db() {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
+
+    /* (1) SELECT MovieDetails from MovieList */
     query.prepare(
-        "SELECT duration, debut, desc FROM MovieList"
+        "SELECT movie_ID, debut, description, duration FROM MovieList"
         " WHERE (name=:name);"
     );
     query.bindValue(":name", this->movieName);
@@ -62,24 +85,52 @@ void MovieInfo::getMovieDetails_Db() {
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();
     } else {
-        qDebug() << "getMovieDetails_Db() read query for " << this->movieName
+        qDebug() << "getMovieDetails_Db() read movieinfo query for " << this->movieName
                  << " was successful.";
         while(query.next()) {
-            this->movieDuration = query.value(0).toInt();
+            this->movieID = query.value(0).toInt();
             this->movieDebut = query.value(1).toString();
             this->movieDesc = query.value(2).toString();
+            this->movieDuration = query.value(3).toInt();
         }
-        MyDB::ResetInstance();
     }
+
+    /* (2) SELECT MovieDates from MovieShowing */
+    query.prepare(
+        "SELECT DISTINCT date"
+        " FROM MovieShowing"
+        " JOIN MovieList ON (MovieShowing.movie_ID = MovieList.movie_ID)"
+        " WHERE (MovieList.name=:name)"
+           " AND (MovieShowing.date||' '||MovieShowing.timeslot >= DATETIME());"
+    );
+    query.bindValue(":name", this->movieName);
+
+    if(!query.exec()) {
+        qDebug() << query.lastError().text() << query.lastQuery();
+    } else {
+        qDebug() << "getMovieDetails_Db() read dates query for " << this->movieName
+                 << " was successful.";
+        while(query.next()) {
+            this->movieDates.append(query.value(0).toString());
+        }
+    }
+
+    MyDB::ResetInstance();
 }
 
-/* (3) Call displayMovieDetails() in MovieDetails to display a movie's information with its corresponding timeslots based on a given day. */
-void ShowtimesInfo::displayMovieDetails() {
+/* (3) Call this func in MovieDetails to display a movie's information with its corresponding timeslots based on a given day. */
+void ShowtimesInfo::displayMovieDetails(QString name, QString date) {
+    this->movieName = name;
+    this->movieDate = date;
+
     // code to run when customer clicks on a date in movieinformation page
-    QString name;   // var of moviename from ui
-    QString date;   // var of moviedate from ui
     ShowtimesInfo::getShowtimes_Db(name, date);
+
     // display movie showtimes with timeslots & halls array
+    for (int cnt=0; cnt<retrieve_timeslots.length(); cnt++) {
+        //movies[cnt].title->setText(this->movieNameList.at(cnt));
+        //movies[cnt].duration->setText(duration);
+    }
 }
 
 /* (4) When Customer clicks on a movie date, call getShowtimes_Db(). */
@@ -99,36 +150,88 @@ void ShowtimesInfo::getShowtimes_Db(QString movieName, QString movieDate) {
                  << " on " << movieDate
                  << " was successful.";
         while(query.next()) {
-            timeslots.append(query.value(0).toString());
-            halls.append(query.value(1).toInt());
+            retrieve_timeslots.append(query.value(0).toString());
+            retrieve_halls.append(query.value(1).toInt());
         }
-        MyDB::ResetInstance();
     }
+    MyDB::ResetInstance();
+}
+
+
+/* (3_2) Call this func in MovieDetails to display a movie's information with its corresponding timeslots based on a given day. */
+void ShowtimesInfo::displayMovieDetails(QString name, QComboBox *dateComboBox) {
+    this->movieName = name;
+
+    // code to run when customer clicks on a date in movieinformation page
+    ShowtimesInfo::getShowtimes_Db(name);
+
+    // display movie showtimes with timeslots & halls array
+    //qDebug() << "retrieve_dates - " << retrieve_dates.length();
+    for (int cnt=0; cnt<retrieve_dates.length(); cnt++) {
+        dateComboBox->addItem(QString::number(retrieve_halls.at(cnt)) + " " + retrieve_dates.at(cnt) + " " + retrieve_timeslots.at(cnt));
+        //movies[cnt].title->setText(this->movieNameList.at(cnt));
+        //movies[cnt].duration->setText(duration);
+    }
+}
+
+/* (4_2) When Customer clicks on a movie date, call getShowtimes_Db(). */
+/* Retrieves a list of timeslots & hallIDs from DB, and append to their respective arrays. */
+void ShowtimesInfo::getShowtimes_Db(QString movieName) {
+    QSqlQuery query(MyDB::getInstance()->getDBInstance());
+    query.prepare("SELECT hall_ID, timeslot, date FROM MovieShowing"
+                  " JOIN MovieList ON (MovieShowing.movie_ID = MovieList.movie_ID)"
+                  " WHERE (MovieList.name=:name)"
+                    " AND (MovieShowing.date||' '||MovieShowing.timeslot >= DATETIME());"
+    );
+    query.bindValue(":name", movieName);
+
+    if(!query.exec()) {
+        qDebug() << query.lastError().text() << query.lastQuery();
+    } else {
+        qDebug() << "getShowtimes_Db() read query for " << movieName
+                 << " 4_2"
+                 << " was successful.";
+        while(query.next()) {
+            retrieve_halls.append(query.value(0).toInt());
+            retrieve_timeslots.append(query.value(1).toString());
+            retrieve_dates.append(query.value(2).toString());
+        }
+    }
+    MyDB::ResetInstance();
 }
 
 
 /* Admin Console: MovieInfo & addMovie_Db() */
 /* When Admin creates a new movie in MainScreen_Admin, via this Constructor, initialise the data members. */
+/* Call generateMovieDates() to generate dates from movie debut to movie finale. */
+/* Call generateShowtimes() to generate showtimes based on a user-supplied movie priority. */
+/* Call addMovie_Db() to add movie information + dates + showtimes into respective Tables in DB. */
 MovieInfo::MovieInfo(QString movieName, int duration, QString debut, QString finale, QString desc) {
     this->movieName = movieName;
     this->movieDuration = duration;
     this->movieDebut = debut;
     this->movieFinale = finale;
     this->movieDesc = desc;
-    /* SELECT MovieList.desc, MovieShowing.date FROM MovieList WHERE (MovieList.name=movieName)
-        ON (MovieList.movieId = MovieShowing.movieId). */
+    generateMovieDates();
+    generateShowtimes();
+    addMovie_Db();
+    /*qDebug() << this->movieName;
+    qDebug() << this->movieDuration;
+    qDebug() << this->movieDebut;
+    qDebug() << this->movieFinale;
+    qDebug() << this->movieDesc;
+    for (int i=0; i<movieDates.length(); i++) {
+        qDebug() << movieDates[i];
+    }*/
+    /*for (int i=0; i<movieDates.length(); i++) {
+        qDebug() << movieDates[i];
+    }*/
 }
 
-/* Call generateMovieDates() in MainScreen_Admin to generate an incremental list of movie show dates & append to movieDates[]. */
+/* Call this function in MainScreen_Admin to generate an incremental list of movie show dates & append to movieDates[]. */
 void MovieInfo::generateMovieDates() {
-    // given movieDebut & movieFinale
-    QDate debut = QDate::fromString("2021-12-10", "yyyy-MM-dd");
-    QDate finale = QDate::fromString("2022-02-02", "yyyy-MM-dd");
-
-    if (debut > finale) {
-        qDebug() << "Debut cannot be after Finale!";
-        exit(1);
-    }
+    QDate debut = QDate::fromString(this->movieDebut, "yyyy-MM-dd");
+    QDate finale = QDate::fromString(this->movieFinale, "yyyy-MM-dd");
 
     QCalendar qCalendarObj;
     for (int month=debut.month(); month<=12+finale.month(); month++) { // for every month between debut & finale
@@ -136,26 +239,21 @@ void MovieInfo::generateMovieDates() {
             break;
         }
         int daysThisMonth = qCalendarObj.daysInMonth(month, debut.year());
-        if (month == debut.month()) {                       // if month is same as debut month
+        if (debut.month() == finale.month()) {
+            for (int day=debut.day(); day<=finale.day(); day++) {
+                appendMovieDate(debut.year(), month, day);    // append date to movieDates
+            }
+        } else if (month == debut.month()) {                       // if month is same as debut month
             for (int day=debut.day(); day<=daysThisMonth; day++) {  // from debut till end of month
-                QString date = QString::number(debut.year()).append("-")
-                        .append(QString::number(month)).append("-")
-                        .append(QString::number(day));
-                movieDates.append(date);    // append date to movieDates
+                appendMovieDate(debut.year(), month, day);    // append date to movieDates
             }
         } else if (month == finale.month()) {               // else if month is same as finale month
             for (int day=1; day<=finale.day(); day++) {         // from start of month till finale
-                QString date = QString::number(debut.year()).append("-")
-                        .append(QString::number(month)).append("-")
-                        .append(QString::number(day));
-                movieDates.append(date);    // append date to movieDates
+                appendMovieDate(debut.year(), month, day);    // append date to movieDates
             }
         } else {                                            // else if month is NOT debut nor finale month
             for (int day=1; day<=daysThisMonth; day++) {        // from start of month till end of month
-                QString date = QString::number(debut.year()).append("-")
-                        .append(QString::number(month)).append("-")
-                        .append(QString::number(day));
-                movieDates.append(date);    // append date to movieDates
+                appendMovieDate(debut.year(), month, day);    // append date to movieDates
             }
         }
         if (month+12 == 12+finale.month()) {       // break if this month is the end of the same calendar year
@@ -164,13 +262,109 @@ void MovieInfo::generateMovieDates() {
     }
 }
 
-/* Call generateShowtimes() in MainScreen_Admin to generate a list of movie show times & match their halls, then append to their respective arrays. */
-void ShowtimesInfo::generateShowtimes(QString) {
+/* Called by generateMovieDates() to append incremental movie dates to movieDates */
+void MovieInfo::appendMovieDate(int year, int month, int day) {
+    QString newMonth;
+    QString newDay;
 
+    if (month < 10) {                               // ensure month is 2 digits
+        newMonth = "0" + QString::number(month);    // append a 0 to front if month is 1 digit
+    } else {
+        newMonth = QString::number(month);
+    }
+    if (day < 10) {                                 // ensure day is 2 digits
+        newDay = "0" + QString::number(day);        // append a 0 to front if day is 1 digit
+    } else {
+        newDay = QString::number(day);
+    }
+
+    QString date = QString::number(year).append("-")
+            .append(newMonth).append("-")
+            .append(newDay);
+    movieDates.append(date);
+}
+
+void MovieInfo::getPriority_Db() {
+    QSqlQuery query(MyDB::getInstance()->getDBInstance());
+    query.prepare(
+        "SELECT movie_ID"
+        " FROM MovieList"
+        " ORDER BY movie_ID DESC LIMIT 1;"
+    );
+    if(!query.exec()) {
+        qDebug() << query.lastError().text() << query.lastQuery();
+    } else {
+        qDebug() << "getPriority_Db() read query for last movie added was successful.";
+        while(query.next()) {
+            this->priority = query.value(0).toInt() % 4;
+        }
+    }
+    MyDB::ResetInstance();  // close DB connection
+}
+
+/* Call this function in MainScreen_Admin to generate a list of movie show times & match their halls, then append to their respective arrays. */
+void MovieInfo::generateShowtimes() {
+    getPriority_Db();
+
+    if (priority == 1) {        // super popular movie
+        for (int hour=8; hour <= 22; hour++) {
+            /* generate for Economy hall */
+            if (hour%2 == 0) {                      // 1 economy showtime every 2 hours
+                economy_timeslots.append(QString::number(hour).append(":00"));  // 8, 10, 12, 14, 16, 18, 20, 22
+                if (hour%4 == 0) { economy_halls.append(1); }   // for 8, 12, 16, 20
+                else { economy_halls.append(2); }               // for 10, 14, 18, 22
+            }
+            /* generate for Diamond hall */
+            if (hour>=12 && hour%4 == 0) {   // 1 diamond showtime every 4 hours from 12PM onward
+                diamond_timeslots.append(QString::number(hour).append(":00"));  // 12, 16, 20
+                diamond_halls.append(7);
+            }
+        }
+
+    } else if (priority == 2) { // quite popular movie
+        for (int hour=8; hour <= 22; hour++) {
+            /* generate for Economy hall */
+            if (hour%3 == 0) {                          // 1 economy showtime every 3 hours
+                economy_timeslots.append(QString::number(hour).append(":00"));  // 9, 12, 15, 18, 21
+                if (hour%6 == 0) { economy_halls.append(4); }   // for 12, 18
+                else { economy_halls.append(3); }               // for 9, 15, 21
+            }
+            /* generate fo Diamond hall */
+            if (hour>=12 && (hour-1)%4 == 0) {   // 1 diamond showtime every 4 hours from 12PM onward
+                diamond_timeslots.append(QString::number(hour).append(":00"));  // 13, 17, 21
+                diamond_halls.append(8);
+            }
+        }
+
+    } else if (priority == 3) { // popular movie
+        /* generate for Economy hall */     // 11, 13, 17, 19, 21
+        economy_timeslots.append("11:00"); economy_timeslots.append("13:00"); economy_timeslots.append("17:00");
+        economy_timeslots.append("19:00"); economy_timeslots.append("21:00");
+        economy_halls.append(5); economy_halls.append(6); economy_halls.append(5);
+        economy_halls.append(6); economy_halls.append(5);
+
+        /* generate for Diamond hall */     // 14, 18, 22
+        diamond_timeslots.append("14:00"); diamond_timeslots.append("18:00"); diamond_timeslots.append("22:00");
+        diamond_halls.append(9); diamond_halls.append(9); diamond_halls.append(9);
+
+    } else {                    // normal movie
+        for (int hour=8; hour <= 22; hour++) {
+            /* generate for Economy hall */
+            if (hour%5 == 0) {  // 1 showtime every 5 hours
+                economy_timeslots.append(QString::number(hour).append(":00"));  // 10, 15, 20
+            }
+            /* generate for Diamond hall */
+            if (hour>=12 && (hour-3)%4 == 0) {   // 1 diamond showtime every 4 hours from 12PM onward
+                diamond_timeslots.append(QString::number(hour).append(":00"));  // 15, 19
+                diamond_halls.append(10);
+            }
+        }
+        economy_halls.append(6); economy_halls.append(4); economy_halls.append(4);
+    }
 }
 
 /* addMovie_Db() adds the movie record into Database tables MovieList, MovieShowing, MovieSeats. */
-void addMovie_Db(MovieInfo movie, ShowtimesInfo showtime) {
+void MovieInfo::addMovie_Db() {
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
 
     /* (1) INSERT movie details INTO MovieList */
@@ -178,18 +372,19 @@ void addMovie_Db(MovieInfo movie, ShowtimesInfo showtime) {
         "INSERT INTO MovieList (name, duration, debut, finale, description)"
         " VALUES (:name, :duration, :debut, :finale, :desc);"
     );
-    query.bindValue(":name", movie.movieName);
-    query.bindValue(":date", movie.movieDuration);
-    query.bindValue(":debut", movie.movieDebut);
-    query.bindValue(":finale", movie.movieFinale);
-    query.bindValue(":desc", movie.movieDesc);
+    query.bindValue(":name", this->movieName);
+    query.bindValue(":duration", this->movieDuration);
+    query.bindValue(":debut", this->movieDebut);
+    query.bindValue(":finale", this->movieFinale);
+    query.bindValue(":desc", this->movieDesc);
 
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();
     } else {
-        qDebug() << "addMovie() into MovieList write query for " << movie.movieName
-                 << " was successful.";
+        /*qDebug() << "addMovie() into MovieList write query for " << this->movieName
+                 << " was successful.";*/
     }
+    qDebug() << "Finished INSERT details INTO MovieList for " << this->movieName;
 
     /* (2) INSERT details INTO MovieShowing */
     /* (2a) SELECT movie_ID of Movie to add */
@@ -198,39 +393,59 @@ void addMovie_Db(MovieInfo movie, ShowtimesInfo showtime) {
         " FROM MovieList"
         " WHERE (name=:name);"
     );
-    query.bindValue(":name", movie.movieName);
+    query.bindValue(":name", this->movieName);
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();
     } else {
-        qDebug() << "addMovie() read query for " << movie.movieName
-                 << " Movie_ID was successful.";
+        /*qDebug() << "addMovie() read query for " << this->movieName
+                 << " Movie_ID was successful.";*/
         while(query.next()) {
-            movie.movieID = query.value(0).toInt();
+            this->movieID = query.value(0).toInt();
         }
     }
+    qDebug() << "Finished SELECT movie_ID FROM MovieList for " << this->movieName;
 
     /* (2b) For every Date and their respective Timeslot,
      * INSERT the date, timeslots and halls INTO MovieShowing */
-    for (int dateCnt=0; dateCnt<movie.movieDates.length(); dateCnt++) {
-        for (int slotCnt=0; slotCnt<showtime.timeslots.length(); slotCnt++) {
+    for (int dateCnt=0; dateCnt < this->movieDates.length(); dateCnt++) {
+        for (int slotCnt=0; slotCnt < this->economy_timeslots.length(); slotCnt++) {
             query.prepare(
                 "INSERT INTO MovieShowing (movie_ID, date, timeslot, hall_ID)"
                 " VALUES (:id, :date, :timeslot, :hall)"
             );
-            query.bindValue(":id", showtime.movieID);
-            query.bindValue(":date", showtime.movieDates[dateCnt]);
-            query.bindValue(":timeslot", showtime.timeslots[slotCnt]);
-            query.bindValue(":hall", showtime.halls[slotCnt]);
+            query.bindValue(":id", this->movieID);
+            query.bindValue(":date", this->movieDates[dateCnt]);
+            query.bindValue(":timeslot", this->economy_timeslots[slotCnt]);
+            query.bindValue(":hall", this->economy_halls[slotCnt]);
             if(!query.exec()) {
                 qDebug() << query.lastError().text() << query.lastQuery();
             } else {
-                qDebug() << "addMovie() into MovieShowing write query for " << showtime.movieName
-                         << " on " << showtime.movieDates[dateCnt]
-                         << " at " << showtime.timeslots[slotCnt]
-                         << " was successful.";
+                /*qDebug() << "addMovie() into MovieShowing write query for " << this->movieName
+                         << " on " << this->movieDates[dateCnt]
+                         << " at " << this->economy_timeslots[slotCnt]
+                         << " was successful.";*/
+            }
+        }
+        for (int slotCnt=0; slotCnt < this->diamond_timeslots.length(); slotCnt++) {
+            query.prepare(
+                "INSERT INTO MovieShowing (movie_ID, date, timeslot, hall_ID)"
+                " VALUES (:id, :date, :timeslot, :hall)"
+            );
+            query.bindValue(":id", this->movieID);
+            query.bindValue(":date", this->movieDates[dateCnt]);
+            query.bindValue(":timeslot", this->diamond_timeslots[slotCnt]);
+            query.bindValue(":hall", this->diamond_halls[slotCnt]);
+            if(!query.exec()) {
+                qDebug() << query.lastError().text() << query.lastQuery();
+            } else {
+                /*qDebug() << "addMovie() into MovieShowing write query for " << this->movieName
+                         << " on " << this->movieDates[dateCnt]
+                         << " at " << this->diamond_timeslots[slotCnt]
+                         << " was successful.";*/
             }
         }
     }
+    qDebug() << "Finished INSERT details INTO MovieShowing for " << this->movieName;
 
     /* (3) INSERT INTO MovieSeats to make Seats available for booking */
     /* (3a) SELECT show_ID and their respective seat_ID & seat's condition based on hall_ID seating plan */
@@ -243,25 +458,26 @@ void addMovie_Db(MovieInfo movie, ShowtimesInfo showtime) {
         " JOIN HallSeats ON (MovieShowing.hall_ID = HallSeats.hall_ID)"
         " WHERE (movie_ID=:id);"
     );
-    query.bindValue(":id", movie.movieID);
+    query.bindValue(":id", this->movieID);
     if(!query.exec()) {
         qDebug() << query.lastError().text() << query.lastQuery();
     } else {
-        qDebug() << "addMovie() read query for " << movie.movieName
-                 << " Show_ID, Hall_ID and Seat_ID was successful.";
+        /*qDebug() << "addMovie() read query for " << this->movieName
+                 << " Show_ID, Hall_ID and Seat_ID was successful.";*/
         while(query.next()) {
             showIDs.append(query.value(0).toInt());
             seatIDs.append(query.value(1).toInt());
-            seatsCondition.append(query.value(3).toString());
+            seatsCondition.append(query.value(2).toString());
         }
     }
+    qDebug() << "Finished SELECT show_ID, hall_ID, seat_ID FROM MovieShowing & HallSeats for " << this->movieName;
 
     /* (3b) For every record, if seatsCondition is NOT 'good', replace it with 'FALSE', else 'TRUE' */
     for (int cnt=0; cnt<seatsCondition.length(); cnt++) {
         if (seatsCondition[cnt] != "good") {
-            seatsCondition.replace(cnt, "FALSE");
+            seatsCondition[cnt].replace(seatsCondition[cnt], "FALSE");
         } else {
-            seatsCondition.replace(cnt, "TRUE");
+            seatsCondition[cnt].replace(seatsCondition[cnt], "TRUE");
         }
 
         /* (3c) INSERT seat_ID & condition for the respective show_ID based on (3a) INTO MovieSeats */
@@ -275,8 +491,8 @@ void addMovie_Db(MovieInfo movie, ShowtimesInfo showtime) {
         if(!query.exec()) {
             qDebug() << query.lastError().text() << query.lastQuery();
         } else {
-            qDebug() << "addMovie() into MovieSeats write query for " << movie.movieName
-                     << " Show_ID, Hall_ID and Seat_ID was successful.";
+            /*qDebug() << "addMovie() into MovieSeats write query for " << this->movieName
+                     << " Show_ID, Hall_ID and Seat_ID was successful.";*/
             while(query.next()) {
                 showIDs.append(query.value(0).toInt());
                 seatIDs.append(query.value(1).toInt());
@@ -284,9 +500,90 @@ void addMovie_Db(MovieInfo movie, ShowtimesInfo showtime) {
             }
         }
     }
+    qDebug() << "Finished INSERT details INTO MovieSeats for " << this->movieName;
 
-    /* INSERT INTO Hall (type)
-        VALUES ('normal' OR 'diamond') */
+    MyDB::ResetInstance();
+}
 
+/* DB QUERY to retrieve a list of movies & duration from DB & append to array. */
+void MovieListInfo::getAllMovieList_Db() {
+    QSqlQuery query(MyDB::getInstance()->getDBInstance());
+    query.prepare(
+        "SELECT name, duration"
+        " FROM MovieList;"
+    );
+
+    if(!query.exec()) {
+        qDebug() << query.lastError().text() << query.lastQuery();
+    } else {
+        qDebug() << "getAllMovieList_Db() read query for all movies was successful.";
+        while(query.next()) {
+            movieNameList.append(query.value(0).toString());
+            movieDurationList.append(query.value(1).toString());
+        }
+    }
+    MyDB::ResetInstance();
+}
+
+/* DB QUERY to delete a movie from MovieList & its respective foreign records in other tables. */
+void MovieInfo::deleteMovie_Db(QString movieName) {
+    QSqlQuery query(MyDB::getInstance()->getDBInstance());
+    query.prepare(
+        "DELETE FROM MovieList"
+        " WHERE name='" + movieName +"';"
+    );
+
+    if(!query.exec()) {
+        qDebug() << query.lastError().text() << query.lastQuery();
+    } else {
+        qDebug() << "DELETE MovieList for " << movieName
+                 << " was successful.";
+    }
+    MyDB::ResetInstance();
+}
+
+
+/* Getters & Setters */
+MovieInfo::MovieInfo(QString movieName) {
+    this->movieName = movieName;
+    getMovieDetails_Db();
+}
+int MovieInfo::getMovieID() {
+	return movieID;
+}
+QString MovieInfo::getMovieName() {
+    return movieName;
+}
+QString MovieInfo::getMovieDebut() {
+    return movieDebut;
+}
+int MovieInfo::getMovieDuration() {
+    return movieDuration;
+}
+QString MovieInfo::getMovieDesc() {
+    return movieDesc;
+}
+/* Constructor to update movie information */
+MovieInfo::MovieInfo(QString oldName, QString newName, int duration, QString desc) {
+    this->movieName = newName;
+    this->movieDuration = duration;
+    this->movieDesc = desc;
+
+    QSqlQuery query(MyDB::getInstance()->getDBInstance());
+    query.prepare(
+        "UPDATE MovieList"
+        " SET name='" + newName + "',"
+            " duration="+ QString::number(duration) +
+            " ,description='" + desc + "'"
+        " WHERE name='" + oldName + "';"
+    );
+
+
+    if(!query.exec()) {
+        qDebug() << query.lastError().text() << query.lastQuery();
+    } else {
+        qDebug() << "UPDATE MovieList for " << oldName
+                 <<" was successful.";
+    }
     MyDB::ResetInstance();
 }

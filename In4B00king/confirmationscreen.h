@@ -18,13 +18,15 @@ public:
 
 signals:
     void updateSeats();
+    void closeAll();
 
 private slots:
-    void showConfirmation(QString seat);
+    void showConfirmation(QString seat, int show_ID);
     void on_confirm_clicked();
 
 private:
     Ui::ConfirmationScreen *ui;
+    int show_ID;
 };
 
 #endif // CONFIRMATIONSCREEN_H

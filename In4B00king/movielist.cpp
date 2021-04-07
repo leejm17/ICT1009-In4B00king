@@ -1,5 +1,8 @@
 #include "movielist.h"
 #include "ui_movielist.h"
+#include "editprofile.h"
+#include "user.h"
+#include "movies.h"
 #include <QPixmap>
 #include <QMessageBox>
 
@@ -13,18 +16,27 @@ MovieList::MovieList(QWidget *parent) :
     seatSelection = new SeatSelection(this);
     confirmationScreen = new ConfirmationScreen(this);
 
-    connect(economyHall,SIGNAL(showSeatSelection()),seatSelection,SLOT(showSeatSelection()));
-    connect(diamondHall,SIGNAL(showSeatSelection()),seatSelection,SLOT(showSeatSelection()));
-    connect(seatSelection,SIGNAL(showConfirmation(QString)),confirmationScreen,SLOT(showConfirmation(QString)));
+    connect(economyHall,SIGNAL(showSeatSelection(int)),seatSelection,SLOT(showSeatSelection(int)));
+    connect(diamondHall,SIGNAL(showSeatSelection(int)),seatSelection,SLOT(showSeatSelection(int)));
+    connect(seatSelection,SIGNAL(showConfirmation(QString,int)),confirmationScreen,SLOT(showConfirmation(QString,int)));
     connect(confirmationScreen,SIGNAL(updateSeats()),economyHall,SLOT(updateSeats()));
     connect(confirmationScreen,SIGNAL(updateSeats()),diamondHall,SLOT(updateSeats()));
-    connect(this,SIGNAL(updateSeats()),economyHall,SLOT(updateSeats()));
-    connect(this,SIGNAL(updateSeats()),diamondHall,SLOT(updateSeats()));
 
-    db = MyDB::getInstance()->getDBInstance();
+    //Close all windows
+    /*connect(economyHall,SIGNAL(closeAll()),seatSelection,SLOT(close()));
+    connect(economyHall,SIGNAL(closeAll()),confirmationScreen,SLOT(close()));
+    connect(diamondHall,SIGNAL(closeAll()),seatSelection,SLOT(close()));
+    connect(diamondHall,SIGNAL(closeAll()),confirmationScreen,SLOT(close()));
+
+    connect(confirmationScreen,SIGNAL(closeAll()),seatSelection,SLOT(close()));*/
+
+    //db = MyDB::getInstance()->getDBInstance();
 
     currentOffset = 0;
     updateUI();
+
+
+
 }
 
 MovieList::~MovieList()
@@ -32,33 +44,33 @@ MovieList::~MovieList()
     delete ui;
 }
 
-void MovieList::on_SelectButton_clicked()
-{
-    //QMessageBox::information(this,"Hi","is_clicked");
-    emit updateSeats();
-    economyHall->show();
-    //movieinformation = new MovieInformation(this);
-    //movieinformation->show();
-}
+void MovieList::receiveData(user newuser){
+    this->newuser = newuser;
+    QString labelText = "<P><b><i><font color='#ffffff' font_size=12>";
+    labelText.append("Hello " + newuser.getEmail());
+    labelText.append("</font></i></b></P></br>");
+    ui->profile->setText(labelText);
+    if (newuser.getType() == "customer"){
+        ui->editmovie->setVisible(false);
+    }else{
+        ui->Edit_Profile->setVisible(false);
+    }
 
-void MovieList::on_SelectButton_2_clicked()
-{
-    emit updateSeats();
-    diamondHall->show();
+    if (newuser.getType() == "customer"){
+        customer newcustomer(newuser.getEmail());
+        this->newcustomer = newcustomer;
+
+    }else{
+        administrator newadmin(newuser.getEmail());
+        this->newadmin = newadmin;
+    }
+
 }
 
 void MovieList::updateUI()
 {
-    struct Movie
-    {
-
-        QLabel* title;
-        QLabel* duration;
-
-    };
-
-    // just some bindings
-    Movie movie0;
+    // bindings to movie labels
+    Movie movie0;       // Movie is a struct defined in movielist.h
     movie0.title = ui->Movie_Title_1;
     movie0.duration = ui->Duration_1;
 
@@ -70,7 +82,6 @@ void MovieList::updateUI()
     movie2.title = ui->Movie_Title_3;
     movie2.duration = ui->Duration_3;
 
-    Movie movies[3];
     movies[0] = movie0;
     movies[1] = movie1;
     movies[2] = movie2;
@@ -90,7 +101,7 @@ void MovieList::updateUI()
 
     qDebug() << "currentOffset: " << currentOffset;
 
-    QSqlQuery query(db);
+/**    QSqlQuery query(db);
     query.prepare("SELECT name, duration FROM MovieList LIMIT 3 OFFSET " + QString(std::to_string(3*currentOffset).c_str()));
     if(!query.exec())
     {
@@ -101,12 +112,6 @@ void MovieList::updateUI()
         int currentIndex = 0;
         while (query.next())
         {
-            /**
-            if (currentIndex == 3)
-            {
-                currentIndex = 0;
-            }**/
-
             movies[currentIndex].title->setText(query.value(0).toString());
             auto duration = query.value(1).toString();
             if (duration !=  QString("TBA"))
@@ -122,14 +127,16 @@ void MovieList::updateUI()
             qDebug() << " duration : " << query.value(1).toString().toUtf8().constData();
         }
     }
-    query.finish();
+    query.finish();**/
 
+    MovieListInfo().displayMovieList(movies);   // movies is a struct array
+    qDebug() << "hi2";
 
-    QPixmap pix(":/resources/img/Tom_and_Jerry.jpg");
+    QPixmap pix(":/resources/img/" + movies[0].title->text().replace(" ", "_") + ".jpg");
     ui->Movie1->setPixmap(pix.scaled(221,300,Qt::KeepAspectRatio));
-    QPixmap pix2(":/resources/img/Godzilla_Vs_Kong.jpg");
+    QPixmap pix2(":/resources/img/" + movies[1].title->text().replace(" ", "_") + ".jpg");
     ui->Movie2->setPixmap(pix2.scaled(221,300,Qt::KeepAspectRatio));
-    QPixmap pix3(":/resources/img/FF9.jpg");
+    QPixmap pix3(":/resources/img/" + movies[2].title->text().replace(" ", "_") + ".jpg");
     ui->Movie3->setPixmap(pix3.scaled(221,300,Qt::KeepAspectRatio));
     /**
 
@@ -145,6 +152,7 @@ void MovieList::updateUI()
     ui->Movie_Title_3->setText("FF9");
     ui->Duration_3->setText("120min");
     **/
+    qDebug() << "hi";
 }
 
 
@@ -157,6 +165,65 @@ void MovieList::on_Next_Button_clicked()
 
 void MovieList::on_Select_Button1_clicked()
 {
+    movieInfoWindow = new MovieInformation(this);
     hide();
-    (new MovieInformation())->show();
+    movieInfoWindow->show();
+
+    MovieInfo movieInfo(movies[0].title->text(), movies[0].duration->text().split(" ").at(0).toInt());
+
+    connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
+    connect(movieInfoWindow,SIGNAL(updateESeats(QString,QString,int)),economyHall,SLOT(updateSeats(QString,QString,int)));
+    connect(movieInfoWindow,SIGNAL(updateDSeats(QString,QString,int)),diamondHall,SLOT(updateSeats(QString,QString,int)));
+    emit sendMovieData(movieInfo);
+}
+
+void MovieList::on_Edit_Profile_clicked()
+{
+    profilepage = new editprofile();
+    profilepage->show();
+    connect(this, SIGNAL(sendData(customer)), profilepage, SLOT(receiveData(customer)));
+    emit sendData(newcustomer);
+
+}
+
+void MovieList::on_logout_clicked()
+{
+    close();
+}
+
+void MovieList::on_editmovie_clicked()
+{  
+    editmoviespage = new editmovies();
+    editmoviespage->show();
+    QString privilegelvl = (QString::number(newadmin.getpriv()));
+    connect(this, SIGNAL(sendData2(QString)), editmoviespage, SLOT(receiveData(QString)));
+    emit sendData2(privilegelvl);
+}
+
+void MovieList::on_Select_Button2_clicked()
+{
+    movieInfoWindow = new MovieInformation(this);
+    hide();
+    movieInfoWindow->show();
+
+    MovieInfo movieInfo(movies[1].title->text(), movies[1].duration->text().split(" ").at(0).toInt());
+
+    connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
+    connect(movieInfoWindow,SIGNAL(updateESeats(QString,QString,int)),economyHall,SLOT(updateSeats(QString,QString,int)));
+    connect(movieInfoWindow,SIGNAL(updateDSeats(QString,QString,int)),diamondHall,SLOT(updateSeats(QString,QString,int)));
+    emit sendMovieData(movieInfo);
+}
+
+void MovieList::on_Select_Button3_clicked()
+{
+    movieInfoWindow = new MovieInformation(this);
+    hide();
+    movieInfoWindow->show();
+
+    MovieInfo movieInfo(movies[2].title->text(), movies[2].duration->text().split(" ").at(0).toInt());
+
+    connect(this, SIGNAL(sendMovieData(MovieInfo)), movieInfoWindow, SLOT(receiveData(MovieInfo)));
+    connect(movieInfoWindow,SIGNAL(updateESeats(QString,QString,int)),economyHall,SLOT(updateSeats(QString,QString,int)));
+    connect(movieInfoWindow,SIGNAL(updateDSeats(QString,QString,int)),diamondHall,SLOT(updateSeats(QString,QString,int)));
+    emit sendMovieData(movieInfo);
 }

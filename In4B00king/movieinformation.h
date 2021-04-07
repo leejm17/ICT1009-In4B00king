@@ -2,6 +2,9 @@
 #define MOVIEINFORMATION_H
 
 #include <QMainWindow>
+#include <QDebug>
+#include <movies.h>
+#include "mydb.h"
 
 namespace Ui {
 class MovieInformation;
@@ -15,8 +18,20 @@ public:
     explicit MovieInformation(QWidget *parent = nullptr);
     ~MovieInformation();
 
+signals:
+    void updateESeats(QString, QString, int);
+    void updateDSeats(QString, QString, int);
+
+private slots:
+    void receiveData(MovieInfo);
+
+    void on_Back_clicked();
+
+    void on_SelectSeats_clicked();
+
 private:
     Ui::MovieInformation *ui;
+    int MovieID;
 };
 
 #endif // MOVIEINFORMATION_H

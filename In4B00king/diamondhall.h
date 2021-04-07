@@ -17,14 +17,17 @@ public:
     ~DiamondHall();
 
 signals:
-    void showSeatSelection();
+    void showSeatSelection(int);
+    void closeAll();
 
 private slots:
     void on_book_clicked();
-    void updateSeats();
+    void updateSeats(QString, QString, int);
 
 private:
     Ui::DiamondHall *ui;
+    void closeEvent(QCloseEvent *event);
+    int show_ID;
 };
 
 #endif // DIAMONDHALL_H

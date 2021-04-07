@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include "mydb.h"
-
+#include "email.h"
 namespace Ui {
 class Register;
 }
@@ -14,13 +14,21 @@ class Register : public QDialog
 
 public:
     explicit Register(QWidget *parent = nullptr);
+    void generateOTP(int len);
     ~Register();
-
+    char* Generate_Email_With_OTP();
 private slots:
     void on_Register_2_clicked();
 
+    void on_Close_clicked();
+
+    void on_sendemail_clicked();
+
+    void on_verify_clicked();
+
 private:
     Ui::Register *ui;
+    email email;
 };
 
 #endif // REGISTER_H

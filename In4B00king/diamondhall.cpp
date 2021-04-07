@@ -6,8 +6,6 @@ DiamondHall::DiamondHall(QWidget *parent) :
     ui(new Ui::DiamondHall)
 {
     ui->setupUi(this);
-
-    updateSeats();
 }
 
 DiamondHall::~DiamondHall()
@@ -15,10 +13,11 @@ DiamondHall::~DiamondHall()
     delete ui;
 }
 
-void DiamondHall::updateSeats()
+void DiamondHall::updateSeats(QString selectedTime, QString selectedDate, int show_ID)
 {
+    this->show_ID = show_ID;
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
-    query.prepare("select HallSeats.seat_num,MovieSeats.available,HallSeats.condition,HallSeats.type from HallSeats inner join MovieSeats on HallSeats.seat_ID=MovieSeats.seat_ID where MovieSeats.show_ID=1");
+    query.prepare("select HallSeats.seat_num,MovieSeats.available,HallSeats.condition,HallSeats.type from HallSeats inner join MovieSeats on HallSeats.seat_ID=MovieSeats.seat_ID where MovieSeats.show_ID=" + QString::number(show_ID));
 
     if(!query.exec())
     {
@@ -41,8 +40,14 @@ void DiamondHall::updateSeats()
             }
         }
     }
+
+    this->show();
 }
 void DiamondHall::on_book_clicked()
 {
-    emit showSeatSelection();
+    emit showSeatSelection(show_ID);
+}
+
+void DiamondHall::closeEvent(QCloseEvent *event){
+    emit closeAll();
 }

@@ -8,7 +8,10 @@
         <file>img/Now_Showing.jpg</file>
         <file>img/JapanSinks2020Info.png</file>
         <file>img/FF9.jpg</file>
-        <file>img/Tom_and_Jerry.jpg</file>
-        <file>img/Godzilla_Vs_Kong.jpg</file>
+        <file>img/Tom_&amp;_Jerry.jpg</file>
+        <file>img/Godzilla_vs._Kong.jpg</file>
+        <file>img/Chaos_Walking.png</file>
+        <file>img/Mortal_Kombat.jpg</file>
+        <file>img/Chaos_Walking.jpg</file>
     </qresource>
 </RCC>
