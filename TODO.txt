@@ -1,0 +1,11 @@
+1. Inheritance for MovieInfo
+class Movie {
+	MovieBasic(movieName, duration);
+};
+
+class MovieInfo : MovieBasic {
+	MovieInfo(movieName, duration, debut, finale, desc) : MovieBasic(movieName, duration)
+	MovieInfo(movieName, duration, desc) : MovieBasic(movieName, duration)
+};
+
+2. MovieInfo constructors SHOULD NOT contain methods
