@@ -19,10 +19,12 @@ void editMovie::on_Close_clicked()
     hide();
 }
 
+//Receive movie name from previous page
 void editMovie::receiveData(QString moviename){
     this->oldmoviename = moviename;
     MovieInfo newmovie(moviename);
     newmovie.getMovieDetails_Db();
+    //Set informaiton of movie into UI
     ui->Mname->setText(newmovie.getName());
     ui->Duration->setText(QString::number(newmovie.getDuration()));
     ui->MDesc->setText(newmovie.getDesc());
@@ -30,6 +32,7 @@ void editMovie::receiveData(QString moviename){
 
 void editMovie::on_EditMovie_clicked()
 {
+    //Get movie informaiton from UI to update into database
     QString moviename = ui->Mname->text();
     QString duration = ui->Duration->text();
     QString description = ui->MDesc->text();

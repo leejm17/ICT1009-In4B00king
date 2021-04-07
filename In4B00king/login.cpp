@@ -45,6 +45,7 @@ void Login::on_pushButton_clicked()
             mainpage = new MovieList(this);
             mainpage->show();
 
+            //Sending user that is logged in to the next pain
             connect(this, SIGNAL(sendData(user)), mainpage, SLOT(receiveData(user)));
             user newuser;
             newuser.GetUserVariables(username);          

@@ -28,7 +28,7 @@ void Register::on_Register_2_clicked()
     bool accountcreated = false;
     bool checkAge = true;
     user_email = ui->Email->text(); pwd = ui->Password->text();pwd2 = ui->Password_2->text();
-    fname = ui->Fname->text(); lname = ui->Lname->text();//age = ui->Age->text();
+    fname = ui->Fname->text(); lname = ui->Lname->text();
 
     if(ui->Male->isChecked()){
         gender = "Male";
@@ -49,7 +49,7 @@ void Register::on_Register_2_clicked()
 
 
 
-    // Checks for empty fields or if they entered their email.
+    // Checks for empty fields, matching password, verification of email and if they entered their email.
     if (ui->Email->text().isEmpty()){
         QMessageBox::warning(this, "Empty Email", "Please enter your email!");
     }else if (ui->Password->text().isEmpty() || ui->Password->text().isEmpty()){

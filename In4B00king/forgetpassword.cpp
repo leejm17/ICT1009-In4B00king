@@ -25,10 +25,12 @@ void forgetpassword::on_HomePage_clicked()
 
 void forgetpassword::on_resetpassword_clicked()
 {
+    //Getting information from UI
     QString username = ui->Email->text();
     QString pwd1 = ui->pwd->text();
     QString pwd2 = ui->pwd2->text();
     QString salted_password = username + pwd1;
+
     // SHA1 Hash
     QByteArray hashed_password = QCryptographicHash::hash(salted_password.toUtf8(),QCryptographicHash::Md5);
     QString inputHash = QLatin1String(hashed_password.toHex());

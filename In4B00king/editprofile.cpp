@@ -16,9 +16,12 @@ editprofile::~editprofile()
     delete ui;
 }
 
+//Receive customer user from main page
 void editprofile::receiveData(customer newcust){
+
     edituser = newcust;
     edituser.loadCust(newcust.getEmail());
+    //Retrieve user details from database and show on UI
     ui->Fname->setText(edituser.getFname());
     ui->Lname->setText(edituser.getLname());
     ui->Age->setValue(edituser.getAge());
@@ -56,6 +59,7 @@ void editprofile::on_profilechange_clicked()
     QByteArray hashed_password = QCryptographicHash::hash(salted_password.toUtf8(),QCryptographicHash::Md5);
     QString inputHash = QLatin1String(hashed_password.toHex());
 
+    //Ensure password is correct to login
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare("Select * FROM User WHERE email_ID='" + username + "' AND password='" + inputHash + "';");
     if(!query.exec()){
@@ -63,7 +67,6 @@ void editprofile::on_profilechange_clicked()
     }else{
         if(query.next()){
             qDebug() << "read was successful "<< query.lastQuery();
-
 
             QSqlQuery updatequery(MyDB::getInstance()->getDBInstance());
             updatequery.prepare("UPDATE User SET first_name ='"+ fname +"', last_name='" + lname +"', age="+age+", about='"+about
@@ -101,6 +104,7 @@ void editprofile::on_pwdchange_clicked()
     QByteArray hashed_password2 = QCryptographicHash::hash(salted_password2.toUtf8(),QCryptographicHash::Md5);
     QString inputHash2 = QLatin1String(hashed_password2.toHex());
 
+    //Ensure original password is correct
     QSqlQuery query(MyDB::getInstance()->getDBInstance());
     query.prepare("Select * FROM User WHERE email_ID='" + username + "' AND password='" + inputHash + "';");
     if(!query.exec()){
@@ -109,6 +113,7 @@ void editprofile::on_pwdchange_clicked()
         if(query.next()){
             qDebug() << "read was successful "<< query.lastQuery();
 
+            //Check if new password matches before updating into database
             if (newpassword.isEmpty()){
                 QMessageBox::warning(this, "Please enter new password", "Empty new password!");
             }else if (newpassword2.isEmpty()){

@@ -9,6 +9,7 @@ editmovies::editmovies(QWidget *parent) :
     ui(new Ui::editmovies)
 {
     ui->setupUi(this);
+    //Add movie name to combo box for administrator to select
     QList<QString> movielist = MovieListInfo().getMovieNameList();
     for (int i = 0; i < movielist.size(); i++){
         QString moviename = movielist.at(i);
@@ -22,6 +23,7 @@ editmovies::~editmovies()
     delete ui;
 }
 
+//Recieve privilege from main page to check if admin can delete and edit movie
 void editmovies::receiveData(QString priv){
     if (priv == "2"){
         qDebug() << "Priv is 2";
@@ -34,6 +36,7 @@ void editmovies::receiveData(QString priv){
 
 void editmovies::on_CreateMovie_clicked()
 {
+    //Get movie information from UI
     QString Mname = ui->Mname->text();
     QString Duration = ui->Duration->text();
     QString Sdate = ui->Sdate->text();
@@ -42,6 +45,7 @@ void editmovies::on_CreateMovie_clicked()
     QDate debut = ui->Sdate->date();
     QDate finale = ui->Edate->date();
 
+    //Perform checks for user input on movie information
     if (Mname.isEmpty()){
         QMessageBox::warning(this, "Create Movie", "Please enter Movie Name!");
     }else if (Duration.isEmpty()){
@@ -55,6 +59,7 @@ void editmovies::on_CreateMovie_clicked()
     }else if (Desc.isEmpty()){
         QMessageBox::warning(this, "Create Movie", "Please enter Movie Description!");
     }else{
+        //Create movie
         MovieInfo newmovie(Mname, Duration.toInt(), Sdate, Edate, Desc);
         QMessageBox::information(this, "Create movie", "Movie have been added!");
         hide();
@@ -64,7 +69,7 @@ void editmovies::on_CreateMovie_clicked()
 
 void editmovies::on_editmovie_clicked()
 {
-
+    //Show edit movie page
     movieinfopage = new editMovie(this);
     movieinfopage->show();
     QString moviename = ui->movieCombo->currentText();
@@ -80,6 +85,7 @@ void editmovies::on_Close_clicked()
 
 void editmovies::on_deletemovie_clicked()
 {
+    //Delete movie from database
     QString moviename = ui->movieCombo->currentText();
     MovieInfo delMovie(moviename);
     delMovie.deleteMovie_Db(moviename);
