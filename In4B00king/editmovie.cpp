@@ -22,6 +22,7 @@ void editMovie::on_Close_clicked()
 void editMovie::receiveData(QString moviename){
     this->oldmoviename = moviename;
     MovieInfo newmovie(moviename);
+    newmovie.getMovieDetails_Db();
     ui->Mname->setText(newmovie.getName());
     ui->Duration->setText(QString::number(newmovie.getDuration()));
     ui->MDesc->setText(newmovie.getDesc());
