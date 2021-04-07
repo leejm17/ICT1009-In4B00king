@@ -24,16 +24,30 @@ Register::~Register()
 // Onclick event for the register button
 void Register::on_Register_2_clicked()
 {
-    QString gender,user_email, pwd, pwd2, fname, lname, age;
+    QString gender,user_email, pwd, pwd2, fname, lname,age;
     bool accountcreated = false;
+    bool checkAge = true;
     user_email = ui->Email->text(); pwd = ui->Password->text();pwd2 = ui->Password_2->text();
-    fname = ui->Fname->text(); lname = ui->Lname->text();age = ui->Age->text();
+    fname = ui->Fname->text(); lname = ui->Lname->text();//age = ui->Age->text();
 
     if(ui->Male->isChecked()){
         gender = "Male";
     }else if (ui->Female->isChecked()){
         gender = "Female";
     }
+
+    try{
+        age = ui->Age->text();
+        if(age.toInt() < 12){
+            throw (age.toInt());
+        }
+
+    }catch (int age){
+        checkAge = false;
+        qDebug()<<"At least 12 years old!";
+    }
+
+
 
     // Checks for empty fields or if they entered their email.
     if (ui->Email->text().isEmpty()){
@@ -50,7 +64,10 @@ void Register::on_Register_2_clicked()
         QMessageBox::warning(this, "Invalid gender", "Please select your gender!");
     }else if (!verified){
         QMessageBox::warning(this, "Verify Email", "Email not Verified.");
-    }else{
+    }else if (!checkAge){
+        QMessageBox::warning(this, "Age", "You are too young to create an account");
+    }
+    else{
         QMessageBox::StandardButton reply = QMessageBox::question(this, "Register Account", "Are you sure you want to register this account?\nEmail:"+
                                                                   user_email + "\nFirst name:" + fname + "\nLast name:" + lname + "\nAge:" +
                                                                   age + "\nGender:" + gender, QMessageBox::Yes | QMessageBox::No);
@@ -79,8 +96,6 @@ void Register::on_Register_2_clicked()
     }
     if (accountcreated){
         this->close();
-        QMessageBox::information(this, "Success", "Successfully registered");
-
     }
 }
 
