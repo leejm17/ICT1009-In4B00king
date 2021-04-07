@@ -76,7 +76,7 @@ void MovieList::updateUI()
     movies[1] = movie1;
     movies[2] = movie2;
 
-    // styling
+    // styling and displaying of movie title and duration
     QPalette sample_palette;
     sample_palette.setColor(QPalette::WindowText, Qt::white);
 
@@ -89,36 +89,6 @@ void MovieList::updateUI()
     movies[2].title->setPalette(sample_palette);
     movies[2].duration->setPalette(sample_palette);
 
-    qDebug() << "currentOffset: " << currentOffset;
-
-/**    QSqlQuery query(db);
-    query.prepare("SELECT name, duration FROM MovieList LIMIT 3 OFFSET " + QString(std::to_string(3*currentOffset).c_str()));
-    if(!query.exec())
-    {
-        qDebug() << query.lastError().text() << query.lastQuery();
-    }
-    else
-    {
-        int currentIndex = 0;
-        while (query.next())
-        {
-            movies[currentIndex].title->setText(query.value(0).toString());
-            auto duration = query.value(1).toString();
-            if (duration !=  QString("TBA"))
-            {
-                duration += QString(" mins");
-            }
-
-            movies[currentIndex].duration->setText(duration);
-
-            currentIndex++;
-
-            qDebug() << "title: " << query.value(0).toString().toUtf8().constData();
-            qDebug() << " duration : " << query.value(1).toString().toUtf8().constData();
-        }
-    }
-    query.finish();**/
-
     MovieListInfo().displayMovieList(movies);   // movies is a struct array
 
     QPixmap pix(":/resources/img/" + movies[0].title->text().replace(" ", "_") + ".jpg");
@@ -127,20 +97,7 @@ void MovieList::updateUI()
     ui->Movie2->setPixmap(pix2.scaled(221,300,Qt::KeepAspectRatio));
     QPixmap pix3(":/resources/img/" + movies[2].title->text().replace(" ", "_") + ".jpg");
     ui->Movie3->setPixmap(pix3.scaled(221,300,Qt::KeepAspectRatio));
-    /**
 
-
-    setText("FF9");
-    ui->Duration_1->setText("120min");
-
-    ui->Movie2->setPixmap(pix.scaled(221,300,Qt::KeepAspectRatio));
-    ui->Movie_Title_2->setText("FF9");
-    ui->Duration_2->setText("120min");
-
-    ui->Movie3->setPixmap(pix.scaled(221,300,Qt::KeepAspectRatio));
-    ui->Movie_Title_3->setText("FF9");
-    ui->Duration_3->setText("120min");
-    **/
 }
 
 
