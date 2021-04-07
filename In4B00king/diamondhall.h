@@ -20,15 +20,15 @@ public:
 
 signals:
     void showSeatSelection(BookingInfo);
-    void closeAll();
 
 private slots:
     void on_book_clicked();
     void updateSeats(BookingInfo);
+    void updateDSeats(BookingInfo);
+
 
 private:
     Ui::DiamondHall *ui;
-    void closeEvent(QCloseEvent *event);
     BookingInfo bookingInfo;
 };
 

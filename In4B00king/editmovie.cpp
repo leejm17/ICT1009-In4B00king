@@ -22,9 +22,9 @@ void editMovie::on_Close_clicked()
 void editMovie::receiveData(QString moviename){
     this->oldmoviename = moviename;
     MovieInfo newmovie(moviename);
-    ui->Mname->setText(newmovie.getMovieName());
-    ui->Duration->setText(QString::number(newmovie.getMovieDuration()));
-    ui->MDesc->setText(newmovie.getMovieDesc());
+    ui->Mname->setText(newmovie.getName());
+    ui->Duration->setText(QString::number(newmovie.getDuration()));
+    ui->MDesc->setText(newmovie.getDesc());
 }
 
 void editMovie::on_EditMovie_clicked()
@@ -39,6 +39,7 @@ void editMovie::on_EditMovie_clicked()
     if (reply == QMessageBox::Yes) {
         qDebug() << "Yes was clicked";
         MovieInfo editmove(oldmoviename, moviename, duration.toInt(), description);
+        editmove.updateMovie_Db();
         hide();
     }else{
         qDebug() << "No was clicked";

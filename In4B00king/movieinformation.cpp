@@ -16,25 +16,25 @@ MovieInformation::~MovieInformation()
 void MovieInformation::receiveData(MovieInfo movieInfo)
 {
     QString isMins;
-    if (movieInfo.getMovieDuration() > 0)
+    if (movieInfo.getDuration() > 0)
     {
-        isMins = QString::number(movieInfo.getMovieDuration()) + QString(" mins");
+        isMins = QString::number(movieInfo.getDuration()) + QString(" mins");
     }
     else
     {
         isMins = QString("TBA");
     }
 
-    QPixmap pix(":/resources/img/" + movieInfo.getMovieName().replace(" ", "_") + ".jpg");
+    QPixmap pix(":/resources/img/" + movieInfo.getName().replace(" ", "_") + ".jpg");
     ui->Movie->setPixmap(pix.scaled(351,525,Qt::KeepAspectRatio));
 
-    ui->Title->setText(movieInfo.getMovieName());
-    ui->Date->setText(movieInfo.getMovieDebut());
+    ui->Title->setText(movieInfo.getName());
+    ui->Date->setText(movieInfo.getDebut());
     ui->Time->setText(isMins);
-    ui->Description->setText(movieInfo.getMovieDesc());
+    ui->Description->setText(movieInfo.getDesc());
     this->MovieID = movieInfo.getMovieID();
     // fetch from db dates and time
-    ShowtimesInfo().displayMovieDetails(movieInfo.getMovieName(), ui->DropdownDate);
+    ShowtimesInfo().displayMovieDetails(movieInfo.getName(), ui->DropdownDate);
 }
 
 void MovieInformation::on_Back_clicked()

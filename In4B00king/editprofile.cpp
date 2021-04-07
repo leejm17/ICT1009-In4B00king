@@ -23,7 +23,6 @@ void editprofile::receiveData(customer newcust){
     ui->Lname->setText(edituser.getLname());
     ui->Age->setValue(edituser.getAge());
     ui->about->setText(edituser.getAbout());
-    qDebug()<<edituser.getGender();
     if (edituser.getGender() == "Male"){
         ui->Male->setChecked(true);
     }else{
